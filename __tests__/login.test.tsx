@@ -4,7 +4,19 @@ import { useRouter } from 'next/router';
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn(),
-  }));
+}));
+
+global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      headers: new Headers(),
+      redirected: false,
+      json: () => Promise.resolve({ message: "Login successful" }),
+    } as Response)
+);
+
 
 describe("Login Page", () => {
     beforeEach(() => {
