@@ -1,7 +1,17 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import Login from "@/app/login/login"; // assuming the login page is in the pages folder
+import Login from "@/app/login-page/page"; 
+import { useRouter } from 'next/router';
+
+jest.mock('next/router', () => ({
+    useRouter: jest.fn(),
+  }));
 
 describe("Login Page", () => {
+    beforeEach(() => {
+        (useRouter as jest.Mock).mockReturnValue({
+          push: jest.fn(), 
+        });
+      });
   it("renders the login form", () => {
     render(<Login />);
     
