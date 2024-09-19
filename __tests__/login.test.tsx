@@ -17,7 +17,7 @@ describe("Login Page", () => {
     
     const phoneInput = screen.getByPlaceholderText("Nomor Ponsel...");
     const passwordInput = screen.getByPlaceholderText("Password...");
-    const loginButton = screen.getByText("Login");
+    const loginButton = screen.getByRole("button", { name: /login/i });
     
     expect(phoneInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("Login Page", () => {
     
     const phoneInput = screen.getByPlaceholderText("Nomor Ponsel...");
     const passwordInput = screen.getByPlaceholderText("Password...");
-    const loginButton = screen.getByText("Login");
+    const loginButton = screen.getByRole("button", { name: /login/i });
     
     fireEvent.change(phoneInput, { target: { value: '08123456789' } });
     fireEvent.change(passwordInput, { target: { value: 'mypassword' } });
