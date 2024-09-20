@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import Login from "@/app/login-page/page"; 
+import Login from "@/app/auth/login/page"; 
 import { useRouter } from "next/navigation";
 
 jest.mock("next/navigation", () => ({
