@@ -11,15 +11,17 @@ export async function handleFormSubmit(data: RegisterForm): Promise<{ ok: boolea
     },
     body: JSON.stringify(data)
   })
-  const jsonRes = await res.json()
+  
   if (res.ok) {
-    await setRefreshAndAccessTokens(jsonRes)
+    await setRefreshAndAccessTokens(res)
     return { ok: true, message: "Registrasi berhasil" }
   }
+
+  const jsonRes = await res.json()
   return { ok: false, message: jsonRes.detail }
 }
 
-async function setRefreshAndAccessTokens(response: any) {
+async function setRefreshAndAccessTokens(response: Response) {
   const { refresh, access } = await response.json()
   cookies().set("refreshToken", refresh, { path: "/", httpOnly: true })
   cookies().set("accessToken", access, { path: "/", httpOnly: true })
