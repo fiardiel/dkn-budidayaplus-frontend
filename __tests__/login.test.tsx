@@ -17,6 +17,12 @@ global.fetch = jest.fn(() =>
     } as Response)
 );
 
+const mockFailedLoginResponse = () =>
+    Promise.resolve({
+      ok: false,
+      status: 401,
+      json: () => Promise.resolve({ detail: "Invalid credentials" }),
+    });
 
 describe("Login Page", () => {
     beforeEach(() => {
@@ -24,6 +30,7 @@ describe("Login Page", () => {
           push: jest.fn(), 
         });
       });
+
   it("renders the login form", () => {
     render(<Login />);
     
@@ -50,4 +57,25 @@ describe("Login Page", () => {
     const successMessage = await screen.findByText("Login successful");
     expect(successMessage).toBeInTheDocument();
   });
+
+  it("shows error message when login fails", async () => {
+    // Set up the mock fetch response for failed login
+    (global.fetch as jest.Mock).mockImplementationOnce(mockFailedLoginResponse);
+    
+    render(<Login />);
+    
+    const phoneInput = screen.getByPlaceholderText("Nomor Ponsel...");
+    const passwordInput = screen.getByPlaceholderText("Password...");
+    const loginButton = screen.getByRole("button", { name: /login/i });
+    
+    fireEvent.change(phoneInput, { target: { value: '08123456789' } });
+    fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
+    fireEvent.click(loginButton);
+
+    // Assert that the error message is shown
+    const errorMessage = await screen.findByText("Invalid credentials");
+    expect(errorMessage).toBeInTheDocument();
+  });
 });
+
+
