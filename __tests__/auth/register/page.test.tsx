@@ -1,9 +1,16 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RegisterPage from '@/app/auth/register/page';
 import { handleFormSubmit } from '@/lib/auth/register/actions';
+import { useRouter } from 'next/navigation';
 
 jest.mock('@/lib/auth/register/actions', () => ({
   handleFormSubmit: jest.fn(),
+}));
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+  })),
 }));
 
 global.fetch = jest.fn(() =>
@@ -23,6 +30,10 @@ const mockFailedRegisterResponse = jest.fn().mockResolvedValue({
 });
 
 describe("Register Page", () => {
+  const mockRouter = {
+    push: jest.fn(),
+  };
+
   let phoneInput: HTMLElement;
   let firstNameInput: HTMLElement;
   let lastNameInput: HTMLElement;
@@ -30,6 +41,7 @@ describe("Register Page", () => {
   let registerButton: HTMLElement;
 
   beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
     render(<RegisterPage />);
 
     phoneInput = screen.getByPlaceholderText("Nomor Ponsel");

@@ -8,8 +8,10 @@ import { handleFormSubmit } from '@/lib/auth/register/actions'
 import { RegisterForm, registerSchema } from '@/types/auth/register'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
 
 const RegisterPage = () => {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -26,6 +28,7 @@ const RegisterPage = () => {
     const response = await handleFormSubmit(data)
     if (response.ok) {
       reset()
+      router.push("/")
       return
     }
     setError(response.message)
