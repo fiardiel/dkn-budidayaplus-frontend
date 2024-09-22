@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pond } from '@/types/pond'
-import PondCard from '@/components/pond/PondCard'
+import {PondCard} from '@/components/pond'
 
 interface PondListProps {
   ponds: Pond[]

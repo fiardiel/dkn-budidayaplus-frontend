@@ -1,5 +1,4 @@
-import AddPond from '@/components/pond/AddPond';
-import PondList from '@/components/pond/PondList';
+import {PondList, AddPond} from '@/components/pond';
 import { getUser } from '@/lib/auth';
 import { fetchPonds } from '@/lib/pond'
 import { Pond } from '@/types/pond'
