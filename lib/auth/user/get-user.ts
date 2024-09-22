@@ -1,8 +1,6 @@
 import User from "@/types/auth/user";
-import Cookies from 'js-cookie'
-import { cookies } from "next/headers";
 
-const API_URL = `${process.env.API_BASE_URL}/api/auth/me`;
+const API_URL = `http://localhost:8000/api/auth/me`;
 
 export async function getUser(token?: string): Promise<User | null> {
   const response = await fetch(API_URL, {
