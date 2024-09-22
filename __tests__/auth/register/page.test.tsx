@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import RegisterPage from '@/app/auth/register/page';
-import { handleFormSubmit } from '@/lib/auth/register/actions';
+import { handleFormSubmit } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 
-jest.mock('@/lib/auth/register/actions', () => ({
+jest.mock('@/lib/auth', () => ({
   handleFormSubmit: jest.fn(),
 }));
 

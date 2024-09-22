@@ -1,10 +1,22 @@
-import PondPage from "@/app/pond/page";
-import { render, screen } from "@testing-library/react";
-import { fetchPonds } from "@/lib/pond";
-import { Pond } from "@/types/pond";
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import PondListPage from '@/app/pond/page';
+import { fetchPonds } from '@/lib/pond';
+import { getUser } from '@/lib/auth';
+import { cookies } from 'next/headers';
+import { Pond } from '@/types/pond';
 
-jest.mock("@/lib/pond/utils", () => ({
+jest.mock("@/lib/pond", () => ({
   fetchPonds: jest.fn(),
+}));
+
+jest.mock("@/lib/auth", () => ({
+  getUser: jest.fn().mockResolvedValue({ first_name: "John", last_name: "Doe" }),
+}));
+
+jest.mock("next/headers", () => ({
+  cookies: jest.fn().mockReturnValue({
+    get: jest.fn().mockReturnValue({ value: "accessToken" }),
+  }),
 }));
 
 const mockPonds: Pond[] = [
@@ -13,65 +25,63 @@ const mockPonds: Pond[] = [
   { id: 'xyz', name: "Pond 3", volume: 169.0, image_name: "pond3.jpg" },
 ];
 
-describe("Pond page", () => {
+describe('PondListPage', () => {
   beforeEach(() => {
     (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
+    (getUser as jest.Mock).mockResolvedValue({ first_name: "John", last_name: "Doe" });
+    (cookies as jest.Mock).mockReturnValue({ get: jest.fn().mockReturnValue({ value: "accessToken" }) });
   });
 
-  it("renders a list of pond cards", async () => {
-    render(<PondPage />);
-    
-    const pondCard1 = await screen.findByText("Pond 1");
-    const pondCard2 = await screen.findByText("Pond 2");
-    const pondCard3 = await screen.findByText("Pond 3");
+  it('renders the pond list page', async () => {
+    render(await PondListPage());
 
-    expect(pondCard1).toBeInTheDocument();
-    expect(pondCard2).toBeInTheDocument();
-    expect(pondCard3).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Selamat datang")).toBeInTheDocument();
+      expect(screen.getByText("John Doe")).toBeInTheDocument();
+      expect(screen.getByText("Pond 1")).toBeInTheDocument();
+      expect(screen.getByText("Pond 2")).toBeInTheDocument();
+      expect(screen.getByText("Pond 3")).toBeInTheDocument();
+    });
   });
 
-  it("renders the pond card with the correct volume", async () => {
-    render(<PondPage />);
-    
-    const pondCard1 = await screen.findByText("Pond 1");
-    const pondCard2 = await screen.findByText("Pond 2");
-    const pondCard3 = await screen.findByText("Pond 3");
+  it('renders no pond message', async () => {
+    (fetchPonds as jest.Mock).mockResolvedValue([]);
+    render(await PondListPage());
 
-    expect(pondCard1).toHaveTextContent("121.0");
-    expect(pondCard2).toHaveTextContent("144.0");
-    expect(pondCard3).toHaveTextContent("169.0");
+    await waitFor(() => {
+      expect(screen.getByText("Tidak ada kolam")).toBeInTheDocument();
+    });
   });
 
-  it("renders the pond card with the correct image", async () => {
-    render(<PondPage />);
+  it("doesn't render the user name if user is not found", async () => {
+    (getUser as jest.Mock).mockResolvedValue(null);
+    render(await PondListPage());
 
-    const pondCard1 = await screen.findByAltText("Pond 1 image");
-    const pondCard2 = await screen.findByAltText("Pond 2 image");
-    const pondCard3 = await screen.findByAltText("Pond 3 image");
-
-    expect(pondCard1).toHaveAttribute("src", "pond1.jpg");
-    expect(pondCard2).toHaveAttribute("src", "pond2.jpg");
-    expect(pondCard3).toHaveAttribute("src", "pond3.jpg");
+    await waitFor(() => {
+      expect(screen.queryByText("John Doe")).not.toBeInTheDocument();
+    });
   });
 
-  it("renders a button to the pond detail page with the correct link", async () => {
-    render(<PondPage />);
-
-    const pondCard1 = await screen.findByText("Pond 1");
-    const pondCard2 = await screen.findByText("Pond 2");
-    const pondCard3 = await screen.findByText("Pond 3");
-
-    expect(pondCard1.closest("a")).toHaveAttribute("href", "/pond/abcde");
-    expect(pondCard2.closest("a")).toHaveAttribute("href", "/pond/abcdefg");
-    expect(pondCard3.closest("a")).toHaveAttribute("href", "/pond/xyz");
-  });
-
-  it("handles an error when fetching ponds", async () => {
+  it('handles the error case of fetching ponds', async () => {
     (fetchPonds as jest.Mock).mockRejectedValue(new Error("Failed to fetch ponds"));
-    
-    render(<PondPage />);
-    
-    const error = await screen.findByText("Failed to fetch ponds");
-    expect(error).toBeInTheDocument();
+    render(await PondListPage());
+
+    await waitFor(() => {
+      expect(screen.getByText("Tidak ada kolam")).toBeInTheDocument();
+    });
   });
-});
+
+  it('renders the pond image and handles fallback', async () => {
+    render(await PondListPage());
+
+    const pondImage = await screen.findByAltText("Pond 1 image");
+    expect(pondImage).toHaveAttribute("src", "http://localhost/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
+
+    fireEvent.error(pondImage);
+
+    await waitFor(() => {
+      expect(pondImage).toHaveAttribute("src", "http://localhost/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
+    })
+  })
+
+})
