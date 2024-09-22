@@ -1,1 +1,1 @@
-export * from "@/types/pond"
+export * from "@/types/pond/pond"
