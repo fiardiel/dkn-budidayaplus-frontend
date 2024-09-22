@@ -1,3 +1,4 @@
+import AddPond from '@/components/pond/AddPond';
 import PondList from '@/components/pond/PondList';
 import { getUser } from '@/lib/auth';
 import { fetchPonds } from '@/lib/pond'
@@ -31,6 +32,7 @@ const PondListPage = async () => {
               {user && `${user.first_name} ${user.last_name}`}
             </p>
           </div>
+          <AddPond/>
           <PondList ponds={ponds} />
         </div>
       </div>

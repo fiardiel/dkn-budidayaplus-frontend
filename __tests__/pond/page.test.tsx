@@ -42,6 +42,7 @@ describe('PondListPage', () => {
       expect(screen.getByText("Pond 1")).toBeInTheDocument();
       expect(screen.getByText("Pond 2")).toBeInTheDocument();
       expect(screen.getByText("Pond 3")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /tambah kolam/i })).toBeInTheDocument();
     });
   });
 
