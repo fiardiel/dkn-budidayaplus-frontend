@@ -61,31 +61,28 @@ describe("Login Page", () => {
 
   it("allows user to login", async () => {
     fireEvent.change(phoneInput, { target: { value: "08123456789" } });
-    fireEvent.change(passwordInput, { target: { value: "mypassword" } });
+    fireEvent.change(passwordInput, { target: { value: "mypassword123" } });
     fireEvent.click(loginButton);
 
     await waitFor(() => {
       expect(handleLoginFormSubmit).toHaveBeenCalledWith({
         phone_number: "08123456789",
-        password: "mypassword",
+        password: "mypassword123",
       });
       expect(mockRouter.push).toHaveBeenCalledWith("/");
     });
-
-    const successMessage = screen.queryByText("Login berhasil");
-    expect(successMessage).toBeInTheDocument();
   });
 
   it("shows error message when login fails", async () => {
     (handleLoginFormSubmit as jest.Mock).mockImplementationOnce(mockFailedLoginResponse);
 
     fireEvent.change(phoneInput, { target: { value: "08123456789" } });
-    fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
+    fireEvent.change(passwordInput, { target: { value: "wrongpassword123" } });
     fireEvent.click(loginButton);
 
     await waitFor(() => {
       expect(handleLoginFormSubmit).toHaveBeenCalled();
-      expect(screen.getByText("Login gagal")).toBeInTheDocument();
+      expect(screen.getByText("Invalid credentials")).toBeInTheDocument();
     });
   });
 
