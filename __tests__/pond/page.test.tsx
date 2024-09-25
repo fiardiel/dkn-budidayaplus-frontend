@@ -85,5 +85,4 @@ describe('PondListPage', () => {
       expect(pondImage).toHaveAttribute("src", "http://localhost/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     })
   })
-
 })
