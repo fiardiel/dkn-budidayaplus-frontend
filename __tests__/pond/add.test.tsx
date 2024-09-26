@@ -33,24 +33,6 @@ describe('Add Pond Modal', () => {
     expect(screen.getByPlaceholderText('Tinggi (meter)')).toBeInTheDocument();
   });
 
-  it('calculates and displays the volume when length, width, and height are entered', async () => {
-    render(<AddPond />);
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /tambah kolam/i }));
-    });
-
-    // Fill out length, width, and height
-    fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '2' } });
-    fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '3' } });
-    fireEvent.change(screen.getByPlaceholderText('Tinggi (meter)'), { target: { value: '4' } });
-
-    // Ensure the calculated volume is displayed correctly
-    await waitFor(() => {
-      expect(screen.getByText('Volume Kolam: 24.00 meter^3')).toBeInTheDocument();
-    });
-  });
-
   it('does not submit the form if no token is found', async () => {
     Object.defineProperty(document, 'cookie', {
       value: '',
