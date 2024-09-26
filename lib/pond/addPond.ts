@@ -17,18 +17,3 @@ export async function addPond(data: PondInputForm, token: string): Promise<{ suc
   }
   return { success: true };
 }
-
-export async function deletePond(pondId: string) {
-  const token = document.cookie.split('accessToken=')[1];
-  const response = await fetch(`${process.env.API_BASE_URL}/ponds/${pondId}/`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    return { success: false };
-  }
-  return { success: true };
-}
