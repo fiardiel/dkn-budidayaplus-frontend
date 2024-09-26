@@ -15,14 +15,14 @@ jest.mock("next/headers", () => ({
 }));
 
 const mockPonds: Pond[] = [
-  { id: 'abcde', name: "Pond 1", volume: 121.0, image_name: "pond1.jpg" },
-  { id: 'abcdefg', name: "Pond 2", volume: 144.0, image_name: "pond2.jpg" },
-  { id: 'xyz', name: "Pond 3", volume: 169.0, image_name: "pond3.jpg" },
+  { pond_id: 'abcde', name: "Pond 1", length: 121.0, width: 121.0, depth: 121.0, image_name: "pond1.jpg" },
+  { pond_id: 'abcdefg', name: "Pond 2", length: 144.0, width: 144.0, depth: 144.0, image_name: "pond2.jpg" },
+  { pond_id: 'xyz', name: "Pond 3", length: 169.0, width: 169.0, depth: 169.0, image_name: "pond3.jpg" },
 ];
 
 describe('PondListPage', () => {
   beforeEach(async () => {
-    (fetchPond as jest.Mock).mockResolvedValue(mockPonds.find(pond => pond.id === 'abcde'));
+    (fetchPond as jest.Mock).mockResolvedValue(mockPonds.find(pond => pond.pond_id === 'abcde'));
     (cookies as jest.Mock).mockReturnValue({ get: jest.fn().mockReturnValue({ value: "accessToken" }) });
   })
   it('renders the pond list page', async () => {
@@ -54,7 +54,7 @@ describe('PondListPage', () => {
   });
 
   it('renders the pond image', async () => {
-    (fetchPond as jest.Mock).mockResolvedValue(mockPonds.find(pond => pond.id === 'abcde'));
+    (fetchPond as jest.Mock).mockResolvedValue(mockPonds.find(pond => pond.pond_id === 'abcde'));
     render(await PondDetailPage({params: {id: 'abcde'}}));
     const pondImage = await screen.findByAltText("Pond 1 image");
     await waitFor(() => {

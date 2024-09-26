@@ -21,9 +21,9 @@ jest.mock("next/headers", () => ({
 }));
 
 const mockPonds: Pond[] = [
-  { id: 'abcde', name: "Pond 1", volume: 121.0, image_name: "pond1.jpg" },
-  { id: 'abcdefg', name: "Pond 2", volume: 144.0, image_name: "pond2.jpg" },
-  { id: 'xyz', name: "Pond 3", volume: 169.0, image_name: "pond3.jpg" },
+  { pond_id: 'abcde', name: "Pond 1", length: 121.0, width: 121.0, depth: 121.0, image_name: "pond1.jpg" },
+  { pond_id: 'abcdefg', name: "Pond 2", length: 144.0, width: 144.0, depth: 144.0, image_name: "pond2.jpg" },
+  { pond_id: 'xyz', name: "Pond 3", length: 169.0, width: 169.0, depth: 169.0, image_name: "pond3.jpg" },
 ];
 
 describe('PondListPage', () => {
@@ -85,4 +85,19 @@ describe('PondListPage', () => {
       expect(pondImage).toHaveAttribute("src", "http://localhost/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     })
   })
+
+  it('opens and closes the Add Pond modal', async () => {
+    render(await PondListPage());
+
+    fireEvent.click(screen.getByRole('button', { name: /Tambah Kolam/i }));
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Nama Kolam')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Close/i }));
+    await waitFor(() => {
+      expect(screen.queryByPlaceholderText('Nama Kolam')).not.toBeInTheDocument();
+    });
+  });
+
 })
