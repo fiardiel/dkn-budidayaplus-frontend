@@ -11,7 +11,7 @@ const PondList: React.FC<PondListProps> = ({ponds}) => {
     <div>
       <div className='flex flex-col space-y-4'>
         {ponds.map((pond) => (
-          <PondCard key={pond.id} pond={pond} />
+          <PondCard key={pond.pond_id} pond={pond} />
         ))}
       </div>
     </div>

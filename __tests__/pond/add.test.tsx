@@ -30,7 +30,7 @@ describe('Add Pond Modal', () => {
     expect(screen.getByPlaceholderText('Nama Gambar')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Panjang (meter)')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Lebar (meter)')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Tinggi (meter)')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Kedalaman (meter)')).toBeInTheDocument();
   });
 
   it('does not submit the form if no token is found', async () => {
@@ -52,7 +52,7 @@ describe('Add Pond Modal', () => {
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond4.jpg' } });
     fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
     fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
-    fireEvent.change(screen.getByPlaceholderText('Tinggi (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /submit/i }));
@@ -76,7 +76,7 @@ describe('Add Pond Modal', () => {
     );
 
     const mockResponse = { success: true, message: 'Pond created' };
-    (addPond as jest.Mock).mockResolvedValue(mockResponse);  // Mock success response
+    (addPond as jest.Mock).mockResolvedValue(mockResponse); 
 
     const mockToken = 'mockAccessToken';
 
@@ -88,7 +88,7 @@ describe('Add Pond Modal', () => {
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond4.jpg' } });
     fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
     fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
-    fireEvent.change(screen.getByPlaceholderText('Tinggi (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /submit/i }));
@@ -117,7 +117,7 @@ describe('Add Pond Modal', () => {
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond5.jpg' } });
     fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
     fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
-    fireEvent.change(screen.getByPlaceholderText('Tinggi (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
     // Submit the form
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }));

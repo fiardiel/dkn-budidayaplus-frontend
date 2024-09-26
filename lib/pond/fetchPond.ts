@@ -1,7 +1,7 @@
 import { Pond } from "@/types/pond"
 
 export async function fetchPond(pondId: string, token?: string): Promise<Pond> {  
-  const res = await fetch(`${process.env.API_BASE_URL}/pond/${pondId}`, {
+  const res = await fetch(`${process.env.API_BASE_URL}/api/pond/${pondId}/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

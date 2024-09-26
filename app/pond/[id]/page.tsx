@@ -34,7 +34,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
             <p className='text-3xl font-semibold'>{ pond.name }</p>
           </div>
           <div>
-            <p>Volume: { pond.volume }</p>
+            <p>Volume: { pond.length * pond.width * pond.depth } m<sup>3</sup></p>
           </div>
           <div>
             <Image className='object-cover h-full w-full' src={ `/${fallbackSrc}` } width={500} height={400} alt={`${pond.name} image`} />

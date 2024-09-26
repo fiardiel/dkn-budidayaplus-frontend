@@ -1,6 +1,8 @@
 export type Pond = {
-  id: string;
+  pond_id: string;
   name: string;
-  volume: number;
+  length: number;
+  width: number;
+  depth: number;
   image_name: string;
 }
