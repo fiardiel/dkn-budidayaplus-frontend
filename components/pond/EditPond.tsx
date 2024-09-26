@@ -5,9 +5,8 @@ import { Button } from '@/components/ui/button';
 import { updatePond } from '@/lib/pond';
 import { IoIosSave } from 'react-icons/io';
 import { Modal } from '@/components/ui/modal';
-import { Pond } from '@/types/pond';
+import { Pond, PondInputForm } from '@/types/pond';
 import { PondForm } from '@/components/pond';
-import { PondInputForm } from '@/types/pond';
 
 interface EditPondProps extends React.HTMLProps<HTMLDivElement> {
   token?: string;
