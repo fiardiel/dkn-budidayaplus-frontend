@@ -26,6 +26,7 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
     try {
       await addPond(data, propToken);
       setOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error('Failed to create pond:', error);
       setError('Failed to create pond');
@@ -39,12 +40,10 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
       </Button>
 
       <Modal open={open} onClose={() => setOpen(false)}>
-        <div role="dialog">
           <PondForm onSubmit={onSubmit} buttonText="Submit" />
           {error && <p className='text-red-500'>{error}</p>}
-        </div>
       </Modal>
-    </div>
+  </div>
   );
 };
 
