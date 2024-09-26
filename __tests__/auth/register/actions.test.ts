@@ -1,4 +1,4 @@
-import { handleFormSubmit } from "@/lib/auth/register/actions";
+import { handleRegisterSubmit } from "@/lib/auth/register/registerActions";
 import { cookies } from "next/headers";
 import { RegisterForm } from "@/types/auth/register";
 
@@ -34,7 +34,7 @@ describe("handleFormSubmit", () => {
       }),
     });
 
-    const result = await handleFormSubmit(mockRegisterForm);
+    const result = await handleRegisterSubmit(mockRegisterForm);
 
     expect(result).toEqual({ ok: true, message: "Registrasi berhasil" });
     expect(mockSetCookie).toHaveBeenCalledWith("refreshToken", "fakeRefreshToken", { path: "/", httpOnly: true });
@@ -49,7 +49,7 @@ describe("handleFormSubmit", () => {
       }),
     });
 
-    const result = await handleFormSubmit(mockRegisterForm);
+    const result = await handleRegisterSubmit(mockRegisterForm);
 
     expect(result).toEqual({ ok: false, message: "Invalid registration data" });
     expect(mockSetCookie).not.toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe("handleFormSubmit", () => {
   it("should return a generic error message when there is an exception", async () => {
     (fetch as jest.Mock).mockRejectedValueOnce(new Error("Network Error"));
 
-    const result = await handleFormSubmit(mockRegisterForm);
+    const result = await handleRegisterSubmit(mockRegisterForm);
 
     expect(result).toEqual({ ok: false, message: "Terjadi kesalahan pada registrasi" });
     expect(mockSetCookie).not.toHaveBeenCalled();

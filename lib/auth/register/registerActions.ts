@@ -3,7 +3,7 @@
 import { RegisterForm } from "@/types/auth/register"
 import { cookies } from "next/headers"
 
-export async function handleFormSubmit(data: RegisterForm): Promise<{ ok: boolean, message: string }> {
+export async function handleRegisterSubmit(data: RegisterForm): Promise<{ ok: boolean, message: string }> {
   const reqUrl = `${process.env.API_BASE_URL}/api/auth/register`
   try {
     const res = await registerRequest(reqUrl, data)
