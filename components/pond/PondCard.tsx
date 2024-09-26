@@ -29,7 +29,7 @@ const PondCard: React.FC<PondCardProps> = ({ pond }) => {
         </CardContent>
         <CardFooter>
           <Button className='bg-blue-500 hover:bg-blue-600 active:bg-blue-700' asChild>
-            <Link href={`/pond/${pond.id}`}>
+            <Link href={`/pond/${pond.pond_id}`}>
               View Pond
             </Link>
           </Button>
