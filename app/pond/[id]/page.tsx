@@ -17,7 +17,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     pond = undefined;
   }
 
-  if (!pond || pond === undefined) {
+  if (!pond) {
     return (
       <div className='min-h-[100vh] flex flex-col items-center justify-center'>
         Kolam tidak ditemukan

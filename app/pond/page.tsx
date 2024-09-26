@@ -10,19 +10,15 @@ const PondListPage = async () => {
   let ponds: Pond[];
 
   try {
-    ponds = await fetchPonds();
+    ponds = await fetchPonds(token);
   } catch (error) {
     ponds = [];
-  }
-
-  if (!ponds || ponds.length === 0) {
-    return <div>Tidak ada kolam</div>;
   }
 
   const user = await getUser(token);
 
   return (
-    <div className='min-h-[100dvh] flex flex-col items-center justify-center py-10'>
+    <div className='min-h-[100dvh] flex flex-col items-center py-10'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>
@@ -31,8 +27,14 @@ const PondListPage = async () => {
               {user && `${user.first_name} ${user.last_name}`}
             </p>
           </div>
-          <AddPond token={token}/>
-          <PondList ponds={ponds} />
+          <AddPond token={token} />
+          {ponds.length > 0 ?
+            (
+              <PondList ponds={ponds} />
+            ) : (
+              <p className='text-lg text-start'>Tidak ada kolam</p>
+            )
+          }
         </div>
       </div>
     </div>
