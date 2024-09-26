@@ -40,7 +40,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
             <Image className='object-cover h-full w-full' src={ `/${fallbackSrc}` } width={500} height={400} alt={`${pond.name} image`} />
           </div>
           <div className='flex gap-x-2'>
-            <EditPond />
+            <EditPond token={token} pondData={pond}/>
             <DeletePond />
           </div>
         </div>
