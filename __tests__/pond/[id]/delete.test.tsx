@@ -66,4 +66,14 @@ describe('DeletePond Component', () => {
     });
   })
 
+  it('shows fail message when deletePond function returns false', async () => {
+    (deletePond as jest.Mock).mockResolvedValue(false);
+    render(<DeletePond pondId="pond1" />);
+    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
+    await waitFor(() => {
+      expect(deletePond).toHaveBeenCalledWith('pond1');
+      expect(screen.getByText('Gagal menghapus kolam')).toBeInTheDocument();
+    });
+  })
 });
