@@ -7,51 +7,63 @@ jest.mock('@/lib/pond', () => ({
 }));
 
 describe('DeletePond Component', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      writable: true,
+      value: { href: '' }
+    });
+  });
+
   it('renders the delete button correctly', () => {
     render(<DeletePond pondId="pond1" />);
     expect(screen.getByRole('button', { name: /hapus kolam/i })).toBeInTheDocument();
   });
 
-  it('calls the delete function when delete button is clicked', async () => {
-    const mockDeletePond = jest.fn(() => Promise.resolve({ success: true }));
-    (deletePond as jest.Mock).mockImplementationOnce(mockDeletePond);
-
-    render(<DeletePond pondId="pond1" />); 
-    const deleteButton = screen.getByRole('button', { name: /hapus kolam/i });
-
-    fireEvent.click(deleteButton);
-
-    await waitFor(() => {
-      expect(mockDeletePond).toHaveBeenCalledWith("pond1");
-      expect(mockDeletePond).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  it('displays an error message if the delete request fails', async () => {
-    const mockDeletePond = jest.fn(() => Promise.reject(new Error('Delete failed')));
-    (deletePond as jest.Mock).mockImplementationOnce(mockDeletePond);
-
+  it('opens a modal when delete button is clicked', () => {
     render(<DeletePond pondId="pond1" />);
-    const deleteButton = screen.getByRole('button', { name: /hapus kolam/i });
+    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Apakah anda yakin?')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /hapus/i })).toBeInTheDocument();
+  })
 
-    fireEvent.click(deleteButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Failed to delete pond')).toBeInTheDocument();
-    });
-  });
-
-  it('throws an error if the delete response is unsuccessful', async () => {
-    const mockDeletePond = jest.fn(() => Promise.resolve({ success: false }));
-    (deletePond as jest.Mock).mockImplementationOnce(mockDeletePond);
-
+  it('closes the dialog when x button is pressed', () => {
     render(<DeletePond pondId="pond1" />);
-    const deleteButton = screen.getByRole('button', { name: /hapus kolam/i });
+    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    expect(screen.getByText(/apakah anda yakin\?/i)).toBeInTheDocument();
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  })
 
-    fireEvent.click(deleteButton);
+  it('closes the dialog when area outside the dialog is clicked', () => { 
+    render(<DeletePond pondId="pond1" />);
+    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    expect(screen.getByText(/apakah anda yakin\?/i)).toBeInTheDocument();
+    fireEvent.mouseDown(document.body);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument
+  })
 
+  it('calls the deletePond function when delete button is clicked and redirected', async () => {
+    (deletePond as jest.Mock).mockResolvedValue(true);
+    render(<DeletePond pondId="pond1" />);
+    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
     await waitFor(() => {
-      expect(screen.getByText('Failed to delete pond')).toBeInTheDocument();
+      expect(deletePond).toHaveBeenCalledWith('pond1');
+      expect(window.location.href).toBe('/pond');
     });
-  });
+  })
+
+  it('shows error message when deletePond function fails', async () => {
+    (deletePond as jest.Mock).mockRejectedValue(new Error('Delete pond failed'));
+    render(<DeletePond pondId="pond1" />);
+    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
+    await waitFor(() => {
+      expect(deletePond).toHaveBeenCalledWith('pond1');
+      expect(screen.getByText('Gagal menghapus kolam')).toBeInTheDocument();
+    });
+  })
+
 });
