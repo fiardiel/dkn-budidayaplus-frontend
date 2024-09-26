@@ -18,7 +18,7 @@ const PondListPage = async () => {
   const user = await getUser(token);
 
   return (
-    <div className='min-h-[100dvh] flex flex-col items-center justify-center py-10'>
+    <div className='min-h-[100dvh] flex flex-col items-center py-10'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>
@@ -32,7 +32,7 @@ const PondListPage = async () => {
             (
               <PondList ponds={ponds} />
             ) : (
-              <p className='text-lg text-center'>Tidak ada kolam</p>
+              <p className='text-lg text-start'>Tidak ada kolam</p>
             )
           }
         </div>
