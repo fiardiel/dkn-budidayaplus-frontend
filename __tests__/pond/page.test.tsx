@@ -85,4 +85,19 @@ describe('PondListPage', () => {
       expect(pondImage).toHaveAttribute("src", "http://localhost/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     })
   })
+
+  it('opens and closes the Add Pond modal', async () => {
+    render(await PondListPage());
+
+    fireEvent.click(screen.getByRole('button', { name: /Tambah Kolam/i }));
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Nama Kolam')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Close/i }));
+    await waitFor(() => {
+      expect(screen.queryByPlaceholderText('Nama Kolam')).not.toBeInTheDocument();
+    });
+  });
+
 })
