@@ -1,5 +1,5 @@
 export type Pond = {
-  id: string;
+  pond_id: string;
   name: string;
   length: number;
   width: number;
