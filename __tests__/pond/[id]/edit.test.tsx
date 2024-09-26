@@ -33,7 +33,7 @@ describe('Edit Pond Modal', () => {
     expect(screen.getByPlaceholderText('Nama Gambar')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Panjang (meter)')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Lebar (meter)')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Tinggi (meter)')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Kedalaman (meter)')).toBeInTheDocument();
   });
 
   it('closes the modal when the close button is clicked', async () => {
