@@ -1,6 +1,6 @@
 'use server';
 
-import { PondAddForm } from "@/types/pond/addpond";
+import { PondAddForm } from "@/types/pond/inputpond";
 
 export async function updatePond(pondId: string, data: PondAddForm, token: string): Promise<{ success: boolean; message?: string }> {
   const response = await fetch(`${process.env.API_BASE_URL}/api/pond/${pondId}/`, {
