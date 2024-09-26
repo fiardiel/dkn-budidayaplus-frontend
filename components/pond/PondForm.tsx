@@ -48,6 +48,7 @@ const PondForm: React.FC<PondFormProps> = ({ onSubmit, initialData, buttonText }
                 {...register('length', { setValueAs: value => parseFloat(value) })}
                 placeholder='Panjang (meter)'
                 type='number'
+                step='0.01'
                 className='w-full p-3 border border-gray-300 rounded-lg'
             />
             {errors.length && <p className='text-red-500'>{errors.length.message?.toString()}</p>}
@@ -56,6 +57,7 @@ const PondForm: React.FC<PondFormProps> = ({ onSubmit, initialData, buttonText }
                 {...register('width', { setValueAs: value => parseFloat(value) })}
                 placeholder='Lebar (meter)'
                 type='number'
+                step='0.01'
                 className='w-full p-3 border border-gray-300 rounded-lg'
             />
             {errors.width && <p className='text-red-500'>{errors.width.message?.toString()}</p>}
@@ -64,6 +66,7 @@ const PondForm: React.FC<PondFormProps> = ({ onSubmit, initialData, buttonText }
                 {...register('depth', { setValueAs: value => parseFloat(value) })}
                 placeholder='Kedalaman (meter)'
                 type='number'
+                step='0.01'
                 className='w-full p-3 border border-gray-300 rounded-lg'
             />
             {errors.depth && <p className='text-red-500'>{errors.depth.message?.toString()}</p>}
