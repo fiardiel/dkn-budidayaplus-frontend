@@ -24,7 +24,7 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
 
   const length = watch('length');
   const width = watch('width');
-  const height = watch('height');
+  const height = watch('depth');
 
   useEffect(() => {
     if (length && width && height) {
@@ -98,14 +98,14 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
             {errors.width && <p className='text-red-500'>{errors.width.message?.toString()}</p>}
 
             <input
-              {...register('height', {
+              {...register('depth', {
                 setValueAs: value => parseFloat(value),
               })}
-              placeholder='Tinggi (meter)'
+              placeholder='Kedalaman (meter)'
               type='number'
               className='w-full p-3 border border-gray-300 rounded-lg'
             />
-            {errors.height && <p className='text-red-500'>{errors.height.message?.toString()}</p>}
+            {errors.depth && <p className='text-red-500'>{errors.depth.message?.toString()}</p>}
 
             {volume !== null && (
               <p className="text-gray-700">
