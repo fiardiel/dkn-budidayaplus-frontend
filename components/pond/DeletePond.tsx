@@ -1,9 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { deletePond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from '@/components/ui/button';
+
 
 type DeletePondProps = {
   pondId: Pond['pond_id'];
@@ -17,15 +27,14 @@ const DeletePond: React.FC<DeletePondProps> = ({ pondId }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await deletePond(pondId);
-      if (response.success) {
-        alert('Pond deleted successfully');
-        window.location.href = '/pond'; 
+      const isDeleteSuccess = await deletePond(pondId);
+      if (isDeleteSuccess) {
+        window.location.href = '/pond';
       } else {
-        throw new Error('Failed to delete pond');
+        setError('Gagal menghapus kolam');
       }
-    } catch (err) {
-      setError('Failed to delete pond');
+    } catch (error) {
+      setError('Gagal menghapus kolam');
     } finally {
       setLoading(false);
     }
@@ -33,10 +42,31 @@ const DeletePond: React.FC<DeletePondProps> = ({ pondId }) => {
 
   return (
     <div>
-      <Button variant={'destructive'} onClick={handleDelete} disabled={loading}>
-        {loading ? 'Deleting...' : 'Hapus Kolam'}
-      </Button>
-      {error && <p className="text-red-500">{error}</p>}
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant={'destructive'}>
+            Hapus kolam
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader className='justify-start'>
+            <DialogTitle className='text-start'>Apakah anda yakin?</DialogTitle>
+            <DialogDescription className='justify-start text-start'>
+              Penghapusan tidak bisa dibatalkan. Tindakan ini akan menghapus kolam anda secara permanen. Tekan tombol x atau di luar kotak dialog untuk membatalkan.
+            </DialogDescription>
+            {error && <p className="text-red-500 mt-1 text-start text-sm">{error}</p>}
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={loading} 
+            >
+              Hapus
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
