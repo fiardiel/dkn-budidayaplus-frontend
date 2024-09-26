@@ -25,7 +25,7 @@ const PondCard: React.FC<PondCardProps> = ({ pond }) => {
           </CardTitle>
         </CardHeader>
         <CardContent className='pb-2'>
-          <p>Volume: {pond.volume}</p>
+          <p>Volume: {pond.depth * pond.width * pond.length}</p>
         </CardContent>
         <CardFooter>
           <Button className='bg-blue-500 hover:bg-blue-600 active:bg-blue-700' asChild>
