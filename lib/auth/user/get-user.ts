@@ -1,6 +1,6 @@
 import User from "@/types/auth/user";
 
-const API_URL = `http://localhost:8000/api/auth/me`;
+const API_URL = `http://127.0.0.1:8000`;
 
 export async function getUser(token?: string): Promise<User | null> {
   const response = await fetch(API_URL, {
