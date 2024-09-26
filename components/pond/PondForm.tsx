@@ -1,8 +1,10 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '../ui/button';
-import { PondInputSchema, PondInputForm } from '@/types/pond/inputpond';
+import { Button } from '@/components/ui/button';
+import { PondInputSchema, PondInputForm } from '@/types/pond';
 
 interface PondFormProps {
     onSubmit: (data: PondInputForm) => Promise<void>;
@@ -72,9 +74,9 @@ const PondForm: React.FC<PondFormProps> = ({ onSubmit, initialData, buttonText }
             {errors.depth && <p className='text-red-500'>{errors.depth.message?.toString()}</p>}
 
             {volume !== null && (
-              <p className="text-gray-700">
-                Volume Kolam: {volume.toFixed(2)} m^3
-              </p>
+                <p className="text-gray-700">
+                    Volume Kolam: {volume.toFixed(2)} m^3
+                </p>
             )}
 
             <Button type='submit'>{buttonText}</Button>

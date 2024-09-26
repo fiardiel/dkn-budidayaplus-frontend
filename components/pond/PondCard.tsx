@@ -4,7 +4,7 @@ import { Pond } from '@/types/pond'
 import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import Image from 'next/image'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 interface PondCardProps {

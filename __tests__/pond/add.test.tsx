@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, act } from '@testing-library/react';
-import AddPond from '@/components/pond/AddPond';
+import { AddPond } from '@/components/pond';
 import { addPond } from '@/lib/pond';
 import fetchMock from 'jest-fetch-mock';
 
@@ -109,17 +109,14 @@ describe('Add Pond Modal', () => {
 
     render(<AddPond token={mockToken} />);
 
-    // Open the modal
     fireEvent.click(screen.getByText(/tambah kolam/i));
 
-    // Fill out the form
     fireEvent.change(screen.getByPlaceholderText('Nama Kolam'), { target: { value: 'Pond 5' } });
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond5.jpg' } });
     fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
     fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
     fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
-    // Submit the form
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
     await waitFor(() => {

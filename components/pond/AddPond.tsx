@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { addPond } from '@/lib/pond';
 import { IoIosAdd } from 'react-icons/io';
-import { Modal } from '../ui/modal';
-import PondForm from './PondForm';
-import { PondInputForm } from '@/types/pond/inputpond';
+import { Modal } from '@/components/ui/modal';
+import { PondForm } from '@/components/pond';
+import { PondInputForm } from '@/types/pond';
 
 interface AddPondProps extends React.HTMLProps<HTMLDivElement> {
   token?: string;
