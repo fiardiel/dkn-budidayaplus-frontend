@@ -41,7 +41,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           </div>
           <div className='flex gap-x-2'>
             <EditPond token={token} pondData={pond}/>
-            <DeletePond />
+            <DeletePond pondId={pond.pond_id} />
           </div>
         </div>
       </div>
