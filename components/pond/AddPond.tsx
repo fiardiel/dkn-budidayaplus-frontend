@@ -15,7 +15,6 @@ interface AddPondProps extends React.HTMLProps<HTMLDivElement> {
 
 const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [volume, setVolume] = useState<number | null>(null);
 
@@ -23,7 +22,6 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
     resolver: zodResolver(PondAddSchema),
   });
 
-  // Watch length, width, and height to calculate volume
   const length = watch('length');
   const width = watch('width');
   const height = watch('height');
@@ -32,7 +30,7 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
     if (length && width && height) {
       const calculatedVolume = parseFloat(length.toString()) * parseFloat(width.toString()) * parseFloat(height.toString());
       setVolume(calculatedVolume);
-      setValue('volume', calculatedVolume); // Set the calculated volume to the form
+      setValue('volume', calculatedVolume); 
     }
   }, [length, width, height, setValue]);
 
@@ -45,7 +43,6 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
     console.log('Submitting data', data);
 
     try {
-      setLoading(true);
       const response = await addPond(data, propToken);
       console.log('Pond created:', response);
       reset();
@@ -54,9 +51,7 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
     } catch (error) {
       console.error('Failed to create pond:', error);
       setError('Failed to create pond');
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
@@ -114,7 +109,7 @@ const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
 
             {volume !== null && (
               <p className="text-gray-700">
-                Volume Kolam: {volume.toFixed(2)} meter^3
+                Volume Kolam: {volume.toFixed(2)} m^3
               </p>
             )}
 
