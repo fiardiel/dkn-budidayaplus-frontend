@@ -8,23 +8,14 @@ import { Modal } from '@/components/ui/modal';
 import { PondForm } from '@/components/pond';
 import { PondInputForm } from '@/types/pond';
 
-interface AddPondProps extends React.HTMLProps<HTMLDivElement> {
-  token?: string;
-}
 
-const AddPond: React.FC<AddPondProps> = ({ token: propToken, ...props }) => {
+const AddPond: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (data: PondInputForm) => {
-    if (!propToken) {
-      console.error('No token found');
-      setError('No token found');
-      return;
-    }
-
     try {
-      await addPond(data, propToken);
+      await addPond(data);
       setOpen(false);
       window.location.reload();
     } catch (error) {
