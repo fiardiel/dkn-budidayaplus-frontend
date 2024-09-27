@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { handleFormSubmit } from '@/lib/auth'
+import { handleRegisterSubmit, hashPassword } from '@/lib/auth'
 import { RegisterForm, registerSchema } from '@/types/auth/register'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -25,7 +25,8 @@ const RegisterPage = () => {
 
   const onSubmit = async (data: RegisterForm) => {
     setError(null)
-    const response = await handleFormSubmit(data)
+    data.password = await hashPassword(data.password)
+    const response = await handleRegisterSubmit(data)
     if (response.ok) {
       reset()
       router.push("/")
