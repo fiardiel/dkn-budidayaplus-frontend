@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, act } from '@testing-library/react';
-import AddPond from '@/components/pond/AddPond';
+import { AddPond } from '@/components/pond';
 import { addPond } from '@/lib/pond';
 import fetchMock from 'jest-fetch-mock';
 
@@ -28,7 +28,9 @@ describe('Add Pond Modal', () => {
 
     expect(screen.getByPlaceholderText('Nama Kolam')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Nama Gambar')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Volume Kolam')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Panjang (meter)')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Lebar (meter)')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Kedalaman (meter)')).toBeInTheDocument();
   });
 
   it('does not submit the form if no token is found', async () => {
@@ -45,9 +47,12 @@ describe('Add Pond Modal', () => {
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /tambah kolam/i }));
     });
+
     fireEvent.change(screen.getByPlaceholderText('Nama Kolam'), { target: { value: 'Pond 4' } });
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond4.jpg' } });
-    fireEvent.change(screen.getByPlaceholderText('Volume Kolam'), { target: { value: 125.0 } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /submit/i }));
@@ -71,7 +76,7 @@ describe('Add Pond Modal', () => {
     );
 
     const mockResponse = { success: true, message: 'Pond created' };
-    (addPond as jest.Mock).mockResolvedValue(mockResponse);  // Mock success response
+    (addPond as jest.Mock).mockResolvedValue(mockResponse); 
 
     const mockToken = 'mockAccessToken';
 
@@ -81,7 +86,9 @@ describe('Add Pond Modal', () => {
 
     fireEvent.change(screen.getByPlaceholderText('Nama Kolam'), { target: { value: 'Pond 4' } });
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond4.jpg' } });
-    fireEvent.change(screen.getByPlaceholderText('Volume Kolam'), { target: { value: 125.0 } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /submit/i }));
@@ -98,20 +105,18 @@ describe('Add Pond Modal', () => {
     const mockError = new Error('Failed to create pond');
     (addPond as jest.Mock).mockRejectedValueOnce(mockError); // Mock error
 
-    // Pass a mock token as prop to the component
     const mockToken = 'mockAccessToken';
 
     render(<AddPond token={mockToken} />);
 
-    // Open the modal
     fireEvent.click(screen.getByText(/tambah kolam/i));
 
-    // Fill out the form
     fireEvent.change(screen.getByPlaceholderText('Nama Kolam'), { target: { value: 'Pond 5' } });
     fireEvent.change(screen.getByPlaceholderText('Nama Gambar'), { target: { value: 'pond5.jpg' } });
-    fireEvent.change(screen.getByPlaceholderText('Volume Kolam'), { target: { value: 321.0 } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Lebar (meter)'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Kedalaman (meter)'), { target: { value: '5' } });
 
-    // Submit the form
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
     await waitFor(() => {
