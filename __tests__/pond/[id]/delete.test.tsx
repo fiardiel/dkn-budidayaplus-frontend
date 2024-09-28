@@ -23,14 +23,14 @@ describe('DeletePond Component', () => {
     render(<DeletePond pondId="pond1" />);
     fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Apakah anda yakin?')).toBeInTheDocument();
+    expect(screen.getByText(/hapus kolam\?/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /hapus/i })).toBeInTheDocument();
   })
 
   it('closes the dialog when x button is pressed', () => {
     render(<DeletePond pondId="pond1" />);
     fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
-    expect(screen.getByText(/apakah anda yakin\?/i)).toBeInTheDocument();
+    expect(screen.getByText(/hapus kolam\?/i)).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('DeletePond Component', () => {
   it('closes the dialog when area outside the dialog is clicked', () => { 
     render(<DeletePond pondId="pond1" />);
     fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
-    expect(screen.getByText(/apakah anda yakin\?/i)).toBeInTheDocument();
+    expect(screen.getByText(/hapus kolam\?/i)).toBeInTheDocument();
     fireEvent.mouseDown(document.body);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument
   })

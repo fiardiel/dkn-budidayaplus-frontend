@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { EditPond } from '@/components/pond';
-import { updatePond } from '@/lib/pond';
+import { addOrUpdatePond } from '@/lib/pond';
 
 jest.mock('@/lib/pond', () => ({
-  updatePond: jest.fn(),
+  addOrUpdatePond: jest.fn(),
 }));
 
 describe('Edit Pond Modal', () => {
@@ -61,7 +61,7 @@ describe('Edit Pond Modal', () => {
 
   it('closes the modal after successful form submission', async () => {
     const mockResponse = { success: true };
-    (updatePond as jest.Mock).mockResolvedValue(mockResponse);
+    (addOrUpdatePond as jest.Mock).mockResolvedValue(mockResponse);
 
     render(<EditPond pond={mockPondData} />);
 
@@ -84,9 +84,9 @@ describe('Edit Pond Modal', () => {
     });
 
     await waitFor(() => {
-      expect(updatePond).toHaveBeenCalledWith(
-        mockPondData.pond_id,
+      expect(addOrUpdatePond).toHaveBeenCalledWith(
         expect.any(Object),
+        mockPondData.pond_id,
       );
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
@@ -94,7 +94,7 @@ describe('Edit Pond Modal', () => {
 
   it('displays error message and sets error state when form submission fails', async () => {
     const mockError = new Error('Gagal menyimpan kolam');
-    (updatePond as jest.Mock).mockRejectedValueOnce(mockError);
+    (addOrUpdatePond as jest.Mock).mockRejectedValueOnce(mockError);
 
     render(<EditPond pond={mockPondData} />);
 
@@ -110,7 +110,7 @@ describe('Edit Pond Modal', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Gagal menyimpan kolam/i)).toBeInTheDocument();
-      expect(updatePond).toHaveBeenCalledTimes(1);
+      expect(addOrUpdatePond).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -137,6 +137,6 @@ describe('Edit Pond Modal', () => {
     expect('Lebar harus berupa angka positif')
     expect('Kedalaman harus berupa angka positif')
 
-    expect(updatePond).not.toHaveBeenCalled();
+    expect(addOrUpdatePond).not.toHaveBeenCalled();
   });
 });

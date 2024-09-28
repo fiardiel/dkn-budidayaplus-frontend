@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitFor, act } from '@testing-library/react';
 import { AddPond } from '@/components/pond';
-import { addPond } from '@/lib/pond';
+import { addOrUpdatePond } from '@/lib/pond';
 
 jest.mock('@/lib/pond', () => ({
-  addPond: jest.fn(),
+  addOrUpdatePond: jest.fn(),
 }));
 
 describe('Add Pond Modal', () => {
@@ -41,7 +41,7 @@ describe('Add Pond Modal', () => {
     );
 
     const mockResponse = { success: true, message: 'Pond created' };
-    (addPond as jest.Mock).mockResolvedValue(mockResponse); 
+    (addOrUpdatePond as jest.Mock).mockResolvedValue(mockResponse); 
     const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
 
     render(<AddPond />);
@@ -67,7 +67,7 @@ describe('Add Pond Modal', () => {
 
   it('displays error message when backend says pond creation failed', async () => {
     const mockResponse = { success: false, message: 'Failed to create pond' };
-    (addPond as jest.Mock).mockResolvedValue(mockResponse);
+    (addOrUpdatePond as jest.Mock).mockResolvedValue(mockResponse);
     const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
 
     render(<AddPond />);
@@ -92,7 +92,7 @@ describe('Add Pond Modal', () => {
   it('displays error message and sets error state when form submission fails', async () => {
     const mockError = new Error('Gagal menambahkan kolam');
     const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
-    (addPond as jest.Mock).mockRejectedValueOnce(mockError);
+    (addOrUpdatePond as jest.Mock).mockRejectedValueOnce(mockError);
 
     render(<AddPond />);
 
@@ -127,7 +127,7 @@ describe('Add Pond Modal', () => {
       expect(screen.getByText('Nama kolam harus diisi')).toBeInTheDocument();
       expect(screen.getByText('Lebar harus berupa angka positif')).toBeInTheDocument();
       expect(screen.getByText('Kedalaman harus berupa angka positif')).toBeInTheDocument();
-      expect(addPond).not.toHaveBeenCalled();
+      expect(addOrUpdatePond).not.toHaveBeenCalled();
     });
   });
 });
