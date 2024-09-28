@@ -1,22 +1,24 @@
-import React from 'react';
+'use client'
 
-interface ModalProps {
-  open: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
+import React from 'react'
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+
+interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
+  title: string
+  description?: string
+  children?: React.ReactNode
 }
 
-const Modal: React.FC<ModalProps> = ({ open, onClose, children, ...rest }) => {
-  if (!open) return null;
-
+export const Modal: React.FC<ModalProps> = ({ title, description, children, ...props }) => {  
   return (
-    <div {...rest} className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
-      <div className='bg-white rounded-lg p-6 max-w-lg w-full'>
-        {children}
-        <button onClick={onClose} className='mt-4'>Close</button>
-      </div>
-    </div>
-  );
-};
-
-export  { Modal }
+    <DialogContent {...props}>
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>
+          {description}
+        </DialogDescription>
+      </DialogHeader>
+      {children}
+    </DialogContent>
+  )
+}
