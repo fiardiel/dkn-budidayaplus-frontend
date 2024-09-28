@@ -1,87 +1,135 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { PondInputSchema, PondInputForm } from '@/types/pond';
+import { Pond, PondInput, PondInputSchema } from '@/types/pond'
+import { zodResolver } from '@hookform/resolvers/zod'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { objectToFormData } from '@/lib/utils'
+import { addOrUpdatePond } from '@/lib/pond'
 
 interface PondFormProps {
-    onSubmit: (data: PondInputForm) => Promise<void>;
-    initialData?: PondInputForm;
-    buttonText: string;
+  pond?: Pond
+  setIsModalOpen: (open: boolean) => void
 }
 
-const PondForm: React.FC<PondFormProps> = ({ onSubmit, initialData, buttonText }) => {
-    const [volume, setVolume] = useState<number | null>(null)
-    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<PondInputForm>({
-        resolver: zodResolver(PondInputSchema),
-        defaultValues: initialData,
-    });
+const PondForm: React.FC<PondFormProps> = ({ pond, setIsModalOpen }) => {
+  const [volume, setVolume] = useState<number | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-    const length = watch('length');
-    const width = watch('width');
-    const height = watch('depth');
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+    reset
+  } = useForm<PondInput>({
+    resolver: zodResolver(PondInputSchema),
+    defaultValues: pond && {
+      name: pond.name,
+      length: pond.length,
+      width: pond.width,
+      depth: pond.depth,
+    }
+  })
 
-    useEffect(() => {
-        if (length && width && height) {
-            const calculatedVolume = parseFloat(length.toString()) * parseFloat(width.toString()) * parseFloat(height.toString());
-            setVolume(calculatedVolume);
-        }
-    }, [length, width, height, setValue]);
+  const width = watch('width')
+  const length = watch('length')
+  const depth = watch('depth')
 
-    return (
-        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-            <input
-                {...register('name')}
-                placeholder='Nama Kolam'
-                className='w-full p-3 border border-gray-300 rounded-lg'
-            />
-            {errors.name && <p className='text-red-500'>{errors.name.message?.toString()}</p>}
+  const onSubmit = async (data: PondInput) => {
+    try {
+      setError(null)
+      const imageList = data.image as FileList
+      data.image = imageList[0]
+      const formData = objectToFormData(data)
 
-            <input
-                {...register('image_name')}
-                placeholder='Nama Gambar'
-                className='w-full p-3 border border-gray-300 rounded-lg'
-            />
-            {errors.image_name && <p className='text-red-500'>{errors.image_name.message?.toString()}</p>}
+      const res = await addOrUpdatePond(formData, pond?.pond_id)
 
-            <input
-                {...register('length', { setValueAs: value => parseFloat(value) })}
-                placeholder='Panjang (meter)'
-                type='number'
-                step='0.01'
-                className='w-full p-3 border border-gray-300 rounded-lg'
-            />
-            {errors.length && <p className='text-red-500'>{errors.length.message?.toString()}</p>}
+      if (!res.success) {
+        setError('Gagal menyimpan kolam')
+        return
+      }
 
-            <input
-                {...register('width', { setValueAs: value => parseFloat(value) })}
-                placeholder='Lebar (meter)'
-                type='number'
-                step='0.01'
-                className='w-full p-3 border border-gray-300 rounded-lg'
-            />
-            {errors.width && <p className='text-red-500'>{errors.width.message?.toString()}</p>}
+      reset()
+      setIsModalOpen(false)
+      window.location.reload()
 
-            <input
-                {...register('depth', { setValueAs: value => parseFloat(value) })}
-                placeholder='Kedalaman (meter)'
-                type='number'
-                step='0.01'
-                className='w-full p-3 border border-gray-300 rounded-lg'
-            />
-            {errors.depth && <p className='text-red-500'>{errors.depth.message?.toString()}</p>}
+    } catch (error) {
+      setError('Gagal menyimpan kolam')
+    }
+  }
 
-            {volume !== null && (
-                <p className="text-gray-700">
-                    Volume Kolam: {volume.toFixed(2)} m^3
-                </p>
-            )}
+  useEffect(() => {
+    if (width && length && depth) {
+      setVolume(width * length * depth)
+    }
+    return () => { return setVolume(null) }
+  }, [width, length, depth])
 
-            <Button type='submit'>{buttonText}</Button>
-        </form>
-    );
-};
+  return (
+    <div>
+      <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <Input
+            {...register('name')}
+            placeholder='Nama Kolam'
+            className='h-12'
+          />
+          {errors.name && <p className='text-red-500 mt-1 text-sm'>{errors.name.message?.toString()}</p>}
+        </div>
 
-export default PondForm;
+        <div>
+          <Input
+            {...register('length', { setValueAs: value => parseFloat(value) })}
+            placeholder='Panjang (meter)'
+            className='h-12'
+            step={0.01}
+          />
+          {errors.length && <p className='text-red-500 mt-1 text-sm'>{errors.length.message?.toString()}</p>}
+        </div>
+
+        <div>
+          <Input
+            {...register('width', { setValueAs: value => parseFloat(value) })}
+            placeholder='Lebar (meter)'
+            className='h-12'
+            step={0.01}
+          />
+          {errors.width && <p className='text-red-500 mt-1 text-sm'>{errors.width.message?.toString()}</p>}
+        </div>
+
+        <div>
+          <Input
+            {...register('depth', { setValueAs: value => parseFloat(value) })}
+            placeholder='Kedalaman (meter)'
+            className='h-12'
+            step={0.01}
+          />
+          {errors.depth && <p className='text-red-500 mt-1 text-sm'>{errors.depth.message?.toString()}</p>}
+        </div>
+
+        <div>
+          <Input
+            {...register('image')}
+            data-testid='image'
+            type='file'
+            accept='image/*'
+          />
+        </div>
+
+        {volume && <p className='text-center font-semibold'>Volume: {volume.toFixed(2)} m<sup>3</sup></p>}
+
+        <Button className='w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700' type='submit' disabled={isSubmitting}>
+          Simpan
+        </Button>
+
+        {error && <p className='w-full text-center text-red-500'>{error}</p>}
+      </form>
+
+    </div>
+  )
+}
+
+export default PondForm
