@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from "next/headers";
-import { formDataToObject } from "@/lib/utils";
+import { formDataToObject, hashImageName } from "@/lib/utils";
 
 export async function addOrUpdatePond(data: FormData, pondId?: string): Promise<{ success: boolean; message?: string }>  {
   const token = cookies().get('accessToken')?.value
@@ -12,6 +12,11 @@ export async function addOrUpdatePond(data: FormData, pondId?: string): Promise<
   const image: File = data.get('image') as File
   const pondData = formDataToObject(data)
 
+  let hashedImageName = ''
+  if (image.name) {
+    hashedImageName = await hashImageName(image.name)
+  }
+
   const response = await fetch(apiUrl, {
     method: pondId? 'PUT' : 'POST',
     headers: {
@@ -20,7 +25,7 @@ export async function addOrUpdatePond(data: FormData, pondId?: string): Promise<
     },
     body: JSON.stringify({
       ...pondData,
-      image_name: image.name ?? '',
+      image_name: hashedImageName,
     }),
   });
 

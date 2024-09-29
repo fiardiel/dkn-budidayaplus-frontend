@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
+import { createHash } from "crypto";
 import { twMerge } from "tailwind-merge"
 
 type FormDataConvertible = { [key: string]: string | number | boolean | File };
@@ -24,4 +25,12 @@ export function formDataToObject(formData: FormData): FormDataConvertible {
     obj[key] = value;
   });
   return obj;
+}
+
+
+export async function hashImageName(fileName: string): Promise<string> {
+  const extension = fileName.split('.').pop()?.toLowerCase() ?? ''
+  const date = new Date().toISOString()
+  const hashedFileName = createHash('sha256').update(`${fileName}${date}`).digest('hex')
+  return `${hashedFileName}.${extension}`
 }
