@@ -28,7 +28,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <div className='min-h-[100vh] flex flex-col py-10 items-center'>
+    <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>

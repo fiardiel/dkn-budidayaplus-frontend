@@ -1,8 +1,11 @@
+"use server"
+
 import User from "@/types/auth/user";
+import { cookies } from "next/headers";
 
-const API_URL = `http://127.0.0.1:8000`;
-
-export async function getUser(token?: string): Promise<User | null> {
+export async function getUser(): Promise<User | null> {
+  const API_URL = process.env.API_BASE_URL;
+  const token = cookies().get('accessToken')?.value
   const response = await fetch(`${API_URL}/api/auth/me`, {
     method: "GET",
     headers: {

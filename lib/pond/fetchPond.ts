@@ -1,6 +1,10 @@
-import { Pond } from "@/types/pond"
+'use server'
 
-export async function fetchPond(pondId: string, token?: string): Promise<Pond> {  
+import { Pond } from "@/types/pond"
+import { cookies } from "next/headers"
+
+export async function fetchPond(pondId: string): Promise<Pond> {  
+  const token = cookies().get('accessToken')?.value
   const res = await fetch(`${process.env.API_BASE_URL}/api/pond/${pondId}/`, {
     method: 'GET',
     headers: {
