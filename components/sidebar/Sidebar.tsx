@@ -61,8 +61,8 @@ const Sidebar = () => {
 
             <div className='mt-4'>
               <div className='flex flex-col w-full'>
-                {navigationMenus.map((menu, index) => (
-                  <Link key={index} href={menu.href} onClick={() => setOpen(false)}>
+                {navigationMenus.map((menu) => (
+                  <Link key={menu.uid} href={menu.href} onClick={() => setOpen(false)}>
                     <div className='flex text-lg rounded-xl gap-4 w-full p-4 py-3 hover:bg-neutral-100 transition duration-200'>
                       {menu.icon}{menu.name}
                     </div>
