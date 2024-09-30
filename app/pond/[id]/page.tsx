@@ -2,7 +2,6 @@ import DeletePond from '@/components/pond/DeletePond';
 import EditPond from '@/components/pond/EditPond';
 import { fetchPond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
-import { cookies } from 'next/headers';
 import Image from 'next/image';
 import React from 'react'
 
@@ -10,10 +9,9 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
   let volume = 0
 
-  const token = cookies().get("accessToken")?.value;
   let pond: Pond | undefined
   try {
-    pond = await fetchPond(params.id, token);
+    pond = await fetchPond(params.id);
     volume = pond.depth * pond.width * pond.length
   } catch (error) {
     pond = undefined;
