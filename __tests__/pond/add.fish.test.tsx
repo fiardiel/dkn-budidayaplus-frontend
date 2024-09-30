@@ -1,5 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import AddFishSampling from '@/components/fishSampling/AddFishSampling';
+import PondDetailPage from '@/app/pond/[id]/page';
+import { fetchPond } from '@/lib/pond';
 import { addFishSampling } from '@/lib/fishSampling';
 import { cookies } from 'next/headers';
 

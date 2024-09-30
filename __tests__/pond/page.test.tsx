@@ -100,4 +100,17 @@ describe('PondListPage', () => {
     });
   });
 
+  it('opens and closes the Fish Sampling Modal', async () => {
+    render(await PondListPage());
+
+    fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Nama Kolam')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Close/i }));
+    await waitFor(() => {
+      expect(screen.queryByPlaceholderText('Nama Kolam')).not.toBeInTheDocument();
+    });
+  });
 })
