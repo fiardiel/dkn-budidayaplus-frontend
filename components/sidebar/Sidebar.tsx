@@ -44,21 +44,23 @@ const Sidebar = () => {
 
             <DrawerDescription className='sr-only hidden' />
 
-            <div className='flex gap-4 p-4 items-center'>
-              <Avatar data-testid='avatar' className='w-12 h-12'>
-                <AvatarImage />
-                <AvatarFallback>BP</AvatarFallback>
-              </Avatar>
-              <div className='flex flex-col items-start'>
-                <p className='font-semibold'>
-                  {user?.first_name} {user?.last_name}
-                </p>
-                <p className='font-normal text-sm -mt-1'>
-                  Aquaculturist
-                </p>
+            {user && (
+              <div className='flex gap-4 p-4 items-center'>
+                <Avatar data-testid='avatar' className='w-12 h-12'>
+                  <AvatarImage />
+                  <AvatarFallback>BP</AvatarFallback>
+                </Avatar>
+                <div className='flex flex-col items-start'>
+                  <p className='font-semibold'>
+                    {user?.first_name} {user?.last_name}
+                  </p>
+                  <p className='font-normal text-sm -mt-1'>
+                    Aquaculturist
+                  </p>
+                </div>
               </div>
-            </div>
-
+            )}
+            
             <div className='mt-4'>
               <div className='flex flex-col w-full'>
                 {navigationMenus.map((menu) => (
