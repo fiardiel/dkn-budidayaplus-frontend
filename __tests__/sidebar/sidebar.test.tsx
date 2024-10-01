@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { Sidebar } from '@/components/sidebar';
 import { useUser } from '@/hooks/useUser';
 import { logout } from '@/lib/auth/logout/logoutAction';
@@ -70,5 +70,18 @@ describe('Sidebar', () => {
     fireEvent.click(logoutMenu);
 
     expect(logout).toHaveBeenCalled(); 
+  });
+
+
+  it('does not render user information when user is null', async () => {
+    mockUseUser.mockReturnValue(null);
+    const sidebarTrigger = screen.getByRole('button', { name: /sidebar trigger/i });
+    await act(async () => {
+      fireEvent.click(sidebarTrigger);
+    })
+
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    expect(screen.queryByText('Aquaculturist')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('avatar')).not.toBeInTheDocument();
   });
 })
