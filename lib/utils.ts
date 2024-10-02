@@ -34,3 +34,16 @@ export async function hashImageName(fileName: string): Promise<string> {
   const hashedFileName = createHash('sha256').update(`${fileName}${date}`).digest('hex')
   return `${hashedFileName}.${extension}`
 }
+
+export const formatDateTime = (date: Date | undefined) => {
+  if (!date) return ''
+  const localDate = new Date(date)
+  const year = localDate.getFullYear()
+  const month = String(localDate.getMonth() + 1).padStart(2, '0')
+  const day = String(localDate.getDate()).padStart(2, '0')
+  const hours = String(localDate.getHours()).padStart(2, '0')
+  const minutes = String(localDate.getMinutes()).padStart(2, '0')
+
+  const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`
+  return formattedDate
+}
