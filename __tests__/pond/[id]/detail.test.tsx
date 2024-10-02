@@ -1,17 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import PondDetailPage from '@/app/pond/[id]/page';
 import { fetchPond } from '@/lib/pond';
-import { cookies } from 'next/headers';
 import { Pond } from '@/types/pond';
+import { PondQuality } from '@/types/pond-quality';
+import { getLatestPondQuality, getPondQuality } from '@/lib/pond-quality';
 
 jest.mock("@/lib/pond", () => ({
   fetchPond: jest.fn(),
 }));
 
-jest.mock("next/headers", () => ({
-  cookies: jest.fn().mockReturnValue({
-    get: jest.fn().mockReturnValue({ value: "accessToken" }),
-  }),
+jest.mock('@/lib/pond-quality', () => ({
+  getLatestPondQuality: jest.fn(),
 }));
 
 const mockPonds: Pond[] = [
@@ -20,12 +19,29 @@ const mockPonds: Pond[] = [
   { pond_id: 'xyz', name: "Pond 3", length: 169.0, width: 169.0, depth: 169.0, image_name: "pond3.jpg" },
 ];
 
-describe('PondListPage', () => {
+const mockPondQuality: PondQuality = {
+  id: 'abcde',
+  pond: 'abcde',
+  reporter: '081234567890',
+  recorded_at: new Date(),
+  image_name: 'pond1.jpg',
+  ph_level: 7.5,
+  salinity: 35,
+  water_temperature: 25,
+  water_clarity: 8,
+  water_circulation: 7.12,
+  dissolved_oxygen: 5,
+  orp: 200,
+  ammonia: 0.112,
+  nitrate: 0.134,
+  phosphate: 0.144,
+};
+
+describe('Pond detail page', () => {
   beforeEach(async () => {
     (fetchPond as jest.Mock).mockResolvedValue(mockPonds.find(pond => pond.pond_id === 'abcde'));
-    (cookies as jest.Mock).mockReturnValue({ get: jest.fn().mockReturnValue({ value: "accessToken" }) });
   })
-  it('renders the pond list page', async () => {
+  it('renders the pond detail page', async () => {
     render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
       expect(screen.getByText("Selamat datang di")).toBeInTheDocument();
@@ -61,5 +77,40 @@ describe('PondListPage', () => {
       expect(pondImage).toHaveAttribute("src", "/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     })
   })
+
+  it('renders the pond quality list if pond quality exists', async () => {
+    (getLatestPondQuality as jest.Mock).mockResolvedValue(mockPondQuality);
+    render(await PondDetailPage({params: {id: 'abcde'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Kualitas Air')).toBeInTheDocument();
+      expect(screen.getByText('Suhu (°C)')).toBeInTheDocument();
+      expect(screen.getByText('pH level')).toBeInTheDocument();
+      expect(screen.getByText('Salinitas')).toBeInTheDocument();
+      expect(screen.getByText('Kecerahan (cm)')).toBeInTheDocument();
+      expect(screen.getByText('Sirkulasi')).toBeInTheDocument();
+      expect(screen.getByText('DO (mg/L)')).toBeInTheDocument();
+      expect(screen.getByText('ORP')).toBeInTheDocument();
+      expect(screen.getByText('NH')).toBeInTheDocument();
+      expect(screen.getByText('NO')).toBeInTheDocument();
+      expect(screen.getByText('PO')).toBeInTheDocument();
+    });
+  })
+
+  it('renders no pond quality message if pond quality does not exist', async () => {
+    (getLatestPondQuality as jest.Mock).mockResolvedValue(undefined);
+    render(await PondDetailPage({params: {id: 'abcde'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Tidak ada data kualitas air')).toBeInTheDocument();
+    });
+  })
+
+  it('handles the error case of fetching pond quality', async () => {
+    (getLatestPondQuality as jest.Mock).mockRejectedValue(new Error("Gagal terhubung ke server"));
+    render(await PondDetailPage({params: {id: 'abcde'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Tidak ada data kualitas air')).toBeInTheDocument();
+    });
+  })
+    
 
 })
