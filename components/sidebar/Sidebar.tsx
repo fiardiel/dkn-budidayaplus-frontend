@@ -28,7 +28,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className='flex items-center justify-center bg-white border-b border-neutral-300/40 shadow-sm h-20 fixed top-0 w-full sm:hidden'>
+    <div className='flex items-center justify-center bg-white border-b border-neutral-300/40 shadow-sm h-20 fixed top-0 w-full sm:hidden z-50'>
       <div className='w-[80%]'>
         <Drawer direction='left' open={open} onOpenChange={setOpen}>
           <DrawerTrigger className='pt-3'> <Menu /> <span className='sr-only'>Sidebar Trigger</span> </DrawerTrigger>
