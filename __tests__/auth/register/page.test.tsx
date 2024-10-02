@@ -1,6 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import RegisterPage from '@/app/auth/register/page';
-import { handleRegisterSubmit } from '@/lib/auth';
+import { handleRegisterSubmit, hashPassword } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 
 jest.mock('@/lib/auth', () => ({
@@ -9,9 +9,7 @@ jest.mock('@/lib/auth', () => ({
 }));
 
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(() => ({
-    push: jest.fn(),
-  })),
+  useRouter: jest.fn(),
 }));
 
 global.fetch = jest.fn(() =>
@@ -31,9 +29,7 @@ const mockFailedRegisterResponse = jest.fn().mockResolvedValue({
 });
 
 describe("Register Page", () => {
-  const mockRouter = {
-    push: jest.fn(),
-  };
+  const mockPush = jest.fn();
 
   let phoneInput: HTMLElement;
   let firstNameInput: HTMLElement;
@@ -42,7 +38,10 @@ describe("Register Page", () => {
   let registerButton: HTMLElement;
 
   beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush,
+    });
+    jest.clearAllMocks();
     render(<RegisterPage />);
 
     phoneInput = screen.getByPlaceholderText("Nomor Ponsel");
@@ -57,6 +56,10 @@ describe("Register Page", () => {
     });
   });
 
+  afterEach(() => {
+    mockPush.mockRestore();
+  })
+
   it("renders the register form", () => {
     expect(phoneInput).toBeInTheDocument();
     expect(firstNameInput).toBeInTheDocument();
@@ -65,20 +68,28 @@ describe("Register Page", () => {
     expect(registerButton).toBeInTheDocument();
   });
 
-  it("allows user to register", async () => {
+  it("allows user to register and succeeds the submission", async () => {
+    (hashPassword as jest.Mock).mockResolvedValue('hashedPassword123');
+    (handleRegisterSubmit as jest.Mock).mockResolvedValue({ok: true, message:"Registrasi berhasil"})
+    
     fireEvent.change(phoneInput, { target: { value: '08123456789' } });
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(passwordInput, { target: { value: 'mypassword123' } });
-    fireEvent.click(registerButton);
+    
+    await act(async () => {
+      fireEvent.click(registerButton);
+    })
 
     await waitFor(() => {
+      expect(hashPassword).toHaveBeenCalledWith('mypassword123')
       expect(handleRegisterSubmit).toHaveBeenCalledWith({
         phone_number: '08123456789',
         first_name: 'John',
         last_name: 'Doe',
-        password: 'hashedPassword'
+        password: 'hashedPassword123'
       });
+      expect(mockPush).toHaveBeenCalledWith("/")
     });
   });
 
@@ -95,11 +106,13 @@ describe("Register Page", () => {
       expect(screen.getByText("Tolong masukkan nama depan anda")).toBeInTheDocument();
       expect(screen.getByText("Tolong masukkan nama belakang anda")).toBeInTheDocument();
       expect(screen.getByText("Kata sandi harus mengandung angka")).toBeInTheDocument();
+      expect(mockPush).not.toHaveBeenCalled();
     });
   })
 
   it("shows error message when registration fails", async () => {
     (handleRegisterSubmit as jest.Mock).mockImplementationOnce(mockFailedRegisterResponse);
+    (hashPassword as jest.Mock).mockResolvedValue('hashedPassword');
 
     fireEvent.change(phoneInput, { target: { value: '08123456789' } });
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
@@ -108,8 +121,38 @@ describe("Register Page", () => {
     fireEvent.click(registerButton);
 
     await waitFor(() => {
-      expect(handleRegisterSubmit).toHaveBeenCalled();
+      expect(hashPassword).toHaveBeenCalledWith('mypassword123');
+      expect(handleRegisterSubmit).toHaveBeenCalledWith({
+        phone_number: '08123456789',
+        first_name: 'John',
+        last_name: 'Doe',
+        password: 'hashedPassword'
+      });
       expect(screen.getByText("Registrasi gagal")).toBeInTheDocument();
+      expect(mockPush).not.toHaveBeenCalled();
     });
   });
+
+  it("shows error message when there is an error exception during registration", async () => {
+    (handleRegisterSubmit as jest.Mock).mockRejectedValue(new Error("Network Error"));
+    (hashPassword as jest.Mock).mockResolvedValue('hashedPassword');
+
+    fireEvent.change(phoneInput, { target: { value: '08123456789' } });
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+    fireEvent.change(passwordInput, { target: { value: 'mypassword123' } });
+    fireEvent.click(registerButton);
+
+    await waitFor(() => {
+      expect(hashPassword).toHaveBeenCalledWith('mypassword123');
+      expect(handleRegisterSubmit).toHaveBeenCalledWith({
+        phone_number: '08123456789',
+        first_name: 'John',
+        last_name: 'Doe',
+        password: 'hashedPassword'
+      });
+      expect(screen.getByText("Terjadi kesalahan pada registrasi")).toBeInTheDocument();
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+  })
 });
