@@ -4,6 +4,7 @@ import { fetchPond } from '@/lib/pond';
 import { getLatestPondQuality } from '@/lib/pond-quality';
 import { Pond } from '@/types/pond';
 import { PondQuality } from '@/types/pond-quality';
+import AddPondQuality from '@/components/pond-quality/AddPondQuality';
 import Image from 'next/image';
 import React from 'react'
 
@@ -56,6 +57,10 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className='flex flex-col mt-10'>
           <PondQualityList pondQuality={pondQuality} />
+          
+          <div className="mt-4">
+            <AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality}/>
+          </div>
         </div>
       </div>
     </div>
