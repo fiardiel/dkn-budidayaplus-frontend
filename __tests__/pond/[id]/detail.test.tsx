@@ -3,6 +3,7 @@ import PondDetailPage from '@/app/pond/[id]/page';
 import { fetchPond } from '@/lib/pond';
 import { cookies } from 'next/headers';
 import { Pond } from '@/types/pond';
+import { FishSampling } from '@/types/fish_sampling';
 
 jest.mock("@/lib/pond", () => ({
   fetchPond: jest.fn(),
@@ -15,16 +16,26 @@ jest.mock("next/headers", () => ({
   }),
 }));
 
+jest.mock('@/lib/fish_sampling', () => ({
+  getLatestFishSampling: jest.fn(),
+}));
+
 const mockPonds: Pond[] = [
   { pond_id: 'abcde', name: "Pond 1", length: 121.0, width: 121.0, depth: 121.0, image_name: "pond1.jpg" },
   { pond_id: 'abcdefg', name: "Pond 2", length: 144.0, width: 144.0, depth: 144.0, image_name: "pond2.jpg" },
   { pond_id: 'xyz', name: "Pond 3", length: 169.0, width: 169.0, depth: 169.0, image_name: "pond3.jpg" },
 ];
 
-// const mockFishSamplings: FishSampling[] = [
-//   { sampling_id: '123', weight: 2.5, length: 12.3, sample_date: '2024-09-28' },
-//   { id: '456', weight: 3.0, length: 13.5, sample_date: '2024-09-27' },
-// ];
+const mockFishSampling: FishSampling[] = [
+  {
+    sampling_id: '123', 
+    fish_weight: 2.5, 
+    fish_length: 12.3, 
+    sample_date: '2024-09-28',
+    pond_id: 'abcde',
+    reporter: 'userA'
+  },
+];
 
 describe('PondListPage', () => {
   beforeEach(async () => {
@@ -66,5 +77,32 @@ describe('PondListPage', () => {
     await waitFor(() => {
       expect(pondImage).toHaveAttribute("src", "/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     })
+  })
+
+  it('renders the fish sampling list if fish sampling exists', async () => {
+    (getLatestFishSampling as jest.Mock).mockResolvedValue(mockFishSampling);
+    render(await PondDetailPage({params: {sampling_id: '123'}}));
+    await waitFor(() => {
+      expect(screen.getByText('fish_weight')).toBeInTheDocument();
+      expect(screen.getByText('fish_length')).toBeInTheDocument();
+      expect(screen.getByText('reporter')).toBeInTheDocument();
+      expect(screen.getByText('sample_date')).toBeInTheDocument();
+    });
+  })
+
+  it('renders no fish sampling message if fish samplingdoes not exist', async () => {
+    (getLatestFishSampling as jest.Mock).mockResolvedValue(undefined);
+    render(await PondDetailPage({params: {sampling_id: '123'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
+    });
+  })
+
+  it('handles the error case of fetching fish sampling', async () => {
+    (getLatestFishSampling as jest.Mock).mockRejectedValue(new Error("Gagal terhubung ke server"));
+    render(await PondDetailPage({params: {sampling_id: '123'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
+    });
   })
 })
