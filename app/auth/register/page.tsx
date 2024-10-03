@@ -24,15 +24,20 @@ const RegisterPage = () => {
   })
 
   const onSubmit = async (data: RegisterForm) => {
-    setError(null)
-    data.password = await hashPassword(data.password)
-    const response = await handleRegisterSubmit(data)
-    if (response.ok) {
+    try {
+      setError(null)
+      data.password = await hashPassword(data.password)
+      const response = await handleRegisterSubmit(data)
+
+      if (!response.ok) {
+        return setError(response.message)
+      }
+
       reset()
-      router.push("/")
-      return
+      router.push('/')
+    } catch {
+      setError("Terjadi kesalahan pada registrasi")
     }
-    setError(response.message)
   }
 
   return (

@@ -2,23 +2,20 @@ import { PondList, AddPond } from '@/components/pond';
 import { getUser } from '@/lib/auth';
 import { fetchPonds } from '@/lib/pond'
 import { Pond } from '@/types/pond'
-import { cookies } from 'next/headers';
 import React from 'react'
 
 const PondListPage = async () => {
-  const token = cookies().get("accessToken")?.value;
   let ponds: Pond[];
-
   try {
-    ponds = await fetchPonds(token);
+    ponds = await fetchPonds();
   } catch (error) {
     ponds = [];
   }
 
-  const user = await getUser(token);
+  const user = await getUser();
 
   return (
-    <div className='min-h-[100dvh] flex flex-col items-center py-10'>
+    <div className='min-h-[100dvh] flex flex-col items-center py-10 mt-20'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>
