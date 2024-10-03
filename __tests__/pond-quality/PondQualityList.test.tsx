@@ -3,6 +3,7 @@ import { PondQualityList } from '@/components/pond-quality';
 import { Pond } from '@/types/pond';
 import { PondQuality } from '@/types/pond-quality';
 import User from '@/types/auth/user';
+import { formatDateTime } from '@/lib/utils';
 
 jest.mock('@/lib/pond-quality', () => ({
   getLatestPondQuality: jest.fn(),
@@ -68,6 +69,7 @@ describe('PondQualityList', () => {
       expect(screen.getByText('0.134')).toBeInTheDocument();
       expect(screen.getByText('PO')).toBeInTheDocument();
       expect(screen.getByText('0.144')).toBeInTheDocument();
+      expect(screen.getByText(`laporan terakhir: ${formatDateTime(mockPondQuality.recorded_at)}`)).toBeInTheDocument();
     });
   });
 

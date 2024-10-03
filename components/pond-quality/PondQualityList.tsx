@@ -1,6 +1,7 @@
 'use client'
 
 import { renderQualityData } from '@/lib/pond-quality/renderQualityData'
+import { formatDateTime } from '@/lib/utils'
 import { PondQuality } from '@/types/pond-quality'
 import React from 'react'
 
@@ -22,6 +23,7 @@ const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, ...props }) 
   return (
     <div {...props}>
       <p className='text-2xl font-semibold'>Kualitas Air</p>
+      <p className='text-neutral-500'>laporan terakhir: { formatDateTime(pondQuality?.recorded_at) }</p>
       <div className='grid grid-cols-2 gap-4 mt-5'>
         {waterQuality.length > 0
           ? waterQuality.map((item) => (
