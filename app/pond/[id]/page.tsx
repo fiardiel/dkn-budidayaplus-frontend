@@ -8,11 +8,13 @@ import React from 'react'
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
+  let volume = 0
 
   const token = cookies().get("accessToken")?.value;
   let pond: Pond | undefined
   try {
     pond = await fetchPond(params.id, token);
+    volume = pond.depth * pond.width * pond.length
   } catch (error) {
     pond = undefined;
   }
@@ -34,13 +36,13 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
             <p className='text-3xl font-semibold'>{ pond.name }</p>
           </div>
           <div>
-            <p>Volume: { pond.length * pond.width * pond.depth } m<sup>3</sup></p>
+            <p>Volume: { volume.toFixed(2) } m<sup>3</sup></p>
           </div>
           <div>
             <Image className='object-cover h-full w-full' src={ `/${fallbackSrc}` } width={500} height={400} alt={`${pond.name} image`} />
           </div>
           <div className='flex gap-x-2'>
-            <EditPond token={token} pondData={pond}/>
+            <EditPond pond={pond}/>
             <DeletePond pondId={pond.pond_id} />
           </div>
         </div>

@@ -27,7 +27,7 @@ const PondListPage = async () => {
               {user && `${user.first_name} ${user.last_name}`}
             </p>
           </div>
-          <AddPond token={token} />
+          <AddPond />
           {ponds.length > 0 ?
             (
               <PondList ponds={ponds} />

@@ -5,14 +5,11 @@ import { deletePond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button';
+import { Modal as DialogContent } from '@/components/ui/modal';
+import { FiTrash2 } from "react-icons/fi";
 
 
 type DeletePondProps = {
@@ -22,6 +19,12 @@ type DeletePondProps = {
 const DeletePond: React.FC<DeletePondProps> = ({ pondId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const description = `
+    Penghapusan tidak bisa dibatalkan.
+    Tindakan ini akan menghapus kolam anda secara permanen.
+    Tekan tombol x atau di luar kotak dialog untuk membatalkan.
+  `.trim();
 
   const handleDelete = async () => {
     setLoading(true);
@@ -44,27 +47,16 @@ const DeletePond: React.FC<DeletePondProps> = ({ pondId }) => {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={'destructive'}>
-            Hapus kolam
+          <Button variant={'destructive'} className='flex gap-2'>
+            Hapus kolam{' '}<FiTrash2 size={20} />
           </Button>
         </DialogTrigger>
-        <DialogContent>
-          <DialogHeader className='justify-start'>
-            <DialogTitle className='text-start'>Apakah anda yakin?</DialogTitle>
-            <DialogDescription className='justify-start text-start'>
-              Penghapusan tidak bisa dibatalkan. Tindakan ini akan menghapus kolam anda secara permanen. Tekan tombol x atau di luar kotak dialog untuk membatalkan.
-            </DialogDescription>
-            {error && <p className="text-red-500 mt-1 text-start text-sm">{error}</p>}
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={loading} 
-            >
-              Hapus
-            </Button>
-          </DialogFooter>
+        <DialogContent className='sm:justify-start' title='Hapus kolam?' description={description}>
+          <Button variant={'destructive'} onClick={handleDelete} disabled={loading}>
+            Hapus
+          </Button>
+
+          {error && <p className='text-red-500'>{error}</p>}
         </DialogContent>
       </Dialog>
     </div>

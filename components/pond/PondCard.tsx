@@ -12,7 +12,8 @@ interface PondCardProps {
 }
 
 const PondCard: React.FC<PondCardProps> = ({ pond }) => {
-  const fallbackImgSrc = 'fallbackimage.png' 
+  const fallbackImgSrc = 'fallbackimage.png'
+  const volume = pond.depth * pond.width * pond.length
   const [imgSrc, setImgSrc] = React.useState<string>(fallbackImgSrc) //TODO: change this later
 
   return (
@@ -25,7 +26,7 @@ const PondCard: React.FC<PondCardProps> = ({ pond }) => {
           </CardTitle>
         </CardHeader>
         <CardContent className='pb-2'>
-          <p>Volume: {pond.depth * pond.width * pond.length} m<sup>3</sup></p>
+          <p>Volume: {volume.toFixed(2)} m<sup>3</sup></p>
         </CardContent>
         <CardFooter>
           <Button className='bg-blue-500 hover:bg-blue-600 active:bg-blue-700' asChild>
