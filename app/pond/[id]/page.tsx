@@ -1,5 +1,6 @@
 import DeletePond from '@/components/pond/DeletePond';
 import EditPond from '@/components/pond/EditPond';
+import AddFishSampling from '@/components/fish_sampling/AddFishSampling';
 import { fetchPond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
 import { cookies } from 'next/headers';
@@ -43,6 +44,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
             <EditPond token={token} pondData={pond}/>
             <DeletePond pondId={pond.pond_id} />
           </div>
+          <AddFishSampling token={token} />
         </div>
       </div>
     </div>

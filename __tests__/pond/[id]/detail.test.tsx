@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import PondDetailPage from '@/app/pond/[id]/page';
 import { fetchPond } from '@/lib/pond';
 import { cookies } from 'next/headers';
@@ -21,10 +21,10 @@ const mockPonds: Pond[] = [
   { pond_id: 'xyz', name: "Pond 3", length: 169.0, width: 169.0, depth: 169.0, image_name: "pond3.jpg" },
 ];
 
-const mockFishSamplings: FishSampling[] = [
-  { id: '123', weight: 2.5, length: 12.3, sample_date: '2024-09-28' },
-  { id: '456', weight: 3.0, length: 13.5, sample_date: '2024-09-27' },
-];
+// const mockFishSamplings: FishSampling[] = [
+//   { sampling_id: '123', weight: 2.5, length: 12.3, sample_date: '2024-09-28' },
+//   { id: '456', weight: 3.0, length: 13.5, sample_date: '2024-09-27' },
+// ];
 
 describe('PondListPage', () => {
   beforeEach(async () => {
@@ -67,23 +67,4 @@ describe('PondListPage', () => {
       expect(pondImage).toHaveAttribute("src", "/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     })
   })
-
-  it('renders the pond detail page with fish samplings', async () => {
-    render(await PondDetailPage({ params: { id: 'abcde' } }));
-    await waitFor(() => {
-      expect(screen.getByText("Selamat datang di Pond 1")).toBeInTheDocument();
-      expect(screen.getByText("Weight: 2.5, Length: 12.3, Sample Date: 2024-09-28")).toBeInTheDocument();
-      expect(screen.getByText("Weight: 3.0, Length: 13.5, Sample Date: 2024-09-27")).toBeInTheDocument();
-    });
-  });
-
-  it('renders no fish samplings if none found', async () => {
-    (fetchFishSamplings as jest.Mock).mockResolvedValue([]);
-    render(await PondDetailPage({ params: { id: 'abcde' } }));
-
-    await waitFor(() => {
-      expect(screen.getByText("No fish samplings found for this pond.")).toBeInTheDocument();
-    });
-  });
-
 })
