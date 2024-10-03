@@ -9,6 +9,7 @@ import { RegisterForm, registerSchema } from '@/types/auth/register'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -51,7 +52,7 @@ const RegisterPage = () => {
           <form data-testid='register-form' onSubmit={handleSubmit(onSubmit)} className='flex flex-col w-full mt-5'>
             <div className='flex flex-col'>
               <Input
-                className='border-none h-12 bg-blue-50 mt-3 focus-visible:ring-blue-500 placeholder:text-black'
+                className={cn('border-none h-12 mt-3 focus-visible:ring-blue-500 placeholder:text-black', error ? 'bg-red-100 ring-2 ring-red-200' : 'bg-blue-50')} 
                 type='text'
                 placeholder='Nomor Ponsel'
                 {...register('phone_number')}
