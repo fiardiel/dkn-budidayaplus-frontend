@@ -2,7 +2,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import PondListPage from '@/app/pond/page';
 import { fetchPonds } from '@/lib/pond';
 import { getUser } from '@/lib/auth';
-import { cookies } from 'next/headers';
 import { Pond } from '@/types/pond';
 import User from '@/types/auth/user';
 
@@ -12,12 +11,6 @@ jest.mock("@/lib/pond", () => ({
 
 jest.mock("@/lib/auth", () => ({
   getUser: jest.fn().mockResolvedValue({ id: 1, phone_number: "0812345678", first_name: "John", last_name: "Doe" } as User),
-}));
-
-jest.mock("next/headers", () => ({
-  cookies: jest.fn().mockReturnValue({
-    get: jest.fn().mockReturnValue({ value: "accessToken" }),
-  }),
 }));
 
 const mockPonds: Pond[] = [
@@ -30,7 +23,6 @@ describe('PondListPage', () => {
   beforeEach(() => {
     (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
     (getUser as jest.Mock).mockResolvedValue({ id: 1, phone_number: "0812345678", first_name: "John", last_name: "Doe" } as User);
-    (cookies as jest.Mock).mockReturnValue({ get: jest.fn().mockReturnValue({ value: "accessToken" }) });
   });
 
   it('renders the pond list page', async () => {
