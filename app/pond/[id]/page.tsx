@@ -1,29 +1,38 @@
-import DeletePond from '@/components/pond/DeletePond';
-import EditPond from '@/components/pond/EditPond';
-import AddFishSampling from '@/components/fish_sampling/AddFishSampling';
 import { fetchPond } from '@/lib/pond';
-import { Pond } from '@/types/pond';
+import { fetchFishSampling } from '@/lib/fish_sampling';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
-import React from 'react'
+import FishSamplingList from '@/components/fish_sampling/FishSamplingList';
+import AddFishSampling from '@/components/fish_sampling/AddFishSampling';
+import DeletePond from '@/components/pond/DeletePond';
+import EditPond from '@/components/pond/EditPond';
+import React from 'react';
+import { FishSampling } from '@/types/fish_sampling';
+import { Pond } from '@/types/pond';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
-  const fallbackSrc = 'fallbackimage.png'
+  const token = cookies().get("accessToken")?.value || '';
+  let pond: Pond | undefined;
+  let fishSampling: FishSampling[] | undefined;
 
-  const token = cookies().get("accessToken")?.value;
-  let pond: Pond | undefined
   try {
+    // Fetch pond details
     pond = await fetchPond(params.id, token);
+
+    // Fetch the fish sampling list for the pond
+    fishSampling = await fetchFishSampling(params.id, token);
   } catch (error) {
+    console.error("Error fetching data:", error);
     pond = undefined;
+    fishSampling = [];
   }
 
   if (!pond) {
     return (
       <div className='min-h-[100vh] flex flex-col items-center justify-center'>
-        Kolam tidak ditemukan
+        <p>Kolam tidak ditemukan</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -38,17 +47,21 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
             <p>Volume: { pond.length * pond.width * pond.depth } m<sup>3</sup></p>
           </div>
           <div>
-            <Image className='object-cover h-full w-full' src={ `/${fallbackSrc}` } width={500} height={400} alt={`${pond.name} image`} />
+            <Image className='object-cover h-full w-full' src={`/fallbackimage.png`} width={500} height={400} alt={`${pond.name} image`} />
           </div>
           <div className='flex gap-x-2'>
             <EditPond token={token} pondData={pond}/>
             <DeletePond pondId={pond.pond_id} />
           </div>
-          <AddFishSampling token={token} />
+          <AddFishSampling token={token} pondData={pond} />
+        </div>
+        <div className='flex flex-col mt-10'>
+          {/* Pass the fetched fish samplings to the FishSamplingList component */}
+          <FishSamplingList fishSamplings={fishSampling || []} />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PondDetailPage
+export default PondDetailPage;

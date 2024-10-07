@@ -1,16 +1,21 @@
-import { FishSampling } from "@/types/fish_sampling"
+'use server'
 
-export async function fetchFishSampling(pondId: string, token?: string): Promise<FishSampling> {  
-  const res = await fetch(`${process.env.API_BASE_URL}/api/pond/${pondId}/`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+export async function fetchFishSampling(pondId: string, token: string) {
+  try {
+    const response = await fetch(`${process.env.API_BASE_URL}/api/fish-sampling/${pondId}/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      return undefined;
     }
-  })
-  const data = await res.json()
-  if (!res.ok) {
-    throw new Error(data.message)
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to fetch fish samplings:", error);
+    throw new Error("Gagal terhubung ke server");
   }
-  return data
 }

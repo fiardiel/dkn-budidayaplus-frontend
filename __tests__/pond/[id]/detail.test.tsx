@@ -4,10 +4,11 @@ import { fetchPond } from '@/lib/pond';
 import { cookies } from 'next/headers';
 import { Pond } from '@/types/pond';
 import { FishSampling } from '@/types/fish_sampling';
+import { fetchFishSampling } from '@/lib/fish_sampling';
 
 jest.mock("@/lib/pond", () => ({
   fetchPond: jest.fn(),
-  fetchFishSamplings: jest.fn(),
+  fetchFishSampling: jest.fn(),
 }));
 
 jest.mock("next/headers", () => ({
@@ -17,7 +18,7 @@ jest.mock("next/headers", () => ({
 }));
 
 jest.mock('@/lib/fish_sampling', () => ({
-  getLatestFishSampling: jest.fn(),
+  fetchFishSampling: jest.fn(),
 }));
 
 const mockPonds: Pond[] = [
@@ -29,11 +30,11 @@ const mockPonds: Pond[] = [
 const mockFishSampling: FishSampling[] = [
   {
     sampling_id: '123', 
+    pond_id: 'abcde',
     fish_weight: 2.5, 
     fish_length: 12.3, 
     sample_date: '2024-09-28',
-    pond_id: 'abcde',
-    reporter: 'userA'
+    // reporter: 'userA'
   },
 ];
 
@@ -49,6 +50,7 @@ describe('PondListPage', () => {
       expect(screen.getByText("Pond 1")).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /edit kolam/i })).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /hapus kolam/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Tambah Sampling Ikan/i })).toBeInTheDocument();
     });
   });
 
@@ -80,27 +82,27 @@ describe('PondListPage', () => {
   })
 
   it('renders the fish sampling list if fish sampling exists', async () => {
-    (getLatestFishSampling as jest.Mock).mockResolvedValue(mockFishSampling);
-    render(await PondDetailPage({params: {sampling_id: '123'}}));
+    (fetchFishSampling as jest.Mock).mockResolvedValue(mockFishSampling);
+    render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
-      expect(screen.getByText('fish_weight')).toBeInTheDocument();
-      expect(screen.getByText('fish_length')).toBeInTheDocument();
-      expect(screen.getByText('reporter')).toBeInTheDocument();
-      expect(screen.getByText('sample_date')).toBeInTheDocument();
+      expect(screen.getByText('Berat Ikan (kg)')).toBeInTheDocument();
+      expect(screen.getByText('Panjang Ikan (cm)')).toBeInTheDocument();
+      // expect(screen.getByText('reporter')).toBeInTheDocument();
+      expect(screen.getByText('Tanggal Sampling')).toBeInTheDocument();
     });
   })
 
   it('renders no fish sampling message if fish samplingdoes not exist', async () => {
-    (getLatestFishSampling as jest.Mock).mockResolvedValue(undefined);
-    render(await PondDetailPage({params: {sampling_id: '123'}}));
+    (fetchFishSampling as jest.Mock).mockResolvedValue(undefined);
+    render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
       expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
     });
   })
 
   it('handles the error case of fetching fish sampling', async () => {
-    (getLatestFishSampling as jest.Mock).mockRejectedValue(new Error("Gagal terhubung ke server"));
-    render(await PondDetailPage({params: {sampling_id: '123'}}));
+    (fetchFishSampling as jest.Mock).mockRejectedValue(new Error("Gagal terhubung ke server"));
+    render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
       expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
     });

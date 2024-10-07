@@ -7,29 +7,33 @@ import { IoIosAdd } from 'react-icons/io';
 import { Modal } from '@/components/ui/modal';
 import { FishSamplingInputForm } from '@/types/fish_sampling';
 import { FishSamplingForm } from '@/components/fish_sampling';
+import { Pond } from '@/types/pond';
 
 interface AddFishSamplingProps extends React.HTMLProps<HTMLDivElement> {
   token?: string;
+  pondData: Pond;
 }
 
-const AddFishSampling: React.FC<AddFishSamplingProps> = ({ token: propToken, ...props }) => {
+const AddFishSampling: React.FC<AddFishSamplingProps> = ({ token: propToken, pondData, ...props }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (data: FishSamplingInputForm) => {
+    // Check if the token is available
     if (!propToken) {
       console.error('No token found');
-      setError('No token found');
-      return;
+      setError('Authentication token is missing. Please log in.');
+      return; // Exit the function if there's no token
     }
 
     try {
-      await addFishSampling(data, propToken);
-      setOpen(false);
-      window.location.reload();
+      // Attempt to add fish sampling
+      await addFishSampling(pondData.pond_id, data, propToken);
+      setOpen(false); // Close modal on success
+      window.location.reload(); // Reload the page
     } catch (error) {
       console.error('Failed to create fish sampling:', error);
-      setError('Failed to create fish sampling');
+      setError('Failed to create fish sampling. Please try again.'); // Set user-friendly error message
     }
   };
 

@@ -7,6 +7,15 @@ jest.mock('@/lib/fish_sampling', () => ({
 }));
 
 describe('Add Fish Sampling Modal', () => {
+  const mockPondData = {
+    pond_id: 'pond123',
+    name: 'Pond A',
+    length: 50,
+    width: 30,
+    depth: 10,
+    image_name: 'pond_a.jpg',
+  };
+
   beforeEach(() => {
     Object.defineProperty(document, 'cookie', {
       value: 'accessToken=mockAccessToken',
@@ -22,7 +31,7 @@ describe('Add Fish Sampling Modal', () => {
   });
 
   it('renders the form fields correctly', async () => {
-    render(<AddFishSampling />);
+    render(<AddFishSampling pondData={mockPondData}/>);
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
     });
@@ -41,7 +50,7 @@ describe('Add Fish Sampling Modal', () => {
 
     fetchMock.mockReject(new Error('No token found'));  // Use fetchMock here
 
-    render(<AddFishSampling />);
+    render(<AddFishSampling pondData={mockPondData}/>);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
@@ -68,7 +77,7 @@ describe('Add Fish Sampling Modal', () => {
 
     const mockToken = 'mockAccessToken';
 
-    render(<AddFishSampling token={mockToken} />);
+    render(<AddFishSampling token={mockToken} pondData={mockPondData} />);
 
     fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
 
@@ -92,7 +101,7 @@ describe('Add Fish Sampling Modal', () => {
 
     const mockToken = 'mockAccessToken';
 
-    render(<AddFishSampling token={mockToken} />);
+    render(<AddFishSampling token={mockToken} pondData={mockPondData} />);
 
     fireEvent.click(screen.getByText(/Tambah Sampling Ikan/i));
 
@@ -112,7 +121,7 @@ describe('Add Fish Sampling Modal', () => {
   
     const mockToken = 'mockAccessToken';
   
-    render(<AddFishSampling token={mockToken} />);
+    render(<AddFishSampling token={mockToken} pondData={mockPondData}/>);
   
     // Open the modal
     fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
@@ -140,7 +149,7 @@ describe('Add Fish Sampling Modal', () => {
   
   
   it('renders FishSamplingForm correctly when modal is open', async () => {
-    render(<AddFishSampling token="mockAccessToken" />);
+    render(<AddFishSampling token="mockAccessToken" pondData={mockPondData}/>);
   
     fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
   
@@ -149,6 +158,7 @@ describe('Add Fish Sampling Modal', () => {
     expect(screen.getByPlaceholderText('Berat Ikan (kg)')).toBeInTheDocument();
   });
 });
+
 
   
 
