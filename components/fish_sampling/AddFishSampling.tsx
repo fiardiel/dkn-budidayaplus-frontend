@@ -44,8 +44,10 @@ const AddFishSampling: React.FC<AddFishSamplingProps> = ({ token: propToken, pon
       </Button>
 
       <Modal open={open} onClose={() => setOpen(false)}>
-          <FishSamplingForm onSubmit={onSubmit} buttonText="Submit" ponds={[]} />
+        <div role="dialog" aria-modal="true" className="bg-white rounded-lg p-6 max-w-lg w-full">
+          <FishSamplingForm onSubmit={onSubmit} buttonText="Submit" />
           {error && <p className='text-red-500'>{error}</p>}
+        </div>
       </Modal>
   </div>
   );

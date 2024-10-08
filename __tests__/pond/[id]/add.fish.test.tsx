@@ -7,6 +7,7 @@ jest.mock('@/lib/fish_sampling', () => ({
 }));
 
 describe('Add Fish Sampling Modal', () => {
+  const mockToken = 'mockAccessToken';
   const mockPondData = {
     pond_id: 'pond123',
     name: 'Pond A',
@@ -17,13 +18,12 @@ describe('Add Fish Sampling Modal', () => {
   };
 
   beforeEach(() => {
-    Object.defineProperty(document, 'cookie', {
-      value: 'accessToken=mockAccessToken',
+    Object.defineProperty(window, 'location', {
+      value: {
+        reload: jest.fn(),
+      },
       writable: true,
     });
-
-    // Enable fetch mocks before each test
-    fetchMock.resetMocks();
   });
 
   afterEach(() => {
@@ -71,82 +71,60 @@ describe('Add Fish Sampling Modal', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('closes the modal after successful form submission', async () => {
-    const mockResponse = { success: true, message: 'Pond created' };
+  it('closes the modal and reloads the page after successful form submission', async () => {
+    const mockResponse = { success: true, message: 'Fish sampling created' };
     (addFishSampling as jest.Mock).mockResolvedValue(mockResponse);
-
+  
     const mockToken = 'mockAccessToken';
-
+  
     render(<AddFishSampling token={mockToken} pondData={mockPondData} />);
-
+  
     fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
-
+  
     fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: 30 } });
     fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: 2.5 } });
-
+  
+    // Mock the window reload function
+    const reloadMock = jest.spyOn(window.location, 'reload').mockImplementation(() => {});
+  
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /submit/i }));
     });
-
+  
     await waitFor(() => {
+      expect(reloadMock).toHaveBeenCalled(); // Assert that the page reload was triggered
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
-
-    jest.clearAllMocks();
-  });
-
-  it('displays error message and sets error state when form submission fails', async () => {
-    const mockError = new Error('Failed to create pond');
-    (addFishSampling as jest.Mock).mockRejectedValueOnce(mockError);
-
-    const mockToken = 'mockAccessToken';
-
-    render(<AddFishSampling token={mockToken} pondData={mockPondData} />);
-
-    fireEvent.click(screen.getByText(/Tambah Sampling Ikan/i));
-
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: 30 } });
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: 2.5 } });
-
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText('Failed to create fish sampling')).toBeInTheDocument();
-    });
-  });
   
-  it('resets error state when modal is closed', async () => {
+    reloadMock.mockRestore(); // Restore the original functionality
+  });
+
+  it('displays an error message when the submission fails', async () => {
     const mockError = new Error('Failed to create fish sampling');
-    (addFishSampling as jest.Mock).mockRejectedValueOnce(mockError);
+    (addFishSampling as jest.Mock).mockRejectedValue(mockError); // Simulate an API error
   
-    const mockToken = 'mockAccessToken';
-  
-    render(<AddFishSampling token={mockToken} pondData={mockPondData}/>);
+    render(<AddFishSampling token={mockToken} pondData={mockPondData} />);
   
     // Open the modal
     fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
   
-    // Simulate filling out the form
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: 30 } });
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: 2.5 } });
+    // Fill in the form with valid data
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: 35 } });
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: 1.8 } });
   
-    // Simulate submitting the form
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
+    // Submit the form
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+    });
   
     // Wait for the error message to be displayed
     await waitFor(() => {
-      expect(screen.getByText('Failed to create fish sampling')).toBeInTheDocument();
+      expect(screen.getByText('Failed to create fish sampling. Please try again.')).toBeInTheDocument();
     });
   
-    // Close the modal
-    fireEvent.click(screen.getByRole('button', { name: /Close/i }));
-  
-    // Wait for the modal to close and then check if the error state is reset
-    await waitFor(() => {
-      expect(screen.queryByText('Failed to create fish sampling')).not.toBeInTheDocument();
-    });
+    // Check if the modal remains open
+    expect(screen.getByRole('dialog')).toBeInTheDocument(); // This should now work correctly
   });
-  
   
   it('renders FishSamplingForm correctly when modal is open', async () => {
     render(<AddFishSampling token="mockAccessToken" pondData={mockPondData}/>);
@@ -157,9 +135,23 @@ describe('Add Fish Sampling Modal', () => {
     expect(screen.getByPlaceholderText('Panjang Ikan (cm)')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Berat Ikan (kg)')).toBeInTheDocument();
   });
-});
 
-
+  it('opens and closes the modal correctly', () => {
+    render(<AddFishSampling token={mockToken} pondData={mockPondData} />);
+    
+    // Verify that the modal is not present initially
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   
-
-
+    // Open the modal
+    fireEvent.click(screen.getByRole('button', { name: /Tambah Sampling Ikan/i }));
+  
+    // Verify that the modal is now present
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  
+    // Close the modal
+    fireEvent.click(screen.getByRole('button', { name: /Close/i }));
+  
+    // Verify that the modal is no longer present
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+});

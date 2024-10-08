@@ -5,16 +5,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { FishSamplingInputSchema, FishSamplingInputForm } from '@/types/fish_sampling';
-import { Pond } from '@/types/pond'; 
 
 interface FishSamplingFormProps {
     onSubmit: (data: FishSamplingInputForm) => Promise<void>;
     initialData?: FishSamplingInputForm;
     buttonText: string;
-    ponds: Pond[];
 }
 
-const FishSamplingForm: React.FC<FishSamplingFormProps> = ({ onSubmit, initialData, buttonText, ponds }) => {
+const FishSamplingForm: React.FC<FishSamplingFormProps> = ({ onSubmit, initialData, buttonText }) => {
     const { register, handleSubmit, formState: { errors } } = useForm<FishSamplingInputForm>({
         resolver: zodResolver(FishSamplingInputSchema),
         defaultValues: initialData,

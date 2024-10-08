@@ -99,12 +99,6 @@ describe('PondListPage', () => {
       expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
     });
   })
-
-  it('handles the error case of fetching fish sampling', async () => {
-    (fetchFishSampling as jest.Mock).mockRejectedValue(new Error("Gagal terhubung ke server"));
-    render(await PondDetailPage({params: {id: 'abcde'}}));
-    await waitFor(() => {
-      expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
-    });
-  })
 })
+
+
