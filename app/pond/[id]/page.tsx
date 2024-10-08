@@ -7,6 +7,9 @@ import { PondQuality } from '@/types/pond-quality';
 import AddPondQuality from '@/components/pond-quality/AddPondQuality';
 import Image from 'next/image';
 import React from 'react'
+import { FishSampling } from '@/types/fish-sampling';
+import { fetchFishSampling } from '@/lib/fish-sampling';
+import { FishSamplingList } from '@/components/fish-sampling';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
@@ -14,6 +17,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
 
   let pond: Pond | undefined
   let pondQuality: PondQuality | undefined
+  let fishSampling: FishSampling | undefined
 
   try {
     pond = await fetchPond(params.id);
@@ -26,6 +30,12 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     pondQuality = await getLatestPondQuality(params.id)
   } catch (error) {
     pondQuality = undefined
+  }
+
+  try {
+    fishSampling = await fetchFishSampling(params.id)
+  } catch (error) {
+    fishSampling = undefined
   }
 
   if (!pond) {
@@ -61,6 +71,13 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <div className="mt-4">
             <AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality}/>
           </div>
+        </div>
+        <div className='flex flex-col mt-10'>
+          <FishSamplingList fishSampling={fishSampling} />
+          
+          {/* <div className="mt-4">
+            <AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality}/>
+          </div> */}
         </div>
       </div>
     </div>

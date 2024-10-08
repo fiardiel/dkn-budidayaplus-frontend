@@ -1,0 +1,1 @@
+export { default as FishSamplingList } from '@/components/fish-sampling/FishSamplingList';
