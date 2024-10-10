@@ -76,7 +76,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <FishSamplingList fishSampling={fishSampling} />
           
           <div className="mt-4">
-            <AddFishSampling pondId={pond.pond_id} fishSampling={fishSampling}/>
+            <AddFishSampling pondId={pond.pond_id} />
           </div>
         </div>
       </div>

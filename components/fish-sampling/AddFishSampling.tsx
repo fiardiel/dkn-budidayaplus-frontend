@@ -10,11 +10,10 @@ import { FishSampling } from '@/types/fish-sampling';
 
 interface AddFishSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string;
-  fishSampling?: FishSampling[]
 }
 
 
-const AddFishSampling: React.FC<AddFishSamplingProps> = ({pondId, fishSampling, ...props}) =>  {
+const AddFishSampling: React.FC<AddFishSamplingProps> = ({pondId, ...props}) =>  {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
