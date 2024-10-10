@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from "next/headers";
-import { formDataToObject, hashImageName } from "@/lib/utils";
+import { formDataToObject } from "@/lib/utils";
 
 export async function addFishSampling(
   data: FormData,
@@ -14,13 +14,7 @@ export async function addFishSampling(
   const samplingPath = fishSamplingId ? fishSamplingId + '/' : '';
   const apiUrl = `${baseUrl}/api/fish-sampling/${pondId}/${samplingPath}`;
 
-//   const image: File = data.get('image') as File
   const fishSamplingData = formDataToObject(data)
-
-//   let hashedImageName = ''
-//   if (image.name) {
-//     hashedImageName = await hashImageName(image.name)
-//   }
 
   const response = await fetch(apiUrl, {
     method: fishSamplingId ? 'PUT' : 'POST',
@@ -30,7 +24,6 @@ export async function addFishSampling(
     },
     body: JSON.stringify({
         ...fishSamplingData,
-        // image_name: hashedImageName,
       }),
   });
 

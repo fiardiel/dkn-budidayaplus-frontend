@@ -40,7 +40,7 @@ describe('FishSamplingForm', () => {
 
     await waitFor(() => {
       const errorMessages = screen.getAllByText('Expected number, received nan');
-      expect(errorMessages.length).toBe(2); // Adjust based on expected counts
+      expect(errorMessages.length).toBe(2); 
   });
   });
 

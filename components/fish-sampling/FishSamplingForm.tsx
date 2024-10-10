@@ -22,7 +22,6 @@ const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, fishSampling
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
     reset
   } = useForm<FishSamplingInputForm>({
@@ -36,8 +35,6 @@ const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, fishSampling
   const onSubmit = async (data: FishSamplingInputForm) => {
     try {
       setError(null)
-    //   const imageList = data.image as FileList
-    //   data.image = imageList[0]
       const fishSamplingData = objectToFormData(data)
 
       const res = await addFishSampling(fishSamplingData, pondId)

@@ -1,11 +1,11 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import PondDetailPage from '@/app/pond/[id]/page';
 import { fetchPond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
 import { PondQuality } from '@/types/pond-quality';
-import { getLatestPondQuality, getPondQuality } from '@/lib/pond-quality';
+import { getLatestPondQuality } from '@/lib/pond-quality';
 import { FishSampling } from '@/types/fish-sampling';
-import { addFishSampling, fetchFishSampling } from '@/lib/fish-sampling';
+import { fetchFishSampling } from '@/lib/fish-sampling';
 
 jest.mock("@/lib/pond", () => ({
   fetchPond: jest.fn(),

@@ -1,29 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { Pond } from '@/types/pond';
-import User from '@/types/auth/user';
-import { fetchFishSampling } from '@/lib/fish-sampling';
 import { FishSampling } from '@/types/fish-sampling';
 import { FishSamplingList } from '@/components/fish-sampling';
 
 jest.mock('@/lib/fish-sampling', () => ({
   fetchFishSampling: jest.fn(),
 }));
-
-const mockPond: Pond = {
-  pond_id: 'abcde',
-  name: 'Pond 1',
-  length: 121.0,
-  width: 121.0,
-  depth: 121.0,
-  image_name: 'pond1.jpg',
-};
-
-const mockUser: User = {
-  id: 1,
-  phone_number: '0812345678',
-  first_name: 'John',
-  last_name: 'Doe',
-};
 
 const mockFishSamplingData: FishSampling[] = [
   {

@@ -1,7 +1,5 @@
 import { fireEvent, render, screen, waitFor, act } from '@testing-library/react';
-import { AddPondQuality } from '@/components/pond-quality';
 import { addFishSampling } from '@/lib/fish-sampling';
-import { FishSampling} from '@/types/fish-sampling';
 import { AddFishSampling } from '@/components/fish-sampling';
 
 jest.mock('@/lib/fish-sampling', () => ({
@@ -9,14 +7,6 @@ jest.mock('@/lib/fish-sampling', () => ({
 }));
 
 describe('Add Fish Sampling Modal', () => {
-  const mockFishSamplingData : FishSampling = {
-    sampling_id: 'abc123',
-    pond_id: 'abcde',
-    fish_weight: 20,
-    fish_length: 30,
-    sample_date: '2024-10-03',
-  };
-
   const pondId = 'test-pond-id';
 
   afterEach(() => {
@@ -52,8 +42,6 @@ describe('Add Fish Sampling Modal', () => {
 
     fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
     fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
-    // fireEvent.change(screen.getByPlaceholderText('Tanggal Sampling'), { target: { value: '2024-10-03' } });
-    
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
@@ -67,7 +55,6 @@ describe('Add Fish Sampling Modal', () => {
   it('displays error message when backend says fish sampling creation failed', async () => {
     const mockResponse = { success: false, message: 'Failed to create fish sampling' };
     (addFishSampling as jest.Mock).mockResolvedValue(mockResponse);
-    // const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
   
     render(<AddFishSampling pondId={pondId} />);
   
@@ -75,7 +62,6 @@ describe('Add Fish Sampling Modal', () => {
   
     fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
     fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
-    // fireEvent.change(screen.getByPlaceholderText('Tanggal Sampling'), { target: { value: '2024-10-03' } });
   
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
@@ -89,7 +75,6 @@ describe('Add Fish Sampling Modal', () => {
 
   it('displays error message and sets error state when form submission fails', async () => {
     const mockError = new Error('Gagal menambah sampling ikan');
-    // const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
     (addFishSampling as jest.Mock).mockRejectedValueOnce(mockError);
 
 
