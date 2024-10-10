@@ -1,23 +1,13 @@
-'use client'
+'use client';
 
-import { renderSamplingData } from '@/lib/fish-sampling/renderSamplingData'
-import { FishSampling } from '@/types/fish-sampling'
-import React from 'react'
+import { FishSampling } from '@/types/fish-sampling';
+import React from 'react';
 
 interface FishSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
-  fishSampling: FishSampling[]
+  fishSampling: FishSampling[];
 }
 
 const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props }) => {
-  // const samplingData = () => {
-  //   if (!fishSampling) {
-  //     return []
-  //   } else {
-  //     return renderSamplingData(fishSampling)
-  //   }
-  // }
-  // const sampling = samplingData()
-
   return (
     <div {...props}>
       <p className='text-2xl font-semibold'>Sampling Ikan</p>
@@ -31,8 +21,8 @@ const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props 
             </tr>
           </thead>
           <tbody>
-            {fishSampling.map((sample, index) => (
-              <tr key={sample.sampling_id || index}>
+            {fishSampling.map((sample) => (
+              <tr key={sample.sampling_id}>
                 <td className='text-xl font-semibold text-neutral-600'>{sample.fish_weight}</td>
                 <td className='text-xl font-semibold text-neutral-600'>{sample.fish_length}</td>
                 <td className='text-xl font-semibold text-neutral-600'>{sample.sample_date}</td>
@@ -44,7 +34,7 @@ const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props 
         <p className='text-lg text-neutral-600 mt-5'>Tidak ada sampling ikan</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default FishSamplingList
+export default FishSamplingList;
