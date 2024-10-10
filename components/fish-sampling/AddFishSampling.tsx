@@ -6,7 +6,6 @@ import { IoIosAdd } from 'react-icons/io';
 import { Modal as DialogContent } from '@/components/ui/modal';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { FishSamplingForm }  from '@/components/fish-sampling';
-import { FishSampling } from '@/types/fish-sampling';
 
 interface AddFishSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string;
