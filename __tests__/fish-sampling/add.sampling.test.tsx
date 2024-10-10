@@ -30,9 +30,8 @@ describe('Add Fish Sampling Modal', () => {
       fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
     });
 
-    expect(screen.getByText('Berat Ikan (kg)')).toBeInTheDocument();
-    expect(screen.getByText('Panjang Ikan (cm)')).toBeInTheDocument();
-    expect(screen.getByText('Tanggal Sampling')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Berat Ikan(kg)')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Panjang Ikan(cm)')).toBeInTheDocument();
   });
 
   it('closes the modal after successful form submission', async () => {
@@ -51,8 +50,8 @@ describe('Add Fish Sampling Modal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
 
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: '30' } });
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
     // fireEvent.change(screen.getByPlaceholderText('Tanggal Sampling'), { target: { value: '2024-10-03' } });
     
 
@@ -74,8 +73,8 @@ describe('Add Fish Sampling Modal', () => {
   
     fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
   
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: '30' } });
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
     // fireEvent.change(screen.getByPlaceholderText('Tanggal Sampling'), { target: { value: '2024-10-03' } });
   
     await act(async () => {
@@ -83,7 +82,7 @@ describe('Add Fish Sampling Modal', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Gagal menyimpan sampling ikan')).toBeInTheDocument();
+      expect(screen.getByText('Gagal menyimpan sample ikan')).toBeInTheDocument();
     });
   });
   
@@ -98,13 +97,13 @@ describe('Add Fish Sampling Modal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
 
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: '30' } });
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
 
     fireEvent.click(screen.getByRole('button', { name: /Simpan/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('Gagal menyimpan sampling ikan')).toBeInTheDocument();
+      expect(screen.getByText('Gagal menyimpan sample ikan')).toBeInTheDocument();
     });
   });
 
@@ -113,8 +112,8 @@ describe('Add Fish Sampling Modal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
 
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan (kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan (cm)'), { target: { value: '30' } });
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '-1' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '-2' } });
 
     fireEvent.click(screen.getByRole('button', { name: /Simpan/i }));
 

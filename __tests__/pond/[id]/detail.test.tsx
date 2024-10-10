@@ -127,7 +127,7 @@ describe('Pond detail page', () => {
   })
   
   it('renders the fish sampling list if fish sampling exists', async () => {
-    (fetchFishSampling as jest.Mock).mockResolvedValue(mockFishSampling);
+    (fetchFishSampling as jest.Mock).mockResolvedValue([mockFishSampling]);
     render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
       expect(screen.getByText('Berat Ikan (kg)')).toBeInTheDocument();

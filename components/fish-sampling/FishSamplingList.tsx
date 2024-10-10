@@ -11,9 +11,9 @@ const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props 
   return (
     <div {...props}>
       <p className='text-2xl font-semibold'>Sampling Ikan</p>
-      {fishSampling.length > 0 ? (
+      {Array.isArray(fishSampling) && fishSampling.length > 0 ? (
         <table className='mt-5 table-auto w-full'>
-          <thead>
+          <thead> 
             <tr>
               <th className='text-left text-lg'>Berat Ikan (kg)</th>
               <th className='text-left text-lg'>Panjang Ikan (cm)</th>
