@@ -3,8 +3,8 @@ import { z } from 'zod';
 export const PondQualitySchema = z.object({
   ph_level: z
     .number()
-    .min(0, 'pH harus minimal 0')
-    .max(14, 'pH harus maksimal 14'),
+    .min(0, 'Nilai pH minimal 0')
+    .max(14, 'Nilai pH maksimal 14'),
   salinity: z
     .number()
     .positive('Salinitas harus berupa angka positif'),
