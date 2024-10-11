@@ -62,6 +62,7 @@ describe('Add Pond Quality Modal', () => {
 
     const mockResponse = { success: true, message: 'Pond quality added' };
     (addOrUpdatePondQuality as jest.Mock).mockResolvedValue(mockResponse);
+    const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
 
     render(<AddPondQuality pondId={pondId} />);
 
@@ -77,6 +78,7 @@ describe('Add Pond Quality Modal', () => {
     fireEvent.change(screen.getByPlaceholderText('Ammonia'), { target: { value: '0.5' } });
     fireEvent.change(screen.getByPlaceholderText('Nitrate'), { target: { value: '1.0' } });
     fireEvent.change(screen.getByPlaceholderText('Phosphate'), { target: { value: '0.2' } });
+    fireEvent.change(screen.getByTestId('image'), { target: { files: [file] } });
     
 
     await act(async () => {
@@ -202,6 +204,34 @@ describe('Add Pond Quality Modal', () => {
     expect(screen.getByDisplayValue('1')).toBeInTheDocument();
     expect(screen.getByDisplayValue('0.2')).toBeInTheDocument();
   })
+
+  it('shows an error when the uploaded file type is not allowed', async () => {
+    render(<AddPondQuality pondId={pondId} />);
+    
+    fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+    
+    fireEvent.change(screen.getByPlaceholderText('Level pH'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Salinitas'), { target: { value: '15' } });
+    fireEvent.change(screen.getByPlaceholderText('Temperatur Air'), { target: { value: '25' } });
+    fireEvent.change(screen.getByPlaceholderText('Kejernihan Air'), { target: { value: '10' } });
+    fireEvent.change(screen.getByPlaceholderText('Sirkulasi Air'), { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('Oksigen Terlarut'), { target: { value: '8' } });
+    fireEvent.change(screen.getByPlaceholderText('ORP'), { target: { value: '500' } });
+    fireEvent.change(screen.getByPlaceholderText('Ammonia'), { target: { value: '0.5' } });
+    fireEvent.change(screen.getByPlaceholderText('Nitrate'), { target: { value: '1.0' } });
+    fireEvent.change(screen.getByPlaceholderText('Phosphate'), { target: { value: '0.2' } });
+    const fileInput = screen.getByTestId('image');
+    const invalidFile = new File(['dummy content'], 'dummy.txt', { type: 'text/plain' });
+    
+    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+    
+    fireEvent.click(screen.getByRole('button', { name: /Simpan/i }));
+    
+    await waitFor(() => {
+      expect(screen.getByText('Only image files are allowed')).toBeInTheDocument();
+      expect(addOrUpdatePondQuality).toHaveBeenCalled();
+    });
+  });
 });
 
   
