@@ -50,10 +50,6 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, s
       const formQualityData = objectToFormData(data)
 
       const res = await addOrUpdatePondQuality(formQualityData, pondId)
-      if (!['image/jpg', 'image/png'].includes(data.image?.type)) {
-        setError('Only image files are allowed');
-        return;
-      }
 
       if (!res.success) {
         setError('Gagal menyimpan kualitas air')

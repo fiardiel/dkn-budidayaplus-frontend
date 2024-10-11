@@ -62,7 +62,6 @@ describe('Add Pond Quality Modal', () => {
 
     const mockResponse = { success: true, message: 'Pond quality added' };
     (addOrUpdatePondQuality as jest.Mock).mockResolvedValue(mockResponse);
-    const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
 
     render(<AddPondQuality pondId={pondId} />);
 
@@ -78,7 +77,6 @@ describe('Add Pond Quality Modal', () => {
     fireEvent.change(screen.getByPlaceholderText('Ammonia'), { target: { value: '0.5' } });
     fireEvent.change(screen.getByPlaceholderText('Nitrate'), { target: { value: '1.0' } });
     fireEvent.change(screen.getByPlaceholderText('Phosphate'), { target: { value: '0.2' } });
-    fireEvent.change(screen.getByTestId('image'), { target: { files: [file] } });
     
 
     await act(async () => {
