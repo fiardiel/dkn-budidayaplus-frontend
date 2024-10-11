@@ -42,6 +42,10 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, s
     }
   });
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
   const onSubmit = async (data: PondQualityInput) => {
     try {
       setError(null)
@@ -58,7 +62,7 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, s
 
       reset()
       setIsModalOpen(false)
-      window.location.reload()
+      reloadPage()
 
     } catch(error) {
       setError('Gagal menyimpan kualitas air')
