@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { loginSchema, LoginForm } from "@/types/auth/login"; 
 import { handleLoginFormSubmit } from "@/lib/auth/login/actions"; 
-import { hashPassword } from "@/lib/auth";
 
 const LoginPage = () => {
   const router = useRouter();
