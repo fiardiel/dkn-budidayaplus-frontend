@@ -26,7 +26,6 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginForm) => {
     setError(null)
-    data.password = await hashPassword(data.password)
     const response = await handleLoginFormSubmit(data)
     if (response.ok) {
       reset()
