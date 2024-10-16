@@ -2,10 +2,15 @@ import { fireEvent, render, screen, waitFor, act } from '@testing-library/react'
 import { AddCycleModal } from '@/components/cycle';
 import { createCycle } from '@/lib/cycle';
 import { Pond } from '@/types/pond';
+import { fetchPonds } from '@/lib/pond';
 
 jest.mock('@/lib/cycle', () => ({
   createCycle: jest.fn(),
 }));
+
+jest.mock('@/lib/pond', () => ({
+  fetchPonds: jest.fn()
+}))
 
 const mockPonds: Pond[] = [
   {
@@ -32,7 +37,12 @@ describe('Add Cycle Modal', () => {
   })
 
   it('renders the form fields correctly', async () => {
-    render(<AddCycleModal ponds={mockPonds} />);
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
@@ -46,10 +56,17 @@ describe('Add Cycle Modal', () => {
     expect(screen.getByPlaceholderText('Jumlah ikan pada kolam Pond 2')).toBeInTheDocument();
   });
 
+
   it('closes the modal after successful form submission', async () => {
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
     (createCycle as jest.Mock).mockResolvedValue({ success: true, message: 'Cycle created' });
 
-    render(<AddCycleModal ponds={mockPonds} />);
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-01' } });
     fireEvent.change(screen.getByPlaceholderText('Tanggal Selesai'), { target: { value: '2021-09-30' } });
@@ -68,7 +85,14 @@ describe('Add Cycle Modal', () => {
   })
 
   it('shows error message when start date is after end date', async () => {
-    render(<AddCycleModal ponds={mockPonds} />);
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
+
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-15' } });
@@ -84,7 +108,13 @@ describe('Add Cycle Modal', () => {
   })
 
   it('shows error message when cycle duration is not 60 days', async () => { 
-    render(<AddCycleModal ponds={mockPonds} />);
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-01' } });
@@ -101,8 +131,14 @@ describe('Add Cycle Modal', () => {
 
   it('shows error message when the server has an error, not reached, or invalid input from the server', async () => {
     (createCycle as jest.Mock).mockRejectedValue(new Error('Gagal membuat siklus tambak'));
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
 
-    render(<AddCycleModal ponds={mockPonds} />);
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-01' } });
     fireEvent.change(screen.getByPlaceholderText('Tanggal Selesai'), { target: { value: '2021-09-30' } });
@@ -119,7 +155,14 @@ describe('Add Cycle Modal', () => {
   })
 
   it('doesnt allow form submission when any of the fields are invalid', async () => { 
-    render(<AddCycleModal ponds={mockPonds} />);
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
+    
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).not.toHaveBeenCalled();
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-01' } });
@@ -137,9 +180,15 @@ describe('Add Cycle Modal', () => {
   })
 
   it('does not close the modal when there is an error', async () => {
+    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
     (createCycle as jest.Mock).mockRejectedValue(new Error('Gagal membuat siklus tambak'));
 
-    render(<AddCycleModal ponds={mockPonds} />);
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
+    
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-01' } });
     fireEvent.change(screen.getByPlaceholderText('Tanggal Selesai'), { target: { value: '2021-09-30' } });
@@ -154,6 +203,4 @@ describe('Add Cycle Modal', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     })
   })
-
-
 })

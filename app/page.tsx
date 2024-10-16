@@ -1,4 +1,4 @@
-import AddCycleModal from "@/components/cycle/AddCycleModal";
+import {AddCycleModal} from "@/components/cycle";
 
 export default function Home() {
   return (

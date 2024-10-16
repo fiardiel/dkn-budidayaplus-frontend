@@ -4,12 +4,12 @@ import { Pond } from '@/types/pond'
 import React from 'react'
 
 interface AddCycleModalProps extends React.HTMLAttributes<HTMLDivElement> {
-  ponds: Pond[]
 }
 
-const AddCycleModal: React.FC<AddCycleModalProps> = ({ponds, ...props}) => {
+const AddCycleModal: React.FC<AddCycleModalProps> = ({...props}) => {
   return (
-    <div>
+    <div {...props}>
+      
     </div>
   )
 }
