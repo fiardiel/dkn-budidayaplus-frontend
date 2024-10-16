@@ -188,7 +188,7 @@ describe('Add Cycle Modal', () => {
     await waitFor(() => {
       expect(fetchPonds).toHaveBeenCalled();
     });
-    
+
     fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
     fireEvent.change(screen.getByPlaceholderText('Tanggal Mulai'), { target: { value: '2021-08-01' } });
     fireEvent.change(screen.getByPlaceholderText('Tanggal Selesai'), { target: { value: '2021-09-30' } });
@@ -202,5 +202,19 @@ describe('Add Cycle Modal', () => {
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     })
+  })
+
+  it('shows message when there are no ponds available', async () => {
+    (fetchPonds as jest.Mock).mockResolvedValue([]);
+
+    render(<AddCycleModal />);
+
+    await waitFor(() => {
+      expect(fetchPonds).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Tidak ada kolam yang tersedia')).toBeInTheDocument();
+    });
   })
 })
