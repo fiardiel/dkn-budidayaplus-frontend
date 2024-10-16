@@ -92,6 +92,36 @@ describe('Edit Pond Modal', () => {
     });
   });
 
+  it('displays error message when form submission fails due to an error on the backend', async () => {
+    const mockResponse = { success: false, message: 'Gagal menyimpan kolam' };
+    (addOrUpdatePond as jest.Mock).mockResolvedValue(mockResponse);
+
+    render(<EditPond pond={mockPondData} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+
+    const nameInput = screen.getByPlaceholderText('Nama Kolam');
+    const lengthInput = screen.getByPlaceholderText('Panjang (meter)');
+    const widthInput = screen.getByPlaceholderText('Lebar (meter)');
+    const depthInput = screen.getByPlaceholderText('Kedalaman (meter)');
+    const imageInput = screen.getByTestId('image');
+
+    fireEvent.change(nameInput, { target: { value: 'Updated Pond' } });
+    fireEvent.change(lengthInput, { target: { value: '15' } });
+    fireEvent.change(widthInput, { target: { value: '7' } });
+    fireEvent.change(depthInput, { target: { value: '3' } });
+    fireEvent.change(imageInput, { target: { files: [new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' })] } });
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/Gagal menyimpan kolam/i)).toBeInTheDocument();
+      expect(addOrUpdatePond).toHaveBeenCalledTimes(1);
+    });
+  })
+
   it('displays error message and sets error state when form submission fails', async () => {
     const mockError = new Error('Gagal menyimpan kolam');
     (addOrUpdatePond as jest.Mock).mockRejectedValueOnce(mockError);
