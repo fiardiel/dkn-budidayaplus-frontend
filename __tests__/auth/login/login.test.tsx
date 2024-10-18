@@ -7,10 +7,6 @@ jest.mock('@/lib/auth/login/actions', () => ({
   handleLoginFormSubmit: jest.fn(),
 }));
 
-jest.mock('@/lib/auth', () => ({
-  hashPassword: jest.fn().mockResolvedValue('hashedPassword'),
-}));
-
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(() => ({
     push: jest.fn(),
@@ -32,7 +28,6 @@ const mockFailedLoginResponse = jest.fn().mockResolvedValue({
   ok: false,
   message: "Invalid credentials",
 });
-
 
 describe("Login Page", () => {
   const mockRouter = {
@@ -71,7 +66,7 @@ describe("Login Page", () => {
     await waitFor(() => {
       expect(handleLoginFormSubmit).toHaveBeenCalledWith({
         phone_number: "08123456789",
-        password: "hashedPassword",
+        password: "mypassword123",
       });
       expect(mockRouter.push).toHaveBeenCalledWith("/");
     });

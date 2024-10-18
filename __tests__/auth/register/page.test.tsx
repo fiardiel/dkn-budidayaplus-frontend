@@ -1,11 +1,10 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import RegisterPage from '@/app/auth/register/page';
-import { handleRegisterSubmit, hashPassword } from '@/lib/auth';
+import { handleRegisterSubmit } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 
 jest.mock('@/lib/auth', () => ({
   handleRegisterSubmit: jest.fn(),
-  hashPassword: jest.fn().mockResolvedValue('hashedPassword'),
 }));
 
 jest.mock('next/navigation', () => ({
@@ -69,7 +68,6 @@ describe("Register Page", () => {
   });
 
   it("allows user to register and succeeds the submission", async () => {
-    (hashPassword as jest.Mock).mockResolvedValue('hashedPassword123');
     (handleRegisterSubmit as jest.Mock).mockResolvedValue({ok: true, message:"Registrasi berhasil"})
     
     fireEvent.change(phoneInput, { target: { value: '08123456789' } });
@@ -82,12 +80,11 @@ describe("Register Page", () => {
     })
 
     await waitFor(() => {
-      expect(hashPassword).toHaveBeenCalledWith('mypassword123')
       expect(handleRegisterSubmit).toHaveBeenCalledWith({
         phone_number: '08123456789',
         first_name: 'John',
         last_name: 'Doe',
-        password: 'hashedPassword123'
+        password: 'mypassword123'
       });
       expect(mockPush).toHaveBeenCalledWith("/")
     });
@@ -112,7 +109,6 @@ describe("Register Page", () => {
 
   it("shows error message when registration fails", async () => {
     (handleRegisterSubmit as jest.Mock).mockImplementationOnce(mockFailedRegisterResponse);
-    (hashPassword as jest.Mock).mockResolvedValue('hashedPassword');
 
     fireEvent.change(phoneInput, { target: { value: '08123456789' } });
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
@@ -121,12 +117,11 @@ describe("Register Page", () => {
     fireEvent.click(registerButton);
 
     await waitFor(() => {
-      expect(hashPassword).toHaveBeenCalledWith('mypassword123');
       expect(handleRegisterSubmit).toHaveBeenCalledWith({
         phone_number: '08123456789',
         first_name: 'John',
         last_name: 'Doe',
-        password: 'hashedPassword'
+        password: 'mypassword123'
       });
       expect(screen.getByText("Registrasi gagal")).toBeInTheDocument();
       expect(mockPush).not.toHaveBeenCalled();
@@ -135,7 +130,6 @@ describe("Register Page", () => {
 
   it("shows error message when there is an error exception during registration", async () => {
     (handleRegisterSubmit as jest.Mock).mockRejectedValue(new Error("Network Error"));
-    (hashPassword as jest.Mock).mockResolvedValue('hashedPassword');
 
     fireEvent.change(phoneInput, { target: { value: '08123456789' } });
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
@@ -144,12 +138,11 @@ describe("Register Page", () => {
     fireEvent.click(registerButton);
 
     await waitFor(() => {
-      expect(hashPassword).toHaveBeenCalledWith('mypassword123');
       expect(handleRegisterSubmit).toHaveBeenCalledWith({
         phone_number: '08123456789',
         first_name: 'John',
         last_name: 'Doe',
-        password: 'hashedPassword'
+        password: 'mypassword123'
       });
       expect(screen.getByText("Terjadi kesalahan pada registrasi")).toBeInTheDocument();
       expect(mockPush).not.toHaveBeenCalled();
