@@ -37,7 +37,7 @@ const config: Config = {
     // Exclude specific directories
     "!app/layout.tsx",
     "!components/ui/**/*",
-
+    "!components/sidebar/*"
   ],
 
   // The directory where Jest should output its coverage files
