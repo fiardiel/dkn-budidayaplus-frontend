@@ -73,16 +73,17 @@ const Sidebar = () => {
               </div>
             </div>
 
-            <DrawerFooter>
-              <Button
-                className='flex gap-2 text-red-500 hover:bg-red-200/90 bg-red-200/50 transition duration-200'
-                onClick={handleLogout}
-              >
-                <LogOut className='-ml-2' />
-                Logout
-              </Button>
-            </DrawerFooter>
-
+            {user && (
+              <DrawerFooter>
+                <Button
+                  className='flex gap-2 text-red-500 hover:bg-red-200/90 bg-red-200/50 transition duration-200'
+                  onClick={handleLogout}
+                >
+                  <LogOut className='-ml-2' />
+                  Logout
+                </Button>
+              </DrawerFooter>
+            )}
           </DrawerContent>
         </Drawer>
       </div>
