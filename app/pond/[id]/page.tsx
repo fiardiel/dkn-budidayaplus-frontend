@@ -91,7 +91,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className='flex flex-col mt-10'>
           <div className="mt-4">
-            {cycle !== undefined ? (<AddFoodSampling pondId={pond.pond_id} cycleId= {cycle!.id} />):
+            {cycle !== undefined ? (<AddFoodSampling pondId={pond.pond_id} cycleId= {cycle.id} />):
             <p>Tidak dapat menambahkan sample makanan karena siklus belum ada</p>}
           </div>
         </div>

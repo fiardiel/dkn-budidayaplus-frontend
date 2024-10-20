@@ -174,7 +174,7 @@ describe('Pond detail page', () => {
     });
   })
 
-  it('handles when food sampling cannot exist due to non-existent cycle', async () => {
+  it('handles when food sampling can exist due to existant cycle', async () => {
     (getLatestCycle as jest.Mock).mockResolvedValue(mockCycle);
     render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
