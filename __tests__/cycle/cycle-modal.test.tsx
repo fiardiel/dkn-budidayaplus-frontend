@@ -38,18 +38,17 @@ const mockPonds: Pond[] = [
 ]
 
 describe('Add Cycle Modal', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.clearAllMocks();
-  })
-
-  it('renders the form fields correctly', async () => {
     (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
+    (createCycle as jest.Mock).mockResolvedValue({ success: true, message: 'Cycle created' });
     render(<AddCycleModal />);
-
     await waitFor(() => {
       expect(fetchPonds).toHaveBeenCalled();
     });
+  })
 
+  it('renders the form fields correctly', async () => {
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
     });
@@ -61,14 +60,7 @@ describe('Add Cycle Modal', () => {
 
 
   it('closes the modal after successful form submission', async () => {
-    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
-    (createCycle as jest.Mock).mockResolvedValue({ success: true, message: 'Cycle created' });
-
     render(<AddCycleModal />);
-
-    await waitFor(() => {
-      expect(fetchPonds).toHaveBeenCalled();
-    });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
@@ -101,14 +93,7 @@ describe('Add Cycle Modal', () => {
 
 
   it('shows error message when form submission succeeds, but the server returns a non 200 response', async () => {
-    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
     (createCycle as jest.Mock).mockResolvedValue({ success: false, message: 'Anda memiliki tambak yang bertabrakan' });
-
-    render(<AddCycleModal />);
-
-    await waitFor(() => {
-      expect(fetchPonds).toHaveBeenCalled();
-    });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
@@ -141,14 +126,7 @@ describe('Add Cycle Modal', () => {
 
   
   it('shows error message when form submission fails', async () => {
-    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
     (createCycle as jest.Mock).mockRejectedValue(new Error('Network Error'));
-
-    render(<AddCycleModal />);
-
-    await waitFor(() => {
-      expect(fetchPonds).toHaveBeenCalled();
-    });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
@@ -181,13 +159,6 @@ describe('Add Cycle Modal', () => {
 
 
   it('shows error message if fish amount is filled 0', async () => {
-    (fetchPonds as jest.Mock).mockResolvedValue(mockPonds);
-    render(<AddCycleModal />);
-
-    await waitFor(() => {
-      expect(fetchPonds).toHaveBeenCalled();
-    });
-
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /mulai siklus/i }));
     })
