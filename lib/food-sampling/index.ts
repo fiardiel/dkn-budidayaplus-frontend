@@ -1,0 +1,1 @@
+export { getFoodSampling } from '@/lib/food-sampling/getFoodSampling';

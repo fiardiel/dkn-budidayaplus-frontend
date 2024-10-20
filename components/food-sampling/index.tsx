@@ -1,0 +1,1 @@
+export { default as FoodSamplingList } from '@/components/food-sampling/FoodSamplingList';
