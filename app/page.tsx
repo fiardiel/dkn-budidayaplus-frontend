@@ -1,3 +1,5 @@
+import {AddCycleModal} from "@/components/cycle";
+
 export default function Home() {
   return (
     <div className="flex items-center justify-center">
@@ -6,7 +8,7 @@ export default function Home() {
           Budidaya{/*
           */}<span className="font-normal text-blue-500">Plus</span>
         </p>
-        <p className="text-2xl mt-2 text-neutral-600">Coming soon</p>
+        <AddCycleModal className="mt-4"/>
       </div>
     </div>
   );
