@@ -42,12 +42,6 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     fishSampling = []
   }
 
-  try {
-    foodSampling = await getFoodSampling(params.id, 'some-cycle-id'); // Pass dummy cycleId for now
-  } catch (error) {
-    foodSampling = [];
-  }
-
   if (!pond) {
     return (
       <div className='min-h-[100vh] flex flex-col items-center justify-center'>

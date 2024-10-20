@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { FoodSampling } from '@/types/food-sampling';
 import { FoodSamplingList } from '@/components/food-sampling';
+import { formatDateTime } from '@/lib/utils';
 
 jest.mock('@/lib/food-sampling', () => ({
   fetchFoodSampling: jest.fn(),
@@ -24,7 +25,7 @@ describe('FoodSamplingList', () => {
     await waitFor(() => {
       expect(screen.getByText('Data Sampling Makanan')).toBeInTheDocument();
       expect(screen.getByText('Kuantitas Makanan (gram): 100')).toBeInTheDocument();
-      expect(screen.getByText('Tanggal: 03-10-2024 07:00')).toBeInTheDocument();
+      expect(screen.getByText(`Tanggal: ${formatDateTime(mockFoodSamplingData[0].sample_date)}`)).toBeInTheDocument();
     });
   });
 
