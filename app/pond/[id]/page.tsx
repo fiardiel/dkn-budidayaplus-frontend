@@ -11,7 +11,6 @@ import { FishSampling } from '@/types/fish-sampling';
 import { fetchFishSampling } from '@/lib/fish-sampling';
 import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
 import { FoodSampling } from '@/types/food-sampling';
-import { getFoodSampling } from '@/lib/food-sampling';
 import { FoodSamplingList } from '@/components/food-sampling';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
@@ -21,7 +20,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   let pond: Pond | undefined
   let pondQuality: PondQuality | undefined
   let fishSampling: FishSampling[]
-  let foodSampling: FoodSampling[] = [];
+  const foodSampling: FoodSampling[] = []
 
   try {
     pond = await fetchPond(params.id);
