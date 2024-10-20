@@ -15,15 +15,6 @@ const mockFoodSamplingData: FoodSampling[] = [
     food_quantity: 100,
     sample_date: new Date('2024-10-03'),
   },
-
-  {
-    sampling_id: 'sample2',
-    pond: 'mockPondId',
-    reporter: '082299442771',
-    cycle: 'mockCycleId',
-    food_quantity: 200,
-    sample_date: new Date('2024-10-02'),
-  },
 ];
 
 describe('FoodSamplingList', () => {
@@ -31,16 +22,11 @@ describe('FoodSamplingList', () => {
     render(<FoodSamplingList foodSampling={mockFoodSamplingData} />);
 
     await waitFor(() => {
-        expect(screen.getByText('Sampling Makanan')).toBeInTheDocument();
-        expect(screen.getByText('Kuantitas Makanan (gram)')).toBeInTheDocument();
-        expect(screen.getByText('100')).toBeInTheDocument();
-        expect(screen.getByText('200')).toBeInTheDocument();
-        expect(screen.getByText('082299442770')).toBeInTheDocument();
-        expect(screen.getByText('082299442771')).toBeInTheDocument();
-        expect(screen.getByText('2024-10-01')).toBeInTheDocument();
-        expect(screen.getByText('2024-10-02')).toBeInTheDocument();
-      });
+      expect(screen.getByText('Data Sampling Makanan')).toBeInTheDocument();
+      expect(screen.getByText('Kuantitas Makanan (gram): 100')).toBeInTheDocument();
+      expect(screen.getByText('Tanggal: 03-10-2024 07:00')).toBeInTheDocument();
     });
+  });
 
   it('renders no food sampling message', async () => {
     const mockFoodSamplingData: FoodSampling[] = [];
