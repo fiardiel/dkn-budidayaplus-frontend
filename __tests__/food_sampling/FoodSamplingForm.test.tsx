@@ -39,7 +39,7 @@ describe('FoodSamplingForm', () => {
 
     await waitFor(() => {
       const errorMessages = screen.getAllByText('Expected number, received nan');
-      expect(errorMessages.length).toBe(2); 
+      expect(errorMessages.length).toBe(1); 
   });
   });
 
@@ -53,7 +53,7 @@ describe('FoodSamplingForm', () => {
     fireEvent.submit(screen.getByRole('button', { name: 'Simpan' }));
 
     await waitFor(() => {
-      expect(addFoodSampling).toHaveBeenCalledWith(expect.any(FormData), pondId);
+      expect(addFoodSampling).toHaveBeenCalledWith(expect.any(FormData), pondId, cycleId);
       expect(mockSetIsModalOpen).toHaveBeenCalledWith(false);
     });
   });

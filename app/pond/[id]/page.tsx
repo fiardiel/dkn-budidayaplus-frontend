@@ -10,6 +10,7 @@ import React from 'react'
 import { FishSampling } from '@/types/fish-sampling';
 import { fetchFishSampling } from '@/lib/fish-sampling';
 import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
+import { AddFoodSampling } from '@/components/food-sampling';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
@@ -77,6 +78,11 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           
           <div className="mt-4">
             <AddFishSampling pondId={pond.pond_id} />
+          </div>
+        </div>
+        <div className='flex flex-col mt-10'>
+          <div className="mt-4">
+            <AddFoodSampling pondId={pond.pond_id} cycleId='29aabc89-df93-40f7-b12e-0bdecf9d7d2a'/> {/*TODO: Change cycleId when cycle fe available*/}
           </div>
         </div>
       </div>
