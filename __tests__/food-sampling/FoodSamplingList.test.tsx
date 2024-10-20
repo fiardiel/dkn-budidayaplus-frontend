@@ -33,7 +33,7 @@ describe('FoodSamplingList', () => {
     render(<FoodSamplingList foodSampling={mockFoodSamplingData} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Tidak ada data sampling makanan')).toBeInTheDocument();
+      expect(screen.getByText('Tidak ada sampling makanan')).toBeInTheDocument();
     });
   });
 });
