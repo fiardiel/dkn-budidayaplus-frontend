@@ -46,12 +46,10 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
 
       const response = await createCycle(formattedData)
       if (!response.success) {
-        console.log(response.message)
         setError(response.message)
         return
       }
 
-      console.log('success', response.message)
       reset()
       setIsModalOpen(false)
 
