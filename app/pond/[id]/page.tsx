@@ -10,6 +10,9 @@ import React from 'react'
 import { FishSampling } from '@/types/fish-sampling';
 import { fetchFishSampling } from '@/lib/fish-sampling';
 import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
+import { FoodSampling } from '@/types/food-sampling';
+import { getFoodSampling } from '@/lib/food-sampling';
+import { FoodSamplingList } from '@/components/food-sampling';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
@@ -18,6 +21,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   let pond: Pond | undefined
   let pondQuality: PondQuality | undefined
   let fishSampling: FishSampling[]
+  let foodSampling: FoodSampling[] = [];
 
   try {
     pond = await fetchPond(params.id);
@@ -36,6 +40,12 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     fishSampling = await fetchFishSampling(params.id)
   } catch (error) {
     fishSampling = []
+  }
+
+  try {
+    foodSampling = await getFoodSampling(params.id, 'some-cycle-id'); // Pass dummy cycleId for now
+  } catch (error) {
+    foodSampling = [];
   }
 
   if (!pond) {
@@ -78,6 +88,9 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <div className="mt-4">
             <AddFishSampling pondId={pond.pond_id} />
           </div>
+        </div>
+        <div className='flex flex-col mt-10'>
+          <FoodSamplingList foodSampling={foodSampling} />
         </div>
       </div>
     </div>
