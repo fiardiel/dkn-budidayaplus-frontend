@@ -12,8 +12,7 @@ import { fetchFishSampling } from '@/lib/fish-sampling';
 import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
 import { getFoodSampling } from '@/lib/food-sampling';
 import { FoodSampling } from '@/types/food-sampling';
-import { FoodSamplingList } from '@/components/food-sampling';
-import { AddFoodSampling } from '@/components/food-sampling';
+import { FoodSamplingList, AddFoodSampling } from '@/components/food-sampling';
 import { Cycle } from '@/types/cycle';
 import { getLatestCycle } from '@/lib/cycle/getLatestCycle';
 

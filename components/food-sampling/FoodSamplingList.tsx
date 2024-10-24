@@ -1,5 +1,3 @@
-// components/food-sampling/FoodSamplingList.tsx
-
 'use client'
 
 import React from 'react';
