@@ -1,6 +1,6 @@
 'use client';
 
-import { FoodSampling, FoodSamplingInputForm, FoodSamplingSchema  } from '@/types/food-sampling';
+import { FoodSampling, FoodSamplingInput, FoodSamplingSchema  } from '@/types/food-sampling';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,14 +24,14 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, foo
     handleSubmit,
     formState: { errors, isSubmitting },
     reset
-  } = useForm<FoodSamplingInputForm>({
+  } = useForm<FoodSamplingInput>({
     resolver: zodResolver(FoodSamplingSchema),
     defaultValues: foodSampling && {
       food_quantity: foodSampling.food_quantity
     }
   })
 
-  const onSubmit = async (data: FoodSamplingInputForm) => {
+  const onSubmit = async (data: FoodSamplingInput) => {
     try {
       setError(null)
       const foodSamplingData = objectToFormData(data)
