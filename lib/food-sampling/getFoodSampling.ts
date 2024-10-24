@@ -1,22 +1,28 @@
+'use server'
+
+import { cookies } from 'next/headers';
 import { FoodSampling } from '@/types/food-sampling';
 
-export async function getFoodSampling(pondId: string, cycleId: string): Promise<FoodSampling[]> {
-  return [
-    {
-      sampling_id: 'sample1',
-      pond: pondId,
-      reporter: '082299442770',
-      cycle: cycleId,
-      food_quantity: 100,
-      sample_date: new Date('2024-10-01'),
-    },
-    {
-      sampling_id: 'sample2',
-      pond: pondId,
-      reporter: '082299442771',
-      cycle: cycleId,
-      food_quantity: 200,
-      sample_date: new Date('2024-10-02'),
-    },
-  ];
+const API_BASE_URL = process.env.API_BASE_URL;
+
+export async function getFoodSampling(pondId: string): Promise<FoodSampling[]> {
+  const token = cookies().get('accessToken')?.value;
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/food-sampling/${pondId}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch food sampling data');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching food sampling data:', error);
+    throw new Error('Failed to fetch food sampling data');
+  }
 }

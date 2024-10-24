@@ -1,33 +1,47 @@
-'use client';
+// components/food-sampling/FoodSamplingList.tsx
+
+'use client'
 
 import React from 'react';
-import { FoodSampling } from '@/types/food-sampling';
 import { formatDateTime } from '@/lib/utils';
+import { FoodSampling } from '@/types/food-sampling';
 
 interface FoodSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
   foodSampling: FoodSampling[] | undefined;
 }
 
 const FoodSamplingList: React.FC<FoodSamplingProps> = ({ foodSampling, ...props }) => {
-  if (!foodSampling || foodSampling.length === 0) {
-    return <p className='text-lg text-neutral-600'>Tidak ada data sampling makanan</p>;
-  }
+  const samplingData = () => {
+    if (!foodSampling || foodSampling.length === 0) {
+      return [];
+    } else {
+      return foodSampling.map((item) => ({
+        id: item.sampling_id,
+        foodQuantity: item.food_quantity,
+        sampleDate: formatDateTime(item.sample_date),
+      }));
+    }
+  };
+
+  const formattedData = samplingData();
 
   return (
     <div {...props}>
       <p className='text-2xl font-semibold'>Data Sampling Makanan</p>
-      <div className='grid grid-cols-2 gap-4 mt-5'>
-        {foodSampling.map((item) => (
-          <div key={item.sampling_id} className='flex flex-col'>
-            <p className='text-sm'>
-              Kuantitas Makanan (gram): {item.food_quantity}
-            </p>
-            <p className='text-sm'>
-              Tanggal: {formatDateTime(item.sample_date)}
-            </p>
-          </div>
-        ))}
-      </div>
+      {formattedData.length > 0 ? (
+        <div className='grid grid-cols-2 gap-4 mt-5'>
+          {formattedData.map((item) => (
+            <div key={item.id} className='flex flex-col'>
+              <div className='flex gap-1 items-center'>
+                <p className='text-sm'>Kuantitas Makanan (gram): {item.foodQuantity}</p>
+              </div>
+              <p className='text-sm'>Tanggal: {item.sampleDate}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className='text-lg text-neutral-600'>Tidak ada data sampling makanan</p>
+      )}
     </div>
   );
 };
