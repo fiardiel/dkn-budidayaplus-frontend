@@ -4,15 +4,14 @@ import { FoodSamplingList } from '@/components/food-sampling';
 import { formatDateTime } from '@/lib/utils';
 
 jest.mock('@/lib/food-sampling', () => ({
-  fetchFoodSampling: jest.fn(),
+  getFoodSampling: jest.fn(),
 }));
 
 const mockFoodSamplingData: FoodSampling[] = [
   {
     sampling_id: 'abc123',
-    pond: 'abcde',
-    cycle: 'cycle123',
-    reporter: '082299442770',
+    pond_id: 'abcde',
+    cycle_id: 'cycle123',
     food_quantity: 100,
     sample_date: new Date('2024-10-03'),
   },
