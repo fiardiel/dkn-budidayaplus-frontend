@@ -8,9 +8,15 @@ import { FishSampling } from '@/types/fish-sampling';
 import { fetchFishSampling } from '@/lib/fish-sampling';
 import { getFoodSampling } from '@/lib/food-sampling'; 
 import { FoodSampling } from '@/types/food-sampling'; 
+import { Cycle } from '@/types/cycle';
+import { getLatestCycle } from '@/lib/cycle/getLatestCycle';
 
 jest.mock("@/lib/pond", () => ({
   fetchPond: jest.fn(),
+}));
+
+jest.mock("@/lib/cycle/getLatestCycle", () => ({
+  getLatestCycle: jest.fn(),
 }));
 
 jest.mock('@/lib/pond-quality', () => ({
@@ -56,6 +62,14 @@ const mockFishSampling: FishSampling = {
   fish_length: 30,
   sample_date: '2024-10-03',
 };
+
+const mockCycle: Cycle = {
+  id: '12345',
+  start_date: new Date("2024-10-21"),
+  end_date: new Date("2024-12-20"),
+  supervisor: 'test',
+  pond_fish_amount: [],
+}
 
 const mockFoodSampling: FoodSampling = {
   sampling_id: 'sample1',
@@ -163,6 +177,22 @@ describe('Pond detail page', () => {
     render(await PondDetailPage({params: {id: 'abcde'}}));
     await waitFor(() => {
       expect(screen.getByText('Tidak ada sampling ikan')).toBeInTheDocument();
+    });
+  })
+
+  it('handles when food sampling cannot exist due to non-existent cycle', async () => {
+    (getLatestCycle as jest.Mock).mockRejectedValue(new Error("Gagal terhubung ke server"));
+    render(await PondDetailPage({params: {id: 'abcde'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Tidak dapat menambahkan sample makanan karena siklus belum ada')).toBeInTheDocument();
+    });
+  })
+
+  it('handles when food sampling can exist due to existant cycle', async () => {
+    (getLatestCycle as jest.Mock).mockResolvedValue(mockCycle);
+    render(await PondDetailPage({params: {id: 'abcde'}}));
+    await waitFor(() => {
+      expect(screen.getByText('Add Food Sampling')).toBeInTheDocument();
     });
   })
 
