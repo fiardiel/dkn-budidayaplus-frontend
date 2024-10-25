@@ -30,6 +30,6 @@ async function loginRequest(url: string, data: LoginForm): Promise<Response> {
 
 async function setRefreshAndAccessTokens(response: Response) {
   const { refresh, access } = await response.json();
-  cookies().set("refreshToken", refresh, { path: "/", httpOnly: true, secure: true });
-  cookies().set("accessToken", access, { path: "/", httpOnly: true, secure: true });
+  cookies().set("refreshToken", refresh, { path: "/", httpOnly: true, secure: true, sameSite: "lax" });
+  cookies().set("accessToken", access, { path: "/", httpOnly: true, secure: true, sameSite: "lax" });
 }
