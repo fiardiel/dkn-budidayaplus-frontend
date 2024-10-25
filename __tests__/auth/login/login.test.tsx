@@ -29,7 +29,6 @@ const mockFailedLoginResponse = jest.fn().mockResolvedValue({
   message: "Invalid credentials",
 });
 
-
 describe("Login Page", () => {
   const mockRouter = {
     push: jest.fn(),

@@ -1,4 +1,4 @@
 import { getUser } from "@/lib/auth/user/get-user";
-import { handleFormSubmit } from "@/lib/auth/register/actions";
+import { handleRegisterSubmit } from "@/lib/auth/register/registerActions";
 
-export { getUser, handleFormSubmit };
+export { getUser, handleRegisterSubmit };

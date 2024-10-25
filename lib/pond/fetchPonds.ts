@@ -1,8 +1,20 @@
-export async function fetchPonds() {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return [
-    { id: 'abcde', name: "Pond 1", volume: 121.0, image_name: "pond1.jpg" },
-    { id: 'abcdefg', name: "Pond 2", volume: 144.0, image_name: "pond2.jpg" },
-    { id: 'xyz', name: "Pond 3", volume: 169.0, image_name: "pond3.jpg" },
-  ];
+'use server'
+
+import { Pond } from "@/types/pond";
+import { cookies } from "next/headers";
+
+export async function fetchPonds(): Promise<Pond[]> {
+  const token = cookies().get('accessToken')?.value
+  const res = await fetch(`${process.env.API_BASE_URL}/api/pond/`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  const data = await res.json()
+  if (!res.ok) {
+    throw new Error(data.message)
+  } 
+  return data
 }
