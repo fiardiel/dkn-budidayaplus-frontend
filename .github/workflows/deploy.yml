@@ -3,7 +3,7 @@ name: Deploy to VM
 on:
   push:
     branches:
-      - deploy_docker
+      - staging
 
 jobs:
   build:
