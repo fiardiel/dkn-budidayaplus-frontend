@@ -50,11 +50,9 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
-
           script: |
+            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -username fiardiel --password-stdin
             docker pull ghcr.io/fiardiel/budidayaplus_fe:latest
             docker stop budidayaplus_fe || true
             docker rm budidayaplus_fe || true
             docker run -d --name budidayaplus_fe -p 3000:3000 ghcr.io/fiardiel/budidayaplus_fe:latest
-
-          debug: true
