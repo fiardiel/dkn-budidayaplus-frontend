@@ -52,7 +52,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/auth/login", req.url))
     }
     const response = NextResponse.next();
-    response.cookies.set("accessToken", newAccessToken, { path: "/", httpOnly: true, secure: true });
+    response.cookies.set("accessToken", newAccessToken, { path: "/", httpOnly: true });
     return response
   }
 
