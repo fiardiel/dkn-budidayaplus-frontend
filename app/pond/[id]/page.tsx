@@ -10,20 +10,33 @@ import React from 'react'
 import { FishSampling } from '@/types/fish-sampling';
 import { fetchFishSampling } from '@/lib/fish-sampling';
 import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
+import { getFoodSampling } from '@/lib/food-sampling';
+import { FoodSampling } from '@/types/food-sampling';
+import { FoodSamplingList, AddFoodSampling } from '@/components/food-sampling';
+import { Cycle } from '@/types/cycle';
+import { getLatestCycle } from '@/lib/cycle/getLatestCycle';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
   let volume = 0
 
   let pond: Pond | undefined
+  let cycle: Cycle | undefined
   let pondQuality: PondQuality | undefined
   let fishSampling: FishSampling[]
+  let foodSampling: FoodSampling[] = []
 
   try {
     pond = await fetchPond(params.id);
     volume = pond.depth * pond.width * pond.length
   } catch (error) {
     pond = undefined
+  }
+
+  try {
+    cycle = await getLatestCycle();
+  } catch (error){
+    cycle = undefined
   }
 
   try {
@@ -36,6 +49,12 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     fishSampling = await fetchFishSampling(params.id)
   } catch (error) {
     fishSampling = []
+  }
+
+  try {
+    foodSampling = await getFoodSampling(params.id)
+  } catch (error) {
+    foodSampling = []
   }
 
   if (!pond) {
@@ -78,6 +97,15 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <div className="mt-4">
             <AddFishSampling pondId={pond.pond_id} />
           </div>
+        </div>
+        <div className='flex flex-col mt-10'>
+          <div className="mt-4">
+            {cycle !== undefined ? (<AddFoodSampling pondId={pond.pond_id} cycleId= {cycle.id} />):
+            <p>Tidak dapat menambahkan sample makanan karena siklus belum ada</p>}
+          </div>
+        </div>
+        <div className='flex flex-col mt-10'>
+          <FoodSamplingList foodSampling={foodSampling} />
         </div>
       </div>
     </div>
