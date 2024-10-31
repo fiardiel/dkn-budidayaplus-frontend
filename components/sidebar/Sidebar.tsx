@@ -18,7 +18,6 @@ import { logout } from '@/lib/auth/logout/logoutAction';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useUser } from '@/hooks/useUser';
 import { Button } from '@/components/ui/button';
-import { UserProfile } from '@/types/profile';
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false)
