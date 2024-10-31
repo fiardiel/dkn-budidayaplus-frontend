@@ -1,8 +1,9 @@
 import React from 'react';
+import FishSamplingHistory from '@/components/fish-sampling/FishSamplingHistory';
 
-const FishSamplingHistoryPage = () => {
+const FishSamplingHistoryPage = ({ params }: { params: {id: string }}) => {
   
-  return <div/>;
+  return <FishSamplingHistory pondId={params.id} />;
 };
 
 export default FishSamplingHistoryPage;
