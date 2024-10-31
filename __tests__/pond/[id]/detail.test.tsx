@@ -4,10 +4,8 @@ import { fetchPond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
 import { PondQuality } from '@/types/pond-quality';
 import { getLatestPondQuality } from '@/lib/pond-quality';
-import { getFoodSampling } from '@/lib/food-sampling'; 
 import { FoodSampling } from '@/types/food-sampling'; 
 import { Cycle } from '@/types/cycle';
-import { getLatestCycle } from '@/lib/cycle/getLatestCycle';
 
 jest.mock("@/lib/pond", () => ({
   fetchPond: jest.fn(),
