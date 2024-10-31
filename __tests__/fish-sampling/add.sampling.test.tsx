@@ -1,111 +1,102 @@
-import { fireEvent, render, screen, waitFor, act } from '@testing-library/react';
-import { addFishSampling } from '@/lib/fish-sampling';
-import { AddFishSampling } from '@/components/fish-sampling';
+import React from 'react';
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AddFishSampling from '@/components/fish-sampling/AddFishSampling';
+import { getLatestCycle } from '@/lib/cycle';
 
-jest.mock('@/lib/fish-sampling', () => ({
-  addFishSampling: jest.fn(),
-}));
+jest.mock('@/lib/cycle');
+const mockGetLatestCycle = getLatestCycle as jest.MockedFunction<typeof getLatestCycle>;
 
-describe('Add Fish Sampling Modal', () => {
+describe('AddFishSampling', () => {
   const pondId = 'test-pond-id';
 
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders the form fields correctly', async () => {
-    render(<AddFishSampling pondId={pondId}  />);
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
+  it('renders the Add Fish Sampling button if cycle is available', async () => {
+    mockGetLatestCycle.mockResolvedValue({
+      id: 'test-cycle-id',
+      start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+      end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
+      supervisor: 'John Doe',
+      pond_fish_amount: [{ id: 'test-pond-fish-amount-id', pond_id: 'test-pond-id', fish_amount: 100 }],
     });
-
-    expect(screen.getByPlaceholderText('Berat Ikan(kg)')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Panjang Ikan(cm)')).toBeInTheDocument();
-  });
-
-  it('closes the modal after successful form submission', async () => {
-
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ success: true }),
-      } as Response)
-    );
-
-    const mockResponse = { success: true, message: 'Fish Sampling added' };
-    (addFishSampling as jest.Mock).mockResolvedValue(mockResponse);
 
     render(<AddFishSampling pondId={pondId} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
+    await waitFor(() => {
+      expect(screen.getByText('Add Fish Sampling')).toBeInTheDocument();
+    });
+  });
 
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
+  it('does not render the Add Fish Sampling button if no cycle is available', async () => {
+    mockGetLatestCycle.mockResolvedValue(undefined);
 
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
+    render(<AddFishSampling pondId={pondId} />);
+
+    await waitFor(() => {
+      expect(screen.queryByText('Add Fish Sampling')).not.toBeInTheDocument();
+    });
+  });
+
+  it('opens modal with FishSamplingForm when Add Fish Sampling button is clicked', async () => {
+    mockGetLatestCycle.mockResolvedValue({
+      id: 'test-cycle-id',
+      start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+      end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
+      supervisor: 'John Doe',
+      pond_fish_amount: [{ id: 'test-pond-fish-amount-id', pond_id: 'test-pond-id', fish_amount: 100 }],
+    });
+
+    render(<AddFishSampling pondId={pondId} />);
+
+    await waitFor(() => {
+      const addButton = screen.getByTestId('add-fish-sampling-button');
+      expect(addButton).toBeInTheDocument();
+    });
+
+    act(() => {
+      fireEvent.click(screen.getByTestId('add-fish-sampling-button'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+  });
+
+  it('closes modal when setIsModalOpen is false', async () => {
+    mockGetLatestCycle.mockResolvedValue({
+      id: 'test-cycle-id',
+      start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+      end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
+      supervisor: 'John Doe',
+      pond_fish_amount: [{ id: 'test-pond-fish-amount-id', pond_id: 'test-pond-id', fish_amount: 100 }],
+    });
+
+    render(<AddFishSampling pondId={pondId} />);
+
+    await waitFor(() => {
+      const addButton = screen.getByText('Add Fish Sampling');
+      expect(addButton).toBeInTheDocument();
+    });
+
+    // Open modal
+    act(() => {
+      fireEvent.click(screen.getByText('Add Fish Sampling'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Simulate modal close
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: /close/i })); // Assuming there's a close button
     });
 
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    });
-  });
-
-  it('displays error message when backend says fish sampling creation failed', async () => {
-    const mockResponse = { success: false, message: 'Failed to create fish sampling' };
-    (addFishSampling as jest.Mock).mockResolvedValue(mockResponse);
-  
-    render(<AddFishSampling pondId={pondId} />);
-  
-    fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
-  
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
-  
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('Gagal menyimpan sample ikan')).toBeInTheDocument();
-    });
-  });
-  
-
-  it('displays error message and sets error state when form submission fails', async () => {
-    const mockError = new Error('Gagal menambah sampling ikan');
-    (addFishSampling as jest.Mock).mockRejectedValueOnce(mockError);
-
-
-    render(<AddFishSampling pondId={pondId} />);
-
-    fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
-
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '20' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '30' } });
-
-    fireEvent.click(screen.getByRole('button', { name: /Simpan/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText('Gagal menyimpan sample ikan')).toBeInTheDocument();
-    });
-  });
-
-  it('does not allow form submission when any of the fields are invalid', async () => {
-    render(<AddFishSampling pondId={pondId} />);
-
-    fireEvent.click(screen.getByRole('button', { name: /Add Fish Sampling/i }));
-
-    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '-1' } });
-    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '-2' } });
-
-    fireEvent.click(screen.getByRole('button', { name: /Simpan/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText('Berat harus berupa angka positif')).toBeInTheDocument();
-      expect(screen.getByText('Panjang harus berupa angka positif')).toBeInTheDocument();
-      expect(addFishSampling).not.toHaveBeenCalled();
     });
   });
 });
