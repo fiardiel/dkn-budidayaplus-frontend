@@ -17,7 +17,7 @@ describe('FoodSamplingForm', () => {
     pond_id: pondId,
     cycle_id: cycleId,
     food_quantity: 30,
-    sample_date: '2024-10-01',
+    sample_date: new Date('2024-10-01'),
   };
 
   beforeEach(() => {
