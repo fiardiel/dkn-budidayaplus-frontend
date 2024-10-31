@@ -2,6 +2,7 @@ export type PondQuality = {
   id: string
   pond: string
   reporter: string
+  cycle: string
   recorded_at: Date
   image_name: string
   ph_level: number
