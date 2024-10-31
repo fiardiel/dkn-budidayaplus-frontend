@@ -11,10 +11,11 @@ import { PondQuality } from '@/types/pond-quality';
 interface AddPondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string;
   pondQuality?: PondQuality;
+  cycleId: string;
 }
 
 
-const AddPondQuality: React.FC<AddPondQualityProps> = ({pondId, pondQuality, ...props}) =>  {
+const AddPondQuality: React.FC<AddPondQualityProps> = ({pondId, pondQuality, cycleId, ...props}) =>  {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -26,7 +27,7 @@ const AddPondQuality: React.FC<AddPondQualityProps> = ({pondId, pondQuality, ...
           </Button>
         </DialogTrigger>
         <DialogContent title="Add Pond Quality">
-          <PondQualityForm setIsModalOpen={setIsModalOpen} pondId={pondId} pondQuality={pondQuality}/>
+          <PondQualityForm setIsModalOpen={setIsModalOpen} pondId={pondId} pondQuality={pondQuality} cycleId={cycleId}/>
         </DialogContent>
       </Dialog>
     </div>

@@ -4,10 +4,10 @@ import { cookies } from "next/headers"
 
 const API_BASE_URL = process.env.API_BASE_URL
 
-export async function getPondQuality(pondId: string, pondQualityId: string) {
+export async function getPondQuality(pondId: string, pondQualityId: string, cycleId: string) {
   const token = cookies().get('accessToken')?.value
   try {
-    const response = await fetch(`${API_BASE_URL}/api/pond-quality/${pondId}/${pondQualityId}/`, {
+    const response = await fetch(`${API_BASE_URL}/api/pond-quality/${cycleId}/${pondId}/${pondQualityId}/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
