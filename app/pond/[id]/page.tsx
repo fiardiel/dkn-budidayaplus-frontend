@@ -7,9 +7,7 @@ import { PondQuality } from '@/types/pond-quality';
 import AddPondQuality from '@/components/pond-quality/AddPondQuality';
 import Image from 'next/image';
 import React from 'react'
-import { FishSampling } from '@/types/fish-sampling';
-import { fetchFishSampling } from '@/lib/fish-sampling';
-import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
+import { FishSamplingCard } from '@/components/fish-sampling';
 import { getFoodSampling } from '@/lib/food-sampling';
 import { FoodSampling } from '@/types/food-sampling';
 import { FoodSamplingList, AddFoodSampling } from '@/components/food-sampling';
@@ -23,7 +21,6 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   let pond: Pond | undefined
   let cycle: Cycle | undefined
   let pondQuality: PondQuality | undefined
-  let fishSampling: FishSampling[]
   let foodSampling: FoodSampling[] = []
 
   try {
@@ -43,12 +40,6 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     pondQuality = await getLatestPondQuality(params.id)
   } catch (error) {
     pondQuality = undefined
-  }
-
-  try {
-    fishSampling = await fetchFishSampling(params.id)
-  } catch (error) {
-    fishSampling = []
   }
 
   try {
@@ -92,11 +83,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
         <div className='flex flex-col mt-10'>
-          <FishSamplingList fishSampling={fishSampling} />
-          
-          <div className="mt-4">
-            <AddFishSampling pondId={pond.pond_id} />
-          </div>
+          <FishSamplingCard pondId={pond.pond_id} />
         </div>
         <div className='flex flex-col mt-10'>
           <div className="mt-4">

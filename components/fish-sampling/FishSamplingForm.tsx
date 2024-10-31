@@ -1,6 +1,6 @@
 'use client';
 
-import { FishSampling, FishSamplingInputForm, FishSamplingSchema  } from '@/types/fish-sampling';
+import { FishSamplingInputForm, FishSamplingSchema  } from '@/types/fish-sampling';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,12 +11,11 @@ import { objectToFormData } from '@/lib/utils'
 
 interface FishSamplingFormProps {
   setIsModalOpen: (open: boolean) => void
-  fishSampling?: FishSampling
-  pondId?: string
-  
+  pondId: string
+  cycleId: string
 }
 
-const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, fishSampling, setIsModalOpen }) => {
+const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, cycleId, setIsModalOpen }) => {
     const [error, setError] = useState<string | null>(null)
 
   const {
@@ -25,19 +24,14 @@ const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, fishSampling
     formState: { errors, isSubmitting },
     reset
   } = useForm<FishSamplingInputForm>({
-    resolver: zodResolver(FishSamplingSchema),
-    defaultValues: fishSampling && {
-      fish_length: fishSampling.fish_length,
-      fish_weight: fishSampling.fish_weight
-    }
+    resolver: zodResolver(FishSamplingSchema)
   })
 
   const onSubmit = async (data: FishSamplingInputForm) => {
     try {
       setError(null)
       const fishSamplingData = objectToFormData(data)
-
-      const res = await addFishSampling(fishSamplingData, pondId)
+      const res = await addFishSampling(pondId, cycleId, fishSamplingData)
 
       if (!res.success) {
         setError('Gagal menyimpan sample ikan')

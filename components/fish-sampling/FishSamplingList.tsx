@@ -4,16 +4,16 @@ import { FishSampling } from '@/types/fish-sampling';
 import React from 'react';
 
 interface FishSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
-  fishSampling: FishSampling[];
+  fishSampling: FishSampling | undefined;
 }
 
 const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props }) => {
   return (
     <div {...props}>
       <p className='text-2xl font-semibold'>Sampling Ikan</p>
-      {Array.isArray(fishSampling) && fishSampling.length > 0 ? (
+      {fishSampling ? (
         <table className='mt-5 table-auto w-full'>
-          <thead> 
+          <thead>
             <tr>
               <th className='text-left text-lg'>Berat Ikan (kg)</th>
               <th className='text-left text-lg'>Panjang Ikan (cm)</th>
@@ -21,13 +21,11 @@ const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props 
             </tr>
           </thead>
           <tbody>
-            {fishSampling.map((sample) => (
-              <tr key={sample.sampling_id}>
-                <td className='text-xl font-semibold text-neutral-600'>{sample.fish_weight}</td>
-                <td className='text-xl font-semibold text-neutral-600'>{sample.fish_length}</td>
-                <td className='text-xl font-semibold text-neutral-600'>{sample.sample_date}</td>
-              </tr>
-            ))}
+            <tr>
+              <td className='text-xl font-semibold text-neutral-600' data-testid="fish-weight">{fishSampling.fish_weight}</td>
+              <td className='text-xl font-semibold text-neutral-600' data-testid="fish-length">{fishSampling.fish_length}</td>
+              <td className='text-xl font-semibold text-neutral-600' data-testid="fish-sample-date">{fishSampling.sample_date}</td>
+            </tr>
           </tbody>
         </table>
       ) : (
