@@ -97,8 +97,8 @@ describe('Update Profile Modal', () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
     })
 
-    fireEvent.change(screen.getByPlaceholderText('Nama Depan'), { target: { value: 'Jane'.repeat(10) } });
-    fireEvent.change(screen.getByPlaceholderText('Nama Belakang'), { target: { value: 'Doe'.repeat(10) } });
+    fireEvent.change(screen.getByPlaceholderText('Nama Depan'), { target: { value: 'Oi'.repeat(13) } });
+    fireEvent.change(screen.getByPlaceholderText('Nama Belakang'), { target: { value: 'Iu'.repeat(13) } });
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
