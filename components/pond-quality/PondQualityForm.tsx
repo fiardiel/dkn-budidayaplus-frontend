@@ -13,10 +13,11 @@ interface PondQualityFormProps {
   setIsModalOpen: (open: boolean) => void
   pondQuality?: PondQuality
   pondId?: string
+  cycleId?: string
   
 }
 
-const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, setIsModalOpen }) => {
+const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, cycleId ,setIsModalOpen }) => {
     const [error, setError] = useState<string | null>(null)
 
   
@@ -53,7 +54,7 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, s
       data.image = imageList[0]
       const formQualityData = objectToFormData(data)
 
-      const res = await addOrUpdatePondQuality(formQualityData, pondId)
+      const res = await addOrUpdatePondQuality(formQualityData, pondId, cycleId)
 
       if (!res.success) {
         setError('Gagal menyimpan kualitas air')

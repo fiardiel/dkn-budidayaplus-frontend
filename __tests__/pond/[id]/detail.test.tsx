@@ -41,6 +41,7 @@ const mockPondQuality: PondQuality = {
   id: 'abcde',
   pond: 'abcde',
   reporter: '081234567890',
+  cycle: 'cycle123',
   recorded_at: new Date(),
   image_name: 'pond1.jpg',
   ph_level: 7.5,

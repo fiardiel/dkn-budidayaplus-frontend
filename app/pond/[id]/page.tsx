@@ -40,7 +40,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   }
 
   try {
-    pondQuality = await getLatestPondQuality(params.id)
+    pondQuality = await getLatestPondQuality(params.id, cycle?.id ?? '')
   } catch (error) {
     pondQuality = undefined
   }
@@ -88,7 +88,8 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <PondQualityList pondQuality={pondQuality} />
           
           <div className="mt-4">
-            <AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality}/>
+            {cycle !== undefined ? (<AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality} cycleId= {cycle.id}/>) :
+            <p>Tidak dapat menambahkan kualitas kolam karena siklus belum ada</p>}
           </div>
         </div>
         <div className='flex flex-col mt-10'>
@@ -99,13 +100,13 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
         <div className='flex flex-col mt-10'>
-          <div className="mt-4">
-            {cycle !== undefined ? (<AddFoodSampling pondId={pond.pond_id} cycleId= {cycle.id} />):
-            <p>Tidak dapat menambahkan sample makanan karena siklus belum ada</p>}
-          </div>
+          <FoodSamplingList foodSampling={foodSampling} />
         </div>
         <div className='flex flex-col mt-10'>
-          <FoodSamplingList foodSampling={foodSampling} />
+          <div className="mt-4">
+            {cycle !== undefined ? (<AddFoodSampling pondId={pond.pond_id} cycleId={cycle.id} />):
+            <p>Tidak dapat menambahkan sample makanan karena siklus belum ada</p>}
+          </div>
         </div>
       </div>
     </div>
