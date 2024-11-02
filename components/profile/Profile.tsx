@@ -1,11 +1,13 @@
 import React from 'react';
 import type { UserProfile } from '@/types/profile';
+import Image from 'next/image';
 
 interface UserProfileProps {
   profile: UserProfile;
 }
 
 const Profile: React.FC<UserProfileProps> = ({ profile }) => {
+  const fallbackImgSrc = 'fallbackimage.png'
   return (
     <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
       <div className='w-[80%]'>
@@ -14,6 +16,11 @@ const Profile: React.FC<UserProfileProps> = ({ profile }) => {
             <p className='text-3xl'>Detail Profile</p>
             <p className='text-3xl font-semibold'>
               {profile.user.first_name} {profile.user.last_name}
+            </p>
+          </div>
+          <div>
+            <p>
+              <Image className='object-cover h-full w-full' src={`/${fallbackImgSrc}`} width={500} height={400} alt={`${profile.user.first_name} image`} />
             </p>
           </div>
           <div>
@@ -29,11 +36,6 @@ const Profile: React.FC<UserProfileProps> = ({ profile }) => {
           <div>
             <p>
               <strong>Phone Number:</strong> {profile.user.phone_number}
-            </p>
-          </div>
-          <div>
-            <p>
-              <strong>Image Name:</strong> {profile.image_name || 'No image'}
             </p>
           </div>
         </div>

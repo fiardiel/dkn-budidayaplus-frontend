@@ -26,11 +26,13 @@ describe('Profile detail page', () => {
 
   it('renders the profile detail page with full name and phone number', async () => {
     render(await ProfilePage({ params: { username: '1234567890' } }));
-    
+    const profileImage = await screen.findByAltText("Apple image");
     await waitFor(() => {
       expect(screen.getByText("Detail Profile")).toBeInTheDocument();
       expect(screen.getByText("Apple Pie")).toBeInTheDocument();
       
+      expect(profileImage).toHaveAttribute("src", "/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
+
       expect(screen.getByText("First Name:")).toBeInTheDocument();
       expect(screen.getByText("Apple")).toBeInTheDocument();
       
@@ -39,9 +41,6 @@ describe('Profile detail page', () => {
       
       expect(screen.getByText("Phone Number:")).toBeInTheDocument();
       expect(screen.getByText("1234567890")).toBeInTheDocument();
-      
-      expect(screen.getByText("Image Name:")).toBeInTheDocument();
-      expect(screen.getByText("profile1.jpg")).toBeInTheDocument();
     });
   });
 
@@ -78,8 +77,10 @@ describe('Profile detail page', () => {
     render(await ProfilePage({ params: { username: '0987654321' } }));
     
     await waitFor(() => {
-      expect(screen.getByText("Image Name:")).toBeInTheDocument();
-      expect(screen.getByText("No image")).toBeInTheDocument(); 
+        expect(screen.getByText('Detail Profile')).toBeInTheDocument();
+        expect(screen.getByText('Banana Split')).toBeInTheDocument();
+        const profileImage = screen.getByAltText('Banana image');
+        expect(profileImage).toHaveAttribute("src", "/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
     });
   });
 });
