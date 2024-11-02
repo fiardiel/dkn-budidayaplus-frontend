@@ -9,8 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button';
 import { Modal as DialogContent } from '@/components/ui/modal';
-import { FiTrash2 } from "react-icons/fi";
-
+import { Trash } from 'lucide-react';
 
 type DeletePondProps = {
   pondId: Pond['pond_id'];
@@ -47,15 +46,14 @@ const DeletePond: React.FC<DeletePondProps> = ({ pondId }) => {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={'destructive'} className='flex gap-2'>
-            Hapus kolam{' '}<FiTrash2 size={20} />
+          <Button variant={'destructive'}>
+            Hapus <Trash className='ml-2' size={18}/>
           </Button>
         </DialogTrigger>
         <DialogContent className='sm:justify-start' title='Hapus kolam?' description={description}>
           <Button variant={'destructive'} onClick={handleDelete} disabled={loading}>
-            Hapus
+            Konfirmasi
           </Button>
-
           {error && <p className='text-red-500'>{error}</p>}
         </DialogContent>
       </Dialog>

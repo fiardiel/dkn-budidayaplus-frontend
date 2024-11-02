@@ -1,6 +1,6 @@
 'use client';
 
-import { PondQuality, PondQualityInput, PondQualitySchema  } from '@/types/pond-quality';
+import { PondQualityInput, PondQualitySchema } from '@/types/pond-quality';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,35 +11,30 @@ import { objectToFormData } from '@/lib/utils'
 
 interface PondQualityFormProps {
   setIsModalOpen: (open: boolean) => void
-  pondQuality?: PondQuality
   pondId?: string
   cycleId?: string
-  
 }
 
-const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, cycleId ,setIsModalOpen }) => {
-    const [error, setError] = useState<string | null>(null)
-
-  
-    const {
+const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setIsModalOpen }) => {
+  const [error, setError] = useState<string | null>(null)
+  const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-
-} = useForm<PondQualityInput>({
+  } = useForm<PondQualityInput>({
     resolver: zodResolver(PondQualitySchema),
-    defaultValues: pondQuality && {
-        ph_level: pondQuality.ph_level,
-        salinity: pondQuality.salinity, 
-        water_temperature: pondQuality.water_temperature,
-        water_clarity: pondQuality.water_clarity,
-        water_circulation: pondQuality.water_circulation,
-        dissolved_oxygen: pondQuality.dissolved_oxygen,
-        orp: pondQuality.orp,
-        ammonia: pondQuality.ammonia,
-        nitrate: pondQuality.nitrate,
-        phosphate: pondQuality.phosphate,
+    defaultValues: {
+      ph_level: 0,
+      salinity: 0,
+      water_temperature: 0,
+      water_clarity: 0,
+      water_circulation: 0,
+      dissolved_oxygen: 0,
+      orp: 0,
+      ammonia: 0,
+      nitrate: 0,
+      phosphate: 0,
     }
   });
 
@@ -65,129 +60,128 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({pondId, pondQuality, c
       setIsModalOpen(false)
       reloadPage()
 
-    } catch(error) {
+    } catch (error) {
       setError('Gagal menyimpan kualitas air')
     }
   }
 
   return (
     <div>
-       <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}> 
+      <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <Input
+            {...register('water_temperature', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Temperatur Air"
+            step={0.01}
+          />
+          {errors.water_temperature && <span className='text-sm text-red-500'>{errors.water_temperature.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('water_temperature', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Temperatur Air"
-               step={0.01}
-             />
-             {errors.water_temperature && <span>{errors.water_temperature.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('ph_level', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Level pH"
+            step={0.01}
+          />
+          {errors.ph_level && <span className='text-sm text-red-500'>{errors.ph_level.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('ph_level', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Level pH"
-               step={0.01}
-             />
-             {errors.ph_level && <span>{errors.ph_level.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('salinity', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Salinitas"
+            step={0.01}
+          />
+          {errors.salinity && <span className='text-sm text-red-500'>{errors.salinity.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('salinity', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Salinitas"
-               step={0.01}
-             />
-             {errors.salinity && <span>{errors.salinity.message}</span>}
-             </div>
+        <div>
+          <Input
+            {...register('water_clarity', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Kejernihan Air"
+            step={0.01}
+          />
+          {errors.water_clarity && <span className='text-sm text-red-500'>{errors.water_clarity.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('water_clarity', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Kejernihan Air"
-               step={0.01}
-             />
-             {errors.water_clarity && <span>{errors.water_clarity.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('water_circulation', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Sirkulasi Air"
+            step={0.01}
+          />
+          {errors.water_circulation && <span className='text-sm text-red-500'>{errors.water_circulation.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('water_circulation', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Sirkulasi Air"
-               step={0.01}
-             />
-             {errors.water_circulation && <span>{errors.water_circulation.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('dissolved_oxygen', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Oksigen Terlarut"
+            step={0.01}
+          />
+          {errors.dissolved_oxygen && <span className='text-sm text-red-500'>{errors.dissolved_oxygen.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('dissolved_oxygen', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Oksigen Terlarut"
-               step={0.01}
-             />
-             {errors.dissolved_oxygen && <span>{errors.dissolved_oxygen.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('orp', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="ORP"
+            step={0.01}
+          />
+          {errors.orp && <span className='text-sm text-red-500'>{errors.orp.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('orp', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="ORP"
-               step={0.01}
-             />
-             {errors.orp && <span>{errors.orp.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('ammonia', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Ammonia"
+            step={0.01}
+          />
+          {errors.ammonia && <span className='text-sm text-red-500'>{errors.ammonia.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('ammonia', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Ammonia"
-               step={0.01}
-             />
-             {errors.ammonia && <span>{errors.ammonia.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('nitrate', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Nitrate"
+            step={0.01}
+          />
+          {errors.nitrate && <span className='text-sm text-red-500'>{errors.nitrate.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('nitrate', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Nitrate"
-               step={0.01}
-             />
-             {errors.nitrate && <span>{errors.nitrate.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('phosphate', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Phosphate"
+            step={0.01}
+          />
+          {errors.phosphate && <span className='text-sm text-red-500'>{errors.phosphate.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('phosphate', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Phosphate"
-               step={0.01}
-             />
-             {errors.phosphate && <span>{errors.phosphate.message}</span>}
-            </div>
+        <div className='col-span-2'>
+          <Input
+            {...register('image')}
+            type="file"
+            accept="image/*"
+            data-testid="image"
+          />
+        </div>
 
-            <div>
-             <Input
-               {...register('image')}
-               type="file"
-               accept="image/*"
-               data-testid="image"
-             />
-            </div>
-   
-            <Button className='w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700' type='submit' disabled={isSubmitting}>
+        <Button className='w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700 col-span-2' type='submit' disabled={isSubmitting}>
           Simpan
         </Button>
         {error && <p className='w-full text-center text-red-500'>{error}</p>}
-       </form>
+      </form>
     </div>
   );
 };
