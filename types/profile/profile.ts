@@ -1,11 +1,7 @@
-export type UserProfile = {
-    id: string;
-    user: User;
-    image_name: string;
-}
-  
-export type User = {
-    phone_number: string,
-    first_name: string,
-    last_name: string,
+import User from "@/types/auth/user"
+
+export type Profile = {
+  id: number
+  user: User
+  image_name: string
 }
