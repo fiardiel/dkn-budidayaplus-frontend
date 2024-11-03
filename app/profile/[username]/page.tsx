@@ -1,6 +1,6 @@
 import { fetchProfile } from '@/lib/profile';
-import { UserProfile } from '@/types/profile';
-import Profile from '@/components/profile/Profile';
+import { Profile } from '@/types/profile';
+import ProfileComponent from '@/components/profile/ProfileComponent';
 import React from 'react';
 
 interface ProfilePageProps {
@@ -8,7 +8,7 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = async ({ params }) => {
-  let profile: UserProfile | undefined;
+  let profile: Profile | undefined;
 
   try {
     profile = await fetchProfile(params.username);
@@ -20,7 +20,7 @@ const ProfilePage: React.FC<ProfilePageProps> = async ({ params }) => {
     return <div>Profile not found</div>;
   }
 
-  return <Profile profile={profile} />;
+  return <ProfileComponent profile={profile} />;
 };
 
 export default ProfilePage;

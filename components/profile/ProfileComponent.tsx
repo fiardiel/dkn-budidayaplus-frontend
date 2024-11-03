@@ -1,12 +1,14 @@
+'use client'
+
 import React from 'react';
-import type { UserProfile } from '@/types/profile';
+import type { Profile } from '@/types/profile';
 import Image from 'next/image';
 
 interface UserProfileProps {
-  profile: UserProfile;
+  profile: Profile;
 }
 
-const Profile: React.FC<UserProfileProps> = ({ profile }) => {
+const ProfileComponent: React.FC<UserProfileProps> = ({ profile }) => {
   const fallbackImgSrc = 'fallbackimage.png'
   return (
     <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
@@ -44,4 +46,4 @@ const Profile: React.FC<UserProfileProps> = ({ profile }) => {
   );
 };
 
-export default Profile;
+export default ProfileComponent;

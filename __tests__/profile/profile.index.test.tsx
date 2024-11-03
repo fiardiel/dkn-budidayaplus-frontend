@@ -1,8 +1,8 @@
-import { Profile } from '@/components/profile';
+import { ProfileComponent } from '@/components/profile';
 
 describe('Profile index export', () => {
   it('should export the Profile component', () => {
-    expect(Profile).toBeDefined();
-    expect(Profile).toBeInstanceOf(Function); 
+    expect(ProfileComponent).toBeDefined();
+    expect(ProfileComponent).toBeInstanceOf(Function); 
   });
 });
