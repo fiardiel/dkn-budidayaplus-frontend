@@ -17,7 +17,7 @@ const AddPondQuality: React.FC<AddPondQualityProps> = ({pondId, cycleId, ...prop
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div {...props}>
+    <div {...props} data-testid='add-pond-quality'>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogTrigger asChild>
           <Button className="flex text-sm" variant={'outline'} size={'sm'}>
