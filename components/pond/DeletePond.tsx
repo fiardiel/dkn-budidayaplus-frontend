@@ -46,7 +46,7 @@ const DeletePond: React.FC<DeletePondProps> = ({ pondId }) => {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={'destructive'}>
+          <Button size='sm' variant={'destructive'}>
             Hapus <Trash className='ml-2' size={18}/>
           </Button>
         </DialogTrigger>
