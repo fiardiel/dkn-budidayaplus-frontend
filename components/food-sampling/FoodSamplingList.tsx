@@ -31,9 +31,9 @@ const FoodSamplingList: React.FC<FoodSamplingProps> = ({ foodSampling, ...props 
           {formattedData.map((item) => (
             <div key={item.id} className='flex flex-col'>
               <div className='flex gap-1 items-center'>
-                <p className='text-sm'>Kuantitas Makanan (gram): {item.foodQuantity}</p>
+                <p className='text-sm' data-testid="food-quantity">Kuantitas Makanan (gram): {item.foodQuantity}</p>
               </div>
-              <p className='text-sm'>Tanggal: {item.sampleDate}</p>
+              <p className='text-sm' data-testid="sample-date">Tanggal: {item.sampleDate}</p>
             </div>
           ))}
         </div>

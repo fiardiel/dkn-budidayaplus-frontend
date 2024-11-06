@@ -11,12 +11,11 @@ import { objectToFormData } from '@/lib/utils'
 
 interface FoodSamplingFormProps {
   setIsModalOpen: (open: boolean) => void
-  foodSampling?: FoodSampling
-  pondId?: string
-  cycleId?: string
+  pondId: string
+  cycleId: string
 }
 
-const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, foodSampling, setIsModalOpen }) => {
+const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, setIsModalOpen }) => {
     const [error, setError] = useState<string | null>(null)
 
   const {
@@ -25,10 +24,7 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, foo
     formState: { errors, isSubmitting },
     reset
   } = useForm<FoodSamplingInput>({
-    resolver: zodResolver(FoodSamplingSchema),
-    defaultValues: foodSampling && {
-      food_quantity: foodSampling.food_quantity
-    }
+    resolver: zodResolver(FoodSamplingSchema)
   })
 
   const onSubmit = async (data: FoodSamplingInput) => {
@@ -36,7 +32,7 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, foo
       setError(null)
       const foodSamplingData = objectToFormData(data)
 
-      const res = await addFoodSampling(foodSamplingData, pondId, cycleId)
+      const res = await addFoodSampling(pondId, cycleId, foodSamplingData)
 
       if (!res.success) {
         setError('Gagal menyimpan sample makanan')
