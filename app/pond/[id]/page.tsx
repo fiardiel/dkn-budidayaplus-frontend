@@ -5,6 +5,8 @@ import { fetchPond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
 import Image from 'next/image';
 import React from 'react'
+import { FishSamplingCard } from '@/components/fish-sampling';
+
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
   let volume = 0
@@ -52,7 +54,9 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
         <div className='flex flex-col mt-10'>
           <PondQuality pondId={pond.pond_id} />
         </div>
-
+        <div className='flex flex-col mt-10'>
+          <FishSamplingCard pondId={pond.pond_id} />
+        </div>
         <div className='flex flex-col mt-10'>
           <FoodSampling pondId={pond.pond_id} />
         </div>
