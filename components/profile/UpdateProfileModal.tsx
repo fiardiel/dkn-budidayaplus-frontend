@@ -5,14 +5,16 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Modal as DialogContent } from '@/components/ui/modal'
 import { UpdateProfileForm } from '@/components/profile'
-import { useProfile } from '@/hooks/useProfile'
+import { Profile } from '@/types/profile'
 
-const UpdateProfileModal = () => {
+interface UpdateProfileModalProps extends React.HTMLAttributes<HTMLDivElement> {
+  profile: Profile
+}
+const UpdateProfileModal: React.FC<UpdateProfileModalProps> = ({ profile, ...props }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const profile = useProfile()
 
   return (
-    <div>
+    <div {...props}>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogTrigger asChild>
           <Button>

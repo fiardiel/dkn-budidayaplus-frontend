@@ -1,27 +1,28 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { UpdateProfileModal } from '@/components/profile';
 import { updateProfile } from '@/lib/profile';
-
-jest.mock('@/hooks/useProfile', () => ({
-  useProfile: jest.fn().mockReturnValue({
-    id: 1,
-    user: {
-      id: 1,
-      first_name: 'John',
-      last_name: 'Doe',
-      phone_number: '081234567890',
-    },
-    image_name: 'john_doe.jpg',
-  })
-}))
+import { Profile } from '@/types/profile';
 
 jest.mock('@/lib/profile', () => ({
   updateProfile: jest.fn(),
 }))
 
+const mockUser = {
+  id: 1,
+  first_name: "John",
+  last_name: "Doe",
+  phone_number: "1234567890",
+}
+
+const mockProfile: Profile = {
+  id: 1,
+  user: mockUser,
+  image_name: "profile1.jpg"
+}
+
 describe('Update Profile Modal', () => {
   it('opens the modal when the update button is clicked', async () => {
-    render(<UpdateProfileModal />);
+    render(<UpdateProfileModal profile={mockProfile} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
@@ -36,7 +37,7 @@ describe('Update Profile Modal', () => {
   })
 
   it('closes the modal when the close button is clicked', async () => {
-    render(<UpdateProfileModal />);
+    render(<UpdateProfileModal profile={mockProfile} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
@@ -53,7 +54,7 @@ describe('Update Profile Modal', () => {
   })
 
   it('updates the profile when the form is submitted with correct fields', async () => {
-    render(<UpdateProfileModal />);
+    render(<UpdateProfileModal profile={mockProfile} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
@@ -73,7 +74,7 @@ describe('Update Profile Modal', () => {
   })
 
   it('shows an error message when the form is submitted with incorrect fields', async () => {
-    render(<UpdateProfileModal />);
+    render(<UpdateProfileModal profile={mockProfile} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
@@ -91,7 +92,7 @@ describe('Update Profile Modal', () => {
   })
 
   it('shows an error message when the form is submitted with too long fields', async () => {
-    render(<UpdateProfileModal />);
+    render(<UpdateProfileModal profile={mockProfile} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
@@ -112,7 +113,7 @@ describe('Update Profile Modal', () => {
     const mockError = new Error('Gagal mengupdate profile');
     (updateProfile as jest.Mock).mockRejectedValueOnce(mockError);
 
-    render(<UpdateProfileModal />);
+    render(<UpdateProfileModal profile={mockProfile} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /update profile/i }));
