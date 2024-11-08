@@ -16,20 +16,20 @@ describe('DeletePond Component', () => {
 
   it('renders the delete button correctly', () => {
     render(<DeletePond pondId="pond1" />);
-    expect(screen.getByRole('button', { name: /hapus kolam/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /hapus/i })).toBeInTheDocument();
   });
 
   it('opens a modal when delete button is clicked', () => {
     render(<DeletePond pondId="pond1" />);
-    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText(/hapus kolam\?/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /hapus/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /konfirmasi/i })).toBeInTheDocument();
   })
 
   it('closes the dialog when x button is pressed', () => {
     render(<DeletePond pondId="pond1" />);
-    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
     expect(screen.getByText(/hapus kolam\?/i)).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
@@ -38,7 +38,7 @@ describe('DeletePond Component', () => {
 
   it('closes the dialog when area outside the dialog is clicked', () => { 
     render(<DeletePond pondId="pond1" />);
-    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
     expect(screen.getByText(/hapus kolam\?/i)).toBeInTheDocument();
     fireEvent.mouseDown(document.body);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument
@@ -47,8 +47,8 @@ describe('DeletePond Component', () => {
   it('calls the deletePond function when delete button is clicked and redirected', async () => {
     (deletePond as jest.Mock).mockResolvedValue(true);
     render(<DeletePond pondId="pond1" />);
-    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
     fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
+    fireEvent.click(screen.getByRole('button', { name: /konfirmasi/i }));
     await waitFor(() => {
       expect(deletePond).toHaveBeenCalledWith('pond1');
       expect(window.location.href).toBe('/pond');
@@ -58,8 +58,8 @@ describe('DeletePond Component', () => {
   it('shows error message when deletePond function fails', async () => {
     (deletePond as jest.Mock).mockRejectedValue(new Error('Delete pond failed'));
     render(<DeletePond pondId="pond1" />);
-    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
     fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
+    fireEvent.click(screen.getByRole('button', { name: /konfirmasi/i }));
     await waitFor(() => {
       expect(deletePond).toHaveBeenCalledWith('pond1');
       expect(screen.getByText('Gagal menghapus kolam')).toBeInTheDocument();
@@ -69,8 +69,8 @@ describe('DeletePond Component', () => {
   it('shows fail message when deletePond function returns false', async () => {
     (deletePond as jest.Mock).mockResolvedValue(false);
     render(<DeletePond pondId="pond1" />);
-    fireEvent.click(screen.getByRole('button', { name: /hapus kolam/i }));
     fireEvent.click(screen.getByRole('button', { name: /hapus/i }));
+    fireEvent.click(screen.getByRole('button', { name: /konfirmasi/i }));
     await waitFor(() => {
       expect(deletePond).toHaveBeenCalledWith('pond1');
       expect(screen.getByText('Gagal menghapus kolam')).toBeInTheDocument();

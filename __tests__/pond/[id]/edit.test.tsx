@@ -24,7 +24,7 @@ describe('Edit Pond Modal', () => {
     render(<EditPond pond={mockPondData} />);
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+      fireEvent.click(screen.getByRole('button', { name: /edit/i }));
     });
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Edit Pond Modal', () => {
     render(<EditPond pond={mockPondData} />);
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+      fireEvent.click(screen.getByRole('button', { name: /edit/i }));
     });
 
     expect(screen.getByPlaceholderText('Nama Kolam')).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe('Edit Pond Modal', () => {
   it('closes the modal when the close button is clicked', async () => {
     render(<EditPond pond={mockPondData} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
@@ -65,7 +65,7 @@ describe('Edit Pond Modal', () => {
 
     render(<EditPond pond={mockPondData} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
     const nameInput = screen.getByPlaceholderText('Nama Kolam');
     const lengthInput = screen.getByPlaceholderText('Panjang (meter)');
@@ -98,7 +98,7 @@ describe('Edit Pond Modal', () => {
 
     render(<EditPond pond={mockPondData} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
     const nameInput = screen.getByPlaceholderText('Nama Kolam');
     const lengthInput = screen.getByPlaceholderText('Panjang (meter)');
@@ -128,7 +128,7 @@ describe('Edit Pond Modal', () => {
 
     render(<EditPond pond={mockPondData} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
     const nameInput = screen.getByPlaceholderText('Nama Kolam');
 
@@ -147,7 +147,7 @@ describe('Edit Pond Modal', () => {
   it("it doesn't allow form submission when any of the fields are invalid", async () => {
     render(<EditPond pond={mockPondData} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /edit kolam/i }));
+    fireEvent.click(screen.getByRole('button', { name: /edit/i }));
 
     const nameInput = screen.getByPlaceholderText('Nama Kolam');
     const lengthInput = screen.getByPlaceholderText('Panjang (meter)');

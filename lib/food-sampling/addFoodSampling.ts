@@ -13,7 +13,7 @@ export async function addFoodSampling(
 
   const baseUrl = process.env.API_BASE_URL;
   const samplingPath = foodSamplingId ? foodSamplingId + '/' : '';
-  const apiUrl = `${baseUrl}/api/food-sampling/${pondId}/${cycleId}/${samplingPath}`;
+  const apiUrl = `${baseUrl}/api/food-sampling/${cycleId}/${pondId}/${samplingPath}`;
  
   const foodSamplingData = formDataToObject(data)
 
