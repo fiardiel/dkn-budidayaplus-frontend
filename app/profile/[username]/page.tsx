@@ -1,6 +1,6 @@
 import React from 'react';
 import { fetchProfile } from '@/lib/profile';
-import { ProfileComponent } from '@/components/profile';
+import ProfileComponent from '@/components/profile/ProfileComponent';
 import { getUser } from '@/lib/auth';
 
 interface ProfilePageProps {
