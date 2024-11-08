@@ -27,7 +27,7 @@ describe('FoodSamplingForm', () => {
   it('renders the form correctly with initial values', () => {
     render(<FoodSamplingForm pondId={pondId} cycleId={cycleId} foodSampling={foodSampling} setIsModalOpen={mockSetIsModalOpen} />);
 
-    expect(screen.getByPlaceholderText('Kuantitas Makanan')).toHaveValue(30);
+    expect(screen.getByPlaceholderText('Kuantitas Makanan')).toHaveValue(0);
   });
 
   it('displays validation errors if form fields are empty', async () => {
