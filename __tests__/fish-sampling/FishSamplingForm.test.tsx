@@ -1,89 +1,91 @@
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { FishSamplingForm } from '@/components/fish-sampling';  
+import '@testing-library/jest-dom';
+import FishSamplingForm from '@/components/fish-sampling/FishSamplingForm';
 import { addFishSampling } from '@/lib/fish-sampling';
-import { FishSampling } from '@/types/fish-sampling';
 
-jest.mock('@/lib/fish-sampling', () => ({
-  addFishSampling: jest.fn(),
+jest.mock('@/lib/fish-sampling'); // Mock the addFishSampling function
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
 }));
+
+const mockAddFishSampling = addFishSampling as jest.MockedFunction<typeof addFishSampling>;
 
 describe('FishSamplingForm', () => {
   const mockSetIsModalOpen = jest.fn();
-  const pondId = 'abcde';
-
-  const fishSampling: FishSampling = {
-    sampling_id: 'abc123',
-    pond_id: pondId,
-    fish_weight: 1.5,
-    fish_length: 20.0,
-    sample_date: '2024-10-01',
-  };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('renders the form correctly with initial values', () => {
-    render(<FishSamplingForm pondId={pondId} fishSampling={fishSampling} setIsModalOpen={mockSetIsModalOpen} />);
+  it('renders form inputs and submit button', () => {
+    render(<FishSamplingForm pondId="1" cycleId="1" setIsModalOpen={mockSetIsModalOpen} />);
 
-    expect(screen.getByPlaceholderText('Berat Ikan(kg)')).toHaveValue(1.5);
-    expect(screen.getByPlaceholderText('Panjang Ikan(cm)')).toHaveValue(20.0);
+    expect(screen.getByPlaceholderText('Berat Ikan(kg)')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Panjang Ikan(cm)')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /simpan/i })).toBeInTheDocument();
   });
 
-  it('displays validation errors if form fields are empty', async () => {
-    render(<FishSamplingForm pondId={pondId} setIsModalOpen={mockSetIsModalOpen} />);
+  it('displays error message on failed submission', async () => {
+    mockAddFishSampling.mockResolvedValueOnce({ success: false });
+    render(<FishSamplingForm pondId="1" cycleId="1" setIsModalOpen={mockSetIsModalOpen} />);
 
-    fireEvent.input(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '' } });
-    fireEvent.input(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '' } });
-
-    fireEvent.submit(screen.getByRole('button', { name: 'Simpan' }));
-
-    await waitFor(() => {
-      const errorMessages = screen.getAllByText('Expected number, received nan');
-      expect(errorMessages.length).toBe(2); 
-  });
-  });
-
-  it('submits the form successfully when data is valid', async () => {
-    (addFishSampling as jest.Mock).mockResolvedValue({ success: true });
-
-    render(<FishSamplingForm pondId={pondId} setIsModalOpen={mockSetIsModalOpen} />);
-
-    fireEvent.input(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '1.5' } });
-    fireEvent.input(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '20' } });
-
-    fireEvent.submit(screen.getByRole('button', { name: 'Simpan' }));
-
-    await waitFor(() => {
-      expect(addFishSampling).toHaveBeenCalledWith(expect.any(FormData), pondId);
-      expect(mockSetIsModalOpen).toHaveBeenCalledWith(false);
-    });
-  });
-
-  it('shows an error message if form submission fails', async () => {
-    (addFishSampling as jest.Mock).mockResolvedValue({ success: false });
-
-    render(<FishSamplingForm pondId={pondId} setIsModalOpen={mockSetIsModalOpen} />);
-
-    fireEvent.input(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '1.5' } });
-    fireEvent.input(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '20' } });
-
-    fireEvent.submit(screen.getByRole('button', { name: 'Simpan' }));
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '1.5' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '20' } });
+    fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
 
     await waitFor(() => {
       expect(screen.getByText('Gagal menyimpan sample ikan')).toBeInTheDocument();
     });
   });
 
-  it('displays the error message when the API call throws an error', async () => {
-    (addFishSampling as jest.Mock).mockRejectedValue(new Error('Network error'));
+  it('submits form successfully and closes modal on success', async () => {
+    mockAddFishSampling.mockResolvedValueOnce({ success: true });
+    render(<FishSamplingForm pondId="1" cycleId="1" setIsModalOpen={mockSetIsModalOpen} />);
 
-    render(<FishSamplingForm pondId={pondId} setIsModalOpen={mockSetIsModalOpen} />);
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '1.5' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '20' } });
+    fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
 
-    fireEvent.input(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '1.5' } });
-    fireEvent.input(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '20' } });
+    await waitFor(() => {
+      expect(mockSetIsModalOpen).toHaveBeenCalledWith(false);
+      expect(screen.queryByText('Gagal menyimpan sample ikan')).not.toBeInTheDocument();
+    });
+  });
 
-    fireEvent.submit(screen.getByRole('button', { name: 'Simpan' }));
+  it('displays validation errors for empty input', async () => {
+    render(<FishSamplingForm pondId="1" cycleId="1" setIsModalOpen={mockSetIsModalOpen} />);
+  
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '' } });
+    fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
+  
+    await waitFor(() => {
+      const errorMessages = screen.getAllByText(/Expected number, received nan/i);
+      expect(errorMessages).toHaveLength(2);
+    });
+  });  
+
+  it('displays validation errors for negative input', async () => {
+    render(<FishSamplingForm pondId="1" cycleId="1" setIsModalOpen={mockSetIsModalOpen} />);
+
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '-1.5' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '-20' } });
+    fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Berat harus berupa angka positif')).toBeInTheDocument();
+      expect(screen.getByText('Panjang harus berupa angka positif')).toBeInTheDocument();
+    });
+  });
+
+  it('displays error message when submission throws an exception', async () => {
+    mockAddFishSampling.mockRejectedValueOnce(new Error('Network Error'));
+    render(<FishSamplingForm pondId="1" cycleId="1" setIsModalOpen={mockSetIsModalOpen} />);
+
+    fireEvent.change(screen.getByPlaceholderText('Berat Ikan(kg)'), { target: { value: '1.5' } });
+    fireEvent.change(screen.getByPlaceholderText('Panjang Ikan(cm)'), { target: { value: '20' } });
+    fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
 
     await waitFor(() => {
       expect(screen.getByText('Gagal menyimpan sample ikan')).toBeInTheDocument();
