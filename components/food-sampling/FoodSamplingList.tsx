@@ -1,44 +1,41 @@
 'use client'
 
 import React from 'react';
-import { formatDateTime } from '@/lib/utils';
+import { renderSamplingData } from '@/lib/food-sampling';
 import { FoodSampling } from '@/types/food-sampling';
+import { Package, Calendar } from 'lucide-react';
 
 interface FoodSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
-  foodSampling: FoodSampling[] | undefined;
+  foodSampling: FoodSampling | undefined;
 }
 
 const FoodSamplingList: React.FC<FoodSamplingProps> = ({ foodSampling, ...props }) => {
-  const samplingData = () => {
-    if (!foodSampling || foodSampling.length === 0) {
-      return [];
-    } else {
-      return foodSampling.map((item) => ({
-        id: item.sampling_id,
-        foodQuantity: item.food_quantity,
-        sampleDate: formatDateTime(item.sample_date),
-      }));
-    }
-  };
-
-  const formattedData = samplingData();
+  const samplingData = foodSampling ? renderSamplingData(foodSampling) : [];
 
   return (
-    <div {...props}>
-      <p className='text-2xl font-semibold'>Data Sampling Makanan</p>
-      {formattedData.length > 0 ? (
-        <div className='grid grid-cols-2 gap-4 mt-5'>
-          {formattedData.map((item) => (
-            <div key={item.id} className='flex flex-col'>
-              <div className='flex gap-1 items-center'>
-                <p className='text-sm'>Kuantitas Makanan (gram): {item.foodQuantity}</p>
+    <div {...props} data-testid='food-sampling-list'>
+      {foodSampling ? (
+        <div className='mt-5'>
+          <div className='grid grid-cols-2 gap-3 mt-4'>
+            {samplingData.map((item) => (
+              <div key={item.id} className='flex flex-col'>
+                <div className='flex gap-1 items-center'>
+                  <Package size={18} />
+                  <p className='text-sm'>{item.label || 'Kuantitas Makanan (gram)'}</p>
+                </div>
+                <p className='text-xl font-semibold text-neutral-600 ml-1 mt-1'>{item.value}</p>
+                <div className='flex gap-1 items-center mt-1'>
+                  <Calendar size={18} />
+                  <p className='text-sm'>Tanggal: {item.sampleDate}</p>
+                </div>
               </div>
-              <p className='text-sm'>Tanggal: {item.sampleDate}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       ) : (
-        <p className='text-lg text-neutral-600'>Tidak ada data sampling makanan</p>
+        <div className='mt-5'>
+          <p className='text-lg text-neutral-600'>Tidak ada data sampling makanan</p>
+        </div>
       )}
     </div>
   );
