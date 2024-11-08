@@ -5,10 +5,10 @@ import { FoodSampling } from '@/types/food-sampling';
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
-export async function getFoodSampling(pondId: string): Promise<FoodSampling[]> {
+export async function getFoodSampling(pondId: string, cycleId: string, foodSamplingId: string): Promise<FoodSampling[]> {
   const token = cookies().get('accessToken')?.value;
   try {
-    const response = await fetch(`${API_BASE_URL}/api/food-sampling/${pondId}/`, {
+    const response = await fetch(`${API_BASE_URL}/api/food-sampling/${cycleId}/${pondId}/${foodSamplingId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

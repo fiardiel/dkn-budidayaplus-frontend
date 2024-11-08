@@ -1,5 +1,6 @@
 import { DeletePond, EditPond } from '@/components/pond';
 import { PondQuality } from '@/components/pond-quality';
+import { FoodSampling } from '@/components/food-sampling';
 import { fetchPond } from '@/lib/pond';
 import { Pond } from '@/types/pond';
 import Image from 'next/image';
@@ -55,6 +56,9 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className='flex flex-col mt-10'>
           <FishSamplingCard pondId={pond.pond_id} />
+        </div>
+        <div className='flex flex-col mt-10'>
+          <FoodSampling pondId={pond.pond_id} />
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ const AddFoodSampling: React.FC<AddFoodSamplingProps> = ({pondId, cycleId, ...pr
     <div {...props}>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogTrigger asChild>
-          <Button className="flex">
+          <Button className="flex text-sm" variant={'outline'} size={'sm'}>
             Add Food Sampling <IoIosAdd size={20} className="ml-1" />
           </Button>
         </DialogTrigger>
