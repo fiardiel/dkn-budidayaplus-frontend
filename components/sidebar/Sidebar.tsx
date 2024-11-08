@@ -26,7 +26,7 @@ const Sidebar = () => {
     logout()
     setOpen(false)
   }
-
+  const username = user?.phone_number || ''; 
   return (
     <div className='flex items-center justify-center bg-white border-b border-neutral-300/40 shadow-sm h-20 fixed top-0 w-full sm:hidden z-50'>
       <div className='w-[80%]'>
@@ -64,7 +64,11 @@ const Sidebar = () => {
             <div className='mt-4'>
               <div className='flex flex-col w-full'>
                 {navigationMenus.map((menu) => (
-                  <Link key={menu.uid} href={menu.href} onClick={() => setOpen(false)}>
+                  <Link
+                    key={menu.uid}
+                    href={menu.name === 'Profile' ? `/profile/${username}` : menu.href} 
+                    onClick={() => setOpen(false)}
+                  >
                     <div className='flex items-center text-lg rounded-xl gap-4 w-full p-4 py-3 hover:bg-neutral-100 transition duration-200'>
                       {menu.icon}{menu.name}
                     </div>
