@@ -16,7 +16,7 @@ interface FoodSamplingFormProps {
   cycleId?: string
 }
 
-const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, foodSampling, setIsModalOpen }) => {
+const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, setIsModalOpen }) => {
     const [error, setError] = useState<string | null>(null)
 
   const {
@@ -26,8 +26,8 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({pondId, cycleId, foo
     reset
   } = useForm<FoodSamplingInput>({
     resolver: zodResolver(FoodSamplingSchema),
-    defaultValues: foodSampling && {
-      food_quantity: foodSampling.food_quantity
+    defaultValues:  {
+      food_quantity: 0
     }
   })
 
