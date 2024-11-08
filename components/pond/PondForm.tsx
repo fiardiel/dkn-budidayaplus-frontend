@@ -121,7 +121,7 @@ const PondForm: React.FC<PondFormProps> = ({ pond, setIsModalOpen }) => {
 
         {volume && <p className='text-center font-semibold'>Volume: {volume.toFixed(2)} m<sup>3</sup></p>}
 
-        <Button className='w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700' type='submit' disabled={isSubmitting}>
+        <Button className='w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700' type='submit' disabled={isSubmitting}>
           Simpan
         </Button>
 

@@ -3,11 +3,8 @@ import { PondQualityList } from '@/components/pond-quality';
 import { Pond } from '@/types/pond';
 import { PondQuality } from '@/types/pond-quality';
 import User from '@/types/auth/user';
-import { formatDateTime } from '@/lib/utils';
-
-jest.mock('@/lib/pond-quality', () => ({
-  getLatestPondQuality: jest.fn(),
-}));
+import { formatDate } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 const mockPond: Pond = {
   pond_id: 'abcde',
@@ -26,6 +23,7 @@ const mockUser: User = {
 }
 
 const mockPondQuality: PondQuality = {
+  cycle: '1',
   id: 'abcde',
   pond: mockPond.pond_id,
   reporter: mockUser.phone_number,
@@ -48,7 +46,6 @@ describe('PondQualityList', () => {
     render(<PondQualityList pondQuality={mockPondQuality} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Kualitas Air')).toBeInTheDocument();
       expect(screen.getByText('Suhu (°C)')).toBeInTheDocument();
       expect(screen.getByText('25°C')).toBeInTheDocument();
       expect(screen.getByText('pH level')).toBeInTheDocument();
@@ -69,7 +66,7 @@ describe('PondQualityList', () => {
       expect(screen.getByText('0.134')).toBeInTheDocument();
       expect(screen.getByText('PO')).toBeInTheDocument();
       expect(screen.getByText('0.144')).toBeInTheDocument();
-      expect(screen.getByText(`laporan terakhir: ${formatDateTime(mockPondQuality.recorded_at)}`)).toBeInTheDocument();
+      expect(screen.getByText(`Laporan terakhir: ${formatDate(mockPondQuality.recorded_at, 'EEEE, dd MMMM yyyy', {locale: id})}`)).toBeInTheDocument();
     });
   });
 

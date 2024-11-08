@@ -1,51 +1,22 @@
-import {DeletePond, EditPond} from '@/components/pond';
-import { PondQualityList } from '@/components/pond-quality';
+import { DeletePond, EditPond } from '@/components/pond';
+import { PondQuality } from '@/components/pond-quality';
 import { fetchPond } from '@/lib/pond';
-import { getLatestPondQuality } from '@/lib/pond-quality';
 import { Pond } from '@/types/pond';
-import { PondQuality } from '@/types/pond-quality';
-import AddPondQuality from '@/components/pond-quality/AddPondQuality';
 import Image from 'next/image';
 import React from 'react'
 import { FishSamplingCard } from '@/components/fish-sampling';
-import { getFoodSampling } from '@/lib/food-sampling';
-import { FoodSampling } from '@/types/food-sampling';
-import { FoodSamplingList, AddFoodSampling } from '@/components/food-sampling';
-import { Cycle } from '@/types/cycle';
-import { getLatestCycle } from '@/lib/cycle/getLatestCycle';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
   let volume = 0
 
   let pond: Pond | undefined
-  let cycle: Cycle | undefined
-  let pondQuality: PondQuality | undefined
-  let foodSampling: FoodSampling[] = []
 
   try {
     pond = await fetchPond(params.id);
     volume = pond.depth * pond.width * pond.length
   } catch (error) {
     pond = undefined
-  }
-
-  try {
-    cycle = await getLatestCycle();
-  } catch (error){
-    cycle = undefined
-  }
-
-  try {
-    pondQuality = await getLatestPondQuality(params.id, cycle?.id ?? '')
-  } catch (error) {
-    pondQuality = undefined
-  }
-
-  try {
-    foodSampling = await getFoodSampling(params.id)
-  } catch (error) {
-    foodSampling = []
   }
 
   if (!pond) {
@@ -59,41 +30,31 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
       <div className='w-[80%]'>
-        <div className='flex flex-col space-y-10'>
+        <div className='flex flex-col space-y-8'>
           <div>
             <p className='text-3xl'>Selamat datang di</p>
             <p className='text-3xl font-semibold'>{pond.name}</p>
           </div>
           <div>
-            <p>Volume: { volume.toFixed(2) } m<sup>3</sup></p>
-          </div>
-          <div>
-            <Image className='object-cover h-full w-full' src={`/${fallbackSrc}`} width={500} height={400} alt={`${pond.name} image`} />
-          </div>
-          <div className='flex gap-x-2'>
-            <EditPond pond={pond} />
-            <DeletePond pondId={pond.pond_id} />
+            <div className='flex gap-x-2'>
+              <EditPond pond={pond} />
+              <DeletePond pondId={pond.pond_id} />
+            </div>
+            <div className='relative mt-5'>
+              <div className='absolute top-3 left-3 bg-black/10 py-1 px-2 rounded-lg'>
+                <p>{volume.toFixed(2)} m<sup>3</sup></p>
+              </div>
+              <div>
+                <Image className='object-cover h-full w-full rounded-xl' src={`/${fallbackSrc}`} width={500} height={400} alt={`${pond.name} image`} />
+              </div>
+            </div>
           </div>
         </div>
         <div className='flex flex-col mt-10'>
-          <PondQualityList pondQuality={pondQuality} />
-          
-          <div className="mt-4">
-            {cycle !== undefined ? (<AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality} cycleId= {cycle.id}/>) :
-            <p>Tidak dapat menambahkan kualitas kolam karena siklus belum ada</p>}
-          </div>
+          <PondQuality pondId={pond.pond_id} />
         </div>
         <div className='flex flex-col mt-10'>
           <FishSamplingCard pondId={pond.pond_id} />
-        </div>
-        <div className='flex flex-col mt-10'>
-          <FoodSamplingList foodSampling={foodSampling} />
-        </div>
-        <div className='flex flex-col mt-10'>
-          <div className="mt-4">
-            {cycle !== undefined ? (<AddFoodSampling pondId={pond.pond_id} cycleId={cycle.id} />):
-            <p>Tidak dapat menambahkan sample makanan karena siklus belum ada</p>}
-          </div>
         </div>
       </div>
     </div>
