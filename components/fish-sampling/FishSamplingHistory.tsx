@@ -22,17 +22,17 @@ const FishSamplingHistory: React.FC<FishSamplingHistoryProps> = ({ pondId }) => 
             <thead>
               <tr className="border-b bg-gray-100">
                 <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                  <div className='flex item-center gap-2'> <Dumbbell size={18} /> 
+                  <div className='flex item-center gap-2'> <Dumbbell size={18} />
                     <p className='flex gap-1'><span className="hidden sm:block">Weight</span>(kg)</p>
                   </div>
                 </th>
-                <th className="px-4 py-2 text-left font-semibold text-gray-700"> 
-                  <div className='flex item-center gap-2'> <Ruler size={18} /> 
+                <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                  <div className='flex item-center gap-2'> <Ruler size={18} />
                     <p className='flex gap-1'><span className="hidden sm:block">Length</span>(cm)</p>
                   </div>
                 </th>
                 <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                  <div className='flex item-center gap-2'> <Calendar size={18} /> 
+                  <div className='flex item-center gap-2'> <Calendar size={18} />
                     <p>Date</p>
                   </div>
                 </th>
@@ -43,7 +43,7 @@ const FishSamplingHistory: React.FC<FishSamplingHistoryProps> = ({ pondId }) => 
                 <tr key={sampling.sampling_id} className="border-b">
                   <td className="px-4 py-2">{sampling.fish_weight}</td>
                   <td className="px-4 py-2">{sampling.fish_length}</td>
-                  <td className="px-4 py-2">{new Date(sampling.sample_date).toLocaleDateString()}</td>
+                  <td className="px-4 py-2">{new Date(sampling.recorded_at).toLocaleDateString()}</td>
                 </tr>
               ))}
             </tbody>

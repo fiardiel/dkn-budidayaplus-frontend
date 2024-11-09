@@ -1,30 +1,31 @@
-'use client'
-
 import React from 'react'
 import { FishSamplingList, AddFishSampling } from '@/components/fish-sampling'
-import { useLatestFishSampling } from '@/hooks/useFishSampling'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { History } from 'lucide-react'
+import { fetchFishSampling } from '@/hooks/non-state/fetchFishSampling'
 
 interface FishSamplingCardProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string
+  cycleId?: string
 }
 
-const FishSamplingCard:React.FC<FishSamplingCardProps> = ({pondId, ...props}) => {
-  const fishSampling = useLatestFishSampling(pondId)
+const FishSamplingCard: React.FC<FishSamplingCardProps> = async ({ pondId, cycleId, ...props }) => {
+  const fishSampling = cycleId ? await fetchFishSampling(pondId, cycleId) : undefined
+  console.log('cycle id nya', cycleId)
+
   return (
     <div {...props}>
-      <FishSamplingList fishSampling={fishSampling} />
-          
+      <p className='text-2xl font-medium'> Sampling Ikan </p>
       <div className="flex gap-2 mt-4">
-        <AddFishSampling pondId={pondId} />
-        <Button asChild className='bg-[#4682B4]'>
+        <AddFishSampling pondId={pondId} cycleId={cycleId} />
+        <Button size={'sm'} variant={'outline'} asChild>
           <Link href={`/pond/${pondId}/fish-sampling`}>
-            Sampling History <History size={20} className="ml-1" />
+            Lihat Riwayat <History size={20} className="ml-1" />
           </Link>
         </Button>
       </div>
+      <FishSamplingList className='mt-5' fishSampling={fishSampling} />
     </div>
   )
 }

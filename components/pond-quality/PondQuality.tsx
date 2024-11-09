@@ -1,33 +1,15 @@
 import React from 'react'
 import { AddPondQuality, PondQualityList, ViewPondQualityHistory } from '@/components/pond-quality'
-import { getLatestPondQuality } from '@/lib/pond-quality'
-import { getLatestCycle } from '@/lib/cycle'
+import { fetchCycle } from '@/hooks/non-state/fetchCycle'
+import { fetchPondQuality } from '@/hooks/non-state/fetchPondQuality'
 
 interface PondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string
 }
 
 const PondQuality: React.FC<PondQualityProps> = async ({ pondId, ...props }) => {
-  const fetchCycle = async () => {
-    try {
-      const res = await getLatestCycle()
-      return res
-    } catch (error) {
-      return undefined
-    }
-  }
-
-  const fetchLatestPondQuality = async (pondId: string, cycleId: string) => {
-    try {
-      const res = await getLatestPondQuality(pondId, cycleId)
-      return res
-    } catch (error) {
-      return undefined
-    }
-  }
-
   const cycle = await fetchCycle()
-  const pondQuality = cycle && await fetchLatestPondQuality(pondId, cycle.id)
+  const pondQuality = cycle && await fetchPondQuality(pondId, cycle.id)
 
   return (
     <div {...props}>

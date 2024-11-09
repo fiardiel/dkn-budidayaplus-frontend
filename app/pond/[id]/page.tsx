@@ -2,23 +2,25 @@ import { DeletePond, EditPond } from '@/components/pond';
 import { PondQuality } from '@/components/pond-quality';
 import { FoodSampling } from '@/components/food-sampling';
 import { fetchPond } from '@/lib/pond';
-import { Pond } from '@/types/pond';
 import Image from 'next/image';
 import React from 'react'
 import { FishSamplingCard } from '@/components/fish-sampling';
+import { fetchCycle } from '@/hooks/non-state/fetchCycle';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
-  let volume = 0
-
-  let pond: Pond | undefined
-
-  try {
-    pond = await fetchPond(params.id);
-    volume = pond.depth * pond.width * pond.length
-  } catch (error) {
-    pond = undefined
+  const getPond = async (id: string) => {
+    try {
+      const pond = await fetchPond(id)
+      return pond
+    } catch (error) {
+      return undefined
+    }
   }
+
+  const pond = await getPond(params.id)
+  const volume = pond ? pond.length * pond.width * pond.depth : 0
+  const cycle = await fetchCycle()
 
   if (!pond) {
     return (
@@ -55,7 +57,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <PondQuality pondId={pond.pond_id} />
         </div>
         <div className='flex flex-col mt-10'>
-          <FishSamplingCard pondId={pond.pond_id} />
+          <FishSamplingCard pondId={pond.pond_id} cycleId={cycle?.id} />
         </div>
         <div className='flex flex-col mt-10'>
           <FoodSampling pondId={pond.pond_id} />

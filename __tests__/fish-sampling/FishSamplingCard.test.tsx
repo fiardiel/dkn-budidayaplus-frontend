@@ -1,85 +1,69 @@
-import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fetchFishSampling } from '@/hooks/non-state/fetchFishSampling';
 import FishSamplingCard from '@/components/fish-sampling/FishSamplingCard';
-import { fetchLatestFishSampling } from '@/lib/fish-sampling';
-import { useLatestFishSampling } from '@/hooks/useFishSampling';
+import { FishSamplingList } from '@/components/fish-sampling';
+import { id } from 'date-fns/locale';
+import { formatDate } from 'date-fns';
 
-jest.mock('@/lib/cycle', () => ({
-  getLatestCycle: jest.fn().mockReturnValue( {
-    id: 'test-cycle-id',
-    start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
-    supervisor: 'John Doe',
-    pond_fish_amount: [
-      {
-        id: 'test-pond-fish-amount-id',
-        pond_id: 'test-pond-id',
-        fish_amount: 100,
-      },
-    ],
-  })
+jest.mock('@/hooks/non-state/fetchFishSampling', () => ({
+  fetchFishSampling: jest.fn()
 }))
-
-
-jest.mock('@/hooks/useFishSampling', () => ({
-  useLatestFishSampling: jest.fn()
-}))
-
-jest.mock('@/lib/fish-sampling', () => ({
-  fetchLatestFishSampling: jest.fn(),
-}));
 
 describe('FishSamplingCard', () => {
   const pondId = 'test-pond-id';
+  const cycleId = 'test-cycle-id';
+  const className = 'test-class';
+  const props = { pondId, cycleId, className };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders FishSamplingList and AddFishSampling components', async () => {
-    (fetchLatestFishSampling as jest.Mock).mockResolvedValue(undefined);
-    await act(async () => {
-      render(<FishSamplingCard pondId={pondId} />);
-    });
+    (fetchFishSampling as jest.Mock).mockResolvedValue(undefined);
 
-    expect(screen.getByText('Add Fish Sampling')).toBeInTheDocument();
+    const ui = await FishSamplingCard(props);
+    render(ui)
+
+    await waitFor(() => {
+      expect(screen.getByText('Sample')).toBeInTheDocument();
+      expect(screen.getByText('Lihat Riwayat')).toBeInTheDocument();
+    })
   });
 
   it('fetches and displays fish sampling data when cycle is available', async () => {
-    // mock the hook's return value
     const mockDate = new Date(Date.now());
-    (useLatestFishSampling as jest.Mock).mockReturnValue({
+    (fetchFishSampling as jest.Mock).mockReturnValue({
       sampling_id: 'test-sampling-id',
       pond_id: 'test-pond-id',
       reporter: 'John Doe',
       fish_weight: 1.5,
       fish_length: 40,
-      sample_date: mockDate.toLocaleDateString(),
+      recorded_at: mockDate.toLocaleDateString(),
     });
 
-    render(<FishSamplingCard pondId={pondId} />);
+    const ui = await FishSamplingCard(props);
+    render(ui)
 
     await waitFor(() => {
-      expect(useLatestFishSampling).toHaveBeenCalledWith("test-pond-id");
-
       const weightElement = screen.getByTestId('fish-weight');
       const lengthElement = screen.getByTestId('fish-length');
       const dateElement = screen.getByTestId('fish-sample-date');
 
       expect(weightElement).toHaveTextContent('1.5');
       expect(lengthElement).toHaveTextContent('40');
-      expect(dateElement).toHaveTextContent(new Date(Date.now()).toLocaleDateString());
+      expect(dateElement).toHaveTextContent(formatDate(mockDate, 'EEEE, dd MMMM yyyy', { locale: id }));
     });
   });
 
   it('does not fetch fish sampling data when cycle is unavailable', async () => {
-    (fetchLatestFishSampling as jest.Mock).mockResolvedValue(undefined);
+    const newProps = { pondId: 'test-pond-id', cycleId: undefined, className: 'test-class' };
 
-    render(<FishSamplingCard pondId={pondId} />);
+    const ui = await FishSamplingCard(newProps);
+    render(ui);
 
     await waitFor(() => {
-      expect(fetchLatestFishSampling).not.toHaveBeenCalled();
+      expect(fetchFishSampling).not.toHaveBeenCalled();
     });
   });
 });

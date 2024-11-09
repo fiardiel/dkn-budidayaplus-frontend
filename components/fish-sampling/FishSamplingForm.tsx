@@ -1,6 +1,6 @@
 'use client';
 
-import { FishSamplingInputForm, FishSamplingSchema  } from '@/types/fish-sampling';
+import { FishSamplingInputForm, FishSamplingSchema } from '@/types/fish-sampling';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,8 +15,8 @@ interface FishSamplingFormProps {
   cycleId: string
 }
 
-const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, cycleId, setIsModalOpen }) => {
-    const [error, setError] = useState<string | null>(null)
+const FishSamplingForm: React.FC<FishSamplingFormProps> = ({ pondId, cycleId, setIsModalOpen }) => {
+  const [error, setError] = useState<string | null>(null)
 
   const {
     register,
@@ -42,40 +42,40 @@ const FishSamplingForm: React.FC<FishSamplingFormProps> = ({pondId, cycleId, set
       setIsModalOpen(false)
       window.location.reload()
 
-    } catch(error) {
+    } catch (error) {
       setError('Gagal menyimpan sample ikan')
     }
   }
 
   return (
     <div>
-       <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}> 
+      <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
 
-            <div>
-             <Input
-               {...register('fish_weight', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Berat Ikan(kg)"
-               step={0.01}
-             />
-             {errors.fish_weight && <span>{errors.fish_weight.message}</span>}
-            </div>
+        <div>
+          <Input
+            {...register('fish_weight', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Berat Ikan(kg)"
+            step={0.01}
+          />
+          {errors.fish_weight && <span>{errors.fish_weight.message}</span>}
+        </div>
 
-            <div>
-             <Input
-               {...register('fish_length', { setValueAs: value => parseFloat(value) })}
-               type="number"
-               placeholder="Panjang Ikan(cm)"
-               step={0.01}
-             />
-             {errors.fish_length && <span>{errors.fish_length.message}</span>}
-            </div>
-   
-            <Button className='w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700' type='submit' disabled={isSubmitting}>
+        <div>
+          <Input
+            {...register('fish_length', { setValueAs: value => parseFloat(value) })}
+            type="number"
+            placeholder="Panjang Ikan(cm)"
+            step={0.01}
+          />
+          {errors.fish_length && <span>{errors.fish_length.message}</span>}
+        </div>
+
+        <Button className='w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700 col-span-2' type='submit' disabled={isSubmitting}>
           Simpan
         </Button>
         {error && <p className='w-full text-center text-red-500'>{error}</p>}
-       </form>
+      </form>
     </div>
   );
 };

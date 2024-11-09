@@ -16,10 +16,10 @@ describe('FishSamplingHistory', () => {
 
   it('renders "No sampling history available" when there is no data', () => {
     mockUseFishSamplingHistory.mockReturnValue(
-        {
-            fish_samplings: [],
-            cycle_id: 'test-cycle-id'
-        }
+      {
+        fish_samplings: [],
+        cycle_id: 'test-cycle-id'
+      }
     );
     render(<FishSamplingHistory pondId={pondId} />);
 
@@ -28,18 +28,18 @@ describe('FishSamplingHistory', () => {
 
   it('renders table headers with icons', () => {
     mockUseFishSamplingHistory.mockReturnValue(
-        {
-            fish_samplings: [
-                {
-                    pond_id: '1',
-                    sampling_id: '1',
-                    fish_weight: 3,
-                    fish_length: 10,
-                    sample_date: '2024-10-31',
-                },
-            ],
-            cycle_id: 'test-cycle-id'
-        }
+      {
+        fish_samplings: [
+          {
+            pond_id: '1',
+            sampling_id: '1',
+            fish_weight: 3,
+            fish_length: 10,
+            recorded_at: '2024-10-31',
+          },
+        ],
+        cycle_id: 'test-cycle-id'
+      }
     );
 
     render(<FishSamplingHistory pondId={pondId} />);
@@ -59,17 +59,17 @@ describe('FishSamplingHistory', () => {
           sampling_id: '1',
           fish_weight: 3,
           fish_length: 10,
-          sample_date: '2024-10-31',
+          recorded_at: '2024-10-31',
         },
         {
           pond_id: '1',
           sampling_id: '2',
           fish_weight: 5,
           fish_length: 15,
-          sample_date: '2024-11-01',
+          recorded_at: '2024-11-01',
         },
       ],
-        cycle_id: 'test-cycle-id'
+      cycle_id: 'test-cycle-id'
     };
     mockUseFishSamplingHistory.mockReturnValue(mockData);
 

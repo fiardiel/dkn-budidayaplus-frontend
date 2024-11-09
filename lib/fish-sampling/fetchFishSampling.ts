@@ -1,11 +1,11 @@
 'use server'
 
-import { FishSamplingHistory } from "@/types/fish-sampling";
+import { FishSampling, FishSamplingHistory } from "@/types/fish-sampling";
 import { cookies } from "next/headers"
 
 const API_BASE_URL = process.env.API_BASE_URL
 
-export async function fetchLatestFishSampling(pondId: string, cycleId: string) {
+export async function fetchLatestFishSampling(pondId: string, cycleId: string): Promise<FishSampling | undefined> {
   const token = cookies().get('accessToken')?.value;
   try {
     const response = await fetch(`${API_BASE_URL}/api/fish-sampling/${pondId}/${cycleId}/latest/`, {

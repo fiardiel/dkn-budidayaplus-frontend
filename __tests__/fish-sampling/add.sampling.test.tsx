@@ -2,54 +2,36 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AddFishSampling from '@/components/fish-sampling/AddFishSampling';
-import { getLatestCycle } from '@/lib/cycle';
 
 jest.mock('@/lib/cycle');
-const mockGetLatestCycle = getLatestCycle as jest.MockedFunction<typeof getLatestCycle>;
 
 describe('AddFishSampling', () => {
   const pondId = 'test-pond-id';
+  const cycleId = 'test-cycle-id';
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders the Add Fish Sampling button if cycle is available', async () => {
-    mockGetLatestCycle.mockResolvedValue({
-      id: 'test-cycle-id',
-      start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-      end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
-      supervisor: 'John Doe',
-      pond_fish_amount: [{ id: 'test-pond-fish-amount-id', pond_id: 'test-pond-id', fish_amount: 100 }],
-    });
 
-    render(<AddFishSampling pondId={pondId} />);
+    render(<AddFishSampling pondId={pondId} cycleId={cycleId} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Add Fish Sampling')).toBeInTheDocument();
+      expect(screen.getByText('Sample')).toBeInTheDocument();
     });
   });
 
   it('does not render the Add Fish Sampling button if no cycle is available', async () => {
-    mockGetLatestCycle.mockResolvedValue(undefined);
-
-    render(<AddFishSampling pondId={pondId} />);
+    render(<AddFishSampling pondId={pondId} cycleId={undefined} />);
 
     await waitFor(() => {
-      expect(screen.queryByText('Add Fish Sampling')).not.toBeInTheDocument();
+      expect(screen.queryByText('Sample')).not.toBeInTheDocument();
     });
   });
 
   it('opens modal with FishSamplingForm when Add Fish Sampling button is clicked', async () => {
-    mockGetLatestCycle.mockResolvedValue({
-      id: 'test-cycle-id',
-      start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-      end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
-      supervisor: 'John Doe',
-      pond_fish_amount: [{ id: 'test-pond-fish-amount-id', pond_id: 'test-pond-id', fish_amount: 100 }],
-    });
-
-    render(<AddFishSampling pondId={pondId} />);
+    render(<AddFishSampling pondId={pondId} cycleId={cycleId} />);
 
     await waitFor(() => {
       const addButton = screen.getByTestId('add-fish-sampling-button');
@@ -66,24 +48,16 @@ describe('AddFishSampling', () => {
   });
 
   it('closes modal when setIsModalOpen is false', async () => {
-    mockGetLatestCycle.mockResolvedValue({
-      id: 'test-cycle-id',
-      start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-      end_date: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
-      supervisor: 'John Doe',
-      pond_fish_amount: [{ id: 'test-pond-fish-amount-id', pond_id: 'test-pond-id', fish_amount: 100 }],
-    });
-
-    render(<AddFishSampling pondId={pondId} />);
+    render(<AddFishSampling pondId={pondId} cycleId={cycleId} />);
 
     await waitFor(() => {
-      const addButton = screen.getByText('Add Fish Sampling');
+      const addButton = screen.getByText('Sample');
       expect(addButton).toBeInTheDocument();
     });
 
     // Open modal
     act(() => {
-      fireEvent.click(screen.getByText('Add Fish Sampling'));
+      fireEvent.click(screen.getByText('Sample'));
     });
 
     await waitFor(() => {
