@@ -1,69 +1,118 @@
+import PondQuality from '@/components/pond-quality/PondQuality';
+import { getLatestCycle } from '@/lib/cycle';
+import { getLatestPondQuality } from '@/lib/pond-quality';
 import { render, screen, waitFor } from '@testing-library/react';
-import { PondQuality as PondQualityComponent } from '@/components/pond-quality';
-import { Pond } from '@/types/pond';
-import { PondQuality } from '@/types/pond-quality';
-import User from '@/types/auth/user';
-import { usePondQuality } from '@/hooks/usePondQuality';
 
-jest.mock('@/hooks/usePondQuality', () => {
-  const mockPond: Pond = {
-    pond_id: 'abcde',
-    name: 'Pond 1',
-    length: 121.0,
-    width: 121.0,
-    depth: 121.0,
-    image_name: 'pond1.jpg',
-  };
-  
-  const mockUser: User = {
-    id: 1,
-    phone_number: '0812345678',
-    first_name: 'John',
-    last_name: 'Doe',
-  }
-  
-  const mockPondQuality: PondQuality = {
-    cycle: '1',
-    id: 'abcde',
-    pond: mockPond.pond_id,
-    reporter: mockUser.phone_number,
-    recorded_at: new Date(),
-    image_name: 'pond1.jpg',
-    ph_level: 7.5,
-    salinity: 35,
-    water_temperature: 25,
-    water_clarity: 8,
-    water_circulation: 7.12,
-    dissolved_oxygen: 5,
-    orp: 200,
-    ammonia: 0.112,
-    nitrate: 0.134,
-    phosphate: 0.144,
-  };
-  return  {
-    usePondQuality: jest.fn().mockReturnValue({ pondQuality: mockPondQuality, cycle: { id: '1' } })
-  }
-})
+jest.mock('@/lib/pond-quality', () => ({
+  getLatestPondQuality: jest.fn()
+}))
+
+jest.mock('@/lib/cycle', () => ({
+  getLatestCycle: jest.fn()
+}))
+
+jest.mock('@/components/pond-quality', () => ({
+  AddPondQuality: jest.fn().mockReturnValue(<div data-testid='add-pond-quality' />),
+  ViewPondQualityHistory: jest.fn().mockReturnValue(<div data-testid='view-pond-quality-history' />),
+  PondQualityList: jest.fn().mockReturnValue(<div data-testid='pond-quality-list' />),
+}))
 
 describe('PondQuality', () => {
+  beforeEach(() => {
+    (getLatestPondQuality as jest.Mock).mockReturnValue(
+      {
+        id: '1',
+        pond_id: 'abcde',
+        cycle: '1',
+        reporter: '0812345678',
+        recorded_at: new Date(),
+        image_name: 'pond1.jpg',
+        ph_level: 7.5,
+        water_temperature: 25,
+        water_clarity: 8,
+        water_circulation: 7.12,
+        dissolved_oxygen: 5,
+        orp: 200,
+        ammonia: 0.112,
+        nitrate: 0.134,
+        phosphate: 0.144,
+      }
+    );
+    (getLatestCycle as jest.Mock).mockReturnValue({
+      id: '1',
+      start_date: new Date(),
+      end_date: new Date(),
+      supervisor: '0812345678',
+      pond_fish_amount: [
+        {
+          id: '1',
+          pond_id: 'abcde',
+          fish_amount: 10,
+        },
+      ],
+    })
+  });
+
   it('renders the pond quality component', async () => {
-    render(<PondQualityComponent pondId='1'/>)
+    const props = {
+      pondId: 'abcde',
+      className: 'test-class',
+    }
+    const ui = await PondQuality(props)
+    render(ui);
 
     await waitFor(() => {
-
       expect(screen.getByTestId('pond-quality-list')).toBeInTheDocument()
       expect(screen.getByTestId('add-pond-quality')).toBeInTheDocument()
       expect(screen.getByTestId('view-pond-quality-history')).toBeInTheDocument()
     })
   })
 
-  it('renders the pond quality component without the cycle', async () => {
-    (usePondQuality as jest.Mock).mockReturnValue({ pondQuality: undefined, cycle: undefined })
-    render(<PondQualityComponent pondId='1' />)
+  it('renders the component without the cycle', async () => {
+    (getLatestCycle as jest.Mock).mockResolvedValue(undefined)
+
+    const props = {
+      pondId: 'abcde',
+      className: 'test-class',
+    }
+    const ui = await PondQuality(props)
+    render(ui);
+
     await waitFor(() => {
-      expect(screen.getByTestId('pond-quality-list')).toBeInTheDocument()
-      expect(screen.queryByTestId('add-pond-quality')).not.toBeInTheDocument()
-      expect(screen.queryByTestId('view-pond-quality-history')).not.toBeInTheDocument()
+      expect(screen.queryByText('Tambah Kualitas Air')).toBeNull()
+      expect(screen.queryByText('Lihat Riwayat Kualitas Air')).toBeNull()
+    })
+  })
+
+  it('handles cycle fetch error', async () => {
+    (getLatestCycle as jest.Mock).mockRejectedValue(new Error('Error'))
+    const props = {
+      pondId: 'pond-id',
+      className: 'test-class',
+    }
+    const ui = await PondQuality(props)
+    render(ui);
+
+    await waitFor(() => {
+      expect(screen.queryByText('Tambah Kualitas Air')).toBeNull()
+      expect(screen.queryByText('Lihat Riwayat Kualitas Air')).toBeNull()
+    })
+  })
+
+  it('handles pond quality fetch error', async () => {
+    (getLatestPondQuality as jest.Mock).mockRejectedValueOnce(new Error('Error'));
+
+    const props = {
+      pondId: 'pond-id',
+      className: 'test-class',
+    }
+
+    const ui = await PondQuality(props)
+    render(ui);
+
+    await waitFor(() => {
+      expect(screen.queryByText('Tambah Kualitas Air')).toBeNull()
+      expect(screen.queryByText('Lihat Riwayat Kualitas Air')).toBeNull()
     })
   })
 })
