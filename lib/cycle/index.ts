@@ -1,3 +1,2 @@
-import { createCycle } from "@/lib/cycle/createCycle";
-
-export { createCycle }
+export { createCycle } from "@/lib/cycle/createCycle";
+export { getLatestCycle } from "@/lib/cycle/getLatestCycle";

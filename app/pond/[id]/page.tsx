@@ -1,42 +1,26 @@
-import {DeletePond, EditPond} from '@/components/pond';
-import { PondQualityList } from '@/components/pond-quality';
+import { DeletePond, EditPond } from '@/components/pond';
+import { PondQuality } from '@/components/pond-quality';
+import { FoodSampling } from '@/components/food-sampling';
 import { fetchPond } from '@/lib/pond';
-import { getLatestPondQuality } from '@/lib/pond-quality';
-import { Pond } from '@/types/pond';
-import { PondQuality } from '@/types/pond-quality';
-import AddPondQuality from '@/components/pond-quality/AddPondQuality';
 import Image from 'next/image';
 import React from 'react'
-import { FishSampling } from '@/types/fish-sampling';
-import { fetchFishSampling } from '@/lib/fish-sampling';
-import { AddFishSampling, FishSamplingList } from '@/components/fish-sampling';
+import { FishSamplingCard } from '@/components/fish-sampling';
+import { fetchCycle } from '@/hooks/non-state/fetchCycle';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
-  let volume = 0
-
-  let pond: Pond | undefined
-  let pondQuality: PondQuality | undefined
-  let fishSampling: FishSampling[]
-
-  try {
-    pond = await fetchPond(params.id);
-    volume = pond.depth * pond.width * pond.length
-  } catch (error) {
-    pond = undefined
+  const getPond = async (id: string) => {
+    try {
+      const pond = await fetchPond(id)
+      return pond
+    } catch (error) {
+      return undefined
+    }
   }
 
-  try {
-    pondQuality = await getLatestPondQuality(params.id)
-  } catch (error) {
-    pondQuality = undefined
-  }
-
-  try {
-    fishSampling = await fetchFishSampling(params.id)
-  } catch (error) {
-    fishSampling = []
-  }
+  const pond = await getPond(params.id)
+  const volume = pond ? pond.length * pond.width * pond.depth : 0
+  const cycle = await fetchCycle()
 
   if (!pond) {
     return (
@@ -49,35 +33,34 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
       <div className='w-[80%]'>
-        <div className='flex flex-col space-y-10'>
+        <div className='flex flex-col space-y-8'>
           <div>
             <p className='text-3xl'>Selamat datang di</p>
             <p className='text-3xl font-semibold'>{pond.name}</p>
           </div>
           <div>
-            <p>Volume: { volume.toFixed(2) } m<sup>3</sup></p>
-          </div>
-          <div>
-            <Image className='object-cover h-full w-full' src={`/${fallbackSrc}`} width={500} height={400} alt={`${pond.name} image`} />
-          </div>
-          <div className='flex gap-x-2'>
-            <EditPond pond={pond} />
-            <DeletePond pondId={pond.pond_id} />
-          </div>
-        </div>
-        <div className='flex flex-col mt-10'>
-          <PondQualityList pondQuality={pondQuality} />
-          
-          <div className="mt-4">
-            <AddPondQuality pondId={pond.pond_id} pondQuality={pondQuality}/>
+            <div className='flex gap-x-2'>
+              <EditPond pond={pond} />
+              <DeletePond pondId={pond.pond_id} />
+            </div>
+            <div className='relative mt-5'>
+              <div className='absolute top-3 left-3 bg-black/10 py-1 px-2 rounded-lg'>
+                <p>{volume.toFixed(2)} m<sup>3</sup></p>
+              </div>
+              <div>
+                <Image className='object-cover h-full w-full rounded-xl' src={`/${fallbackSrc}`} width={500} height={400} alt={`${pond.name} image`} />
+              </div>
+            </div>
           </div>
         </div>
         <div className='flex flex-col mt-10'>
-          <FishSamplingList fishSampling={fishSampling} />
-          
-          <div className="mt-4">
-            <AddFishSampling pondId={pond.pond_id} />
-          </div>
+          <PondQuality pondId={pond.pond_id} />
+        </div>
+        <div className='flex flex-col mt-10'>
+          <FishSamplingCard pondId={pond.pond_id} cycleId={cycle?.id} />
+        </div>
+        <div className='flex flex-col mt-10'>
+          <FoodSampling pondId={pond.pond_id} />
         </div>
       </div>
     </div>

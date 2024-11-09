@@ -11,7 +11,21 @@ const config: Config = {
 		extend: {
 			colors: {
 				background: 'var(--background)',
-				foreground: 'var(--foreground)'
+				foreground: 'var(--foreground)',
+				'primary': {
+					DEFAULT:'#4682B4',
+					50: '#C8DAEA',
+					100: '#B9D1E4',
+					200: '#9CBDD8',
+					300: '#7FA9CD',
+					400: '#6196C2',
+					500: '#4682B4',
+					600: '#36658C',
+					700: '#274863',
+					800: '#172A3B',
+					900: '#070D12',
+					950: '#000000'
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

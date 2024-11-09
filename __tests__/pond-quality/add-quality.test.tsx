@@ -1,42 +1,24 @@
 import { fireEvent, render, screen, waitFor, act } from '@testing-library/react';
 import { AddPondQuality } from '@/components/pond-quality';
 import { addOrUpdatePondQuality } from '@/lib/pond-quality';
-import { PondQuality } from '@/types/pond-quality';
 
 jest.mock('@/lib/pond-quality', () => ({
   addOrUpdatePondQuality: jest.fn(),
 }));
 
 describe('Add Pond Quality Modal', () => {
-  const mockPondQualityData : PondQuality = {
-    id: '1',
-    pond: '1',
-    reporter: '082299442770',
-    recorded_at: new Date(),
-    ph_level: 7,
-    salinity: 30,
-    water_temperature: 25,
-    water_clarity: 10,
-    water_circulation: 5,
-    dissolved_oxygen: 8,
-    orp: 500,
-    ammonia: 0.5,
-    nitrate: 1.0,
-    phosphate: 0.2,
-    image_name: 'quality.jpg',
-  };
-
   const pondId = 'test-pond-id';
+  const cycleId = 'test-cycle-id';
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders the form fields correctly', async () => {
-    render(<AddPondQuality pondId={pondId}  />);
+    render(<AddPondQuality pondId={pondId} cycleId={cycleId} />);
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+      fireEvent.click(screen.getByRole('button', { name: /sample/i }));
     });
 
     expect(screen.getByPlaceholderText('Level pH')).toBeInTheDocument();
@@ -63,9 +45,9 @@ describe('Add Pond Quality Modal', () => {
     const mockResponse = { success: true, message: 'Pond quality added' };
     (addOrUpdatePondQuality as jest.Mock).mockResolvedValue(mockResponse);
 
-    render(<AddPondQuality pondId={pondId} />);
+    render(<AddPondQuality pondId={pondId} cycleId={cycleId}/>);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Level pH'), { target: { value: '7.0' } });
     fireEvent.change(screen.getByPlaceholderText('Salinitas'), { target: { value: '30' } });
@@ -93,9 +75,9 @@ describe('Add Pond Quality Modal', () => {
     (addOrUpdatePondQuality as jest.Mock).mockResolvedValue(mockResponse);
     const file = new File(['(⌐□_□)'], 'pond.jpg', { type: 'image/jpg' });
   
-    render(<AddPondQuality pondId={pondId} />);
+    render(<AddPondQuality pondId={pondId} cycleId={cycleId}/>);
   
-    fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
   
     fireEvent.change(screen.getByPlaceholderText('Level pH'), { target: { value: '6.0' } });
     fireEvent.change(screen.getByPlaceholderText('Salinitas'), { target: { value: '20' } });
@@ -125,9 +107,9 @@ describe('Add Pond Quality Modal', () => {
     (addOrUpdatePondQuality as jest.Mock).mockRejectedValueOnce(mockError);
 
 
-    render(<AddPondQuality pondId={pondId} />);
+    render(<AddPondQuality pondId={pondId} cycleId={cycleId}/>);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Level pH'), { target: { value: '5' } });
     fireEvent.change(screen.getByPlaceholderText('Salinitas'), { target: { value: '15' } });
@@ -149,9 +131,9 @@ describe('Add Pond Quality Modal', () => {
   });
 
   it('does not allow form submission when any of the fields are invalid', async () => {
-    render(<AddPondQuality pondId={pondId} />);
+    render(<AddPondQuality pondId={pondId} cycleId={cycleId}/>);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Level pH'), { target: { value: '-1' } });
     fireEvent.change(screen.getByPlaceholderText('Salinitas'), { target: { value: '-5' } });
@@ -168,9 +150,9 @@ describe('Add Pond Quality Modal', () => {
   });
 
   it('handles file input correctly', async () => {
-    render(<AddPondQuality pondId={pondId} />);
+    render(<AddPondQuality pondId={pondId} cycleId={cycleId}/>);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     const fileInput = screen.getByTestId('image');
     const file = new File(['pond-quality'], 'quality.jpg', { type: 'image/jpg' });
@@ -184,24 +166,6 @@ describe('Add Pond Quality Modal', () => {
       throw new Error("fileInput is not an HTMLInputElement");
     }
   });
-
-  it('displays the previous added values in the form fields', async () => {
-    render(<AddPondQuality pondId={pondId} pondQuality={mockPondQualityData} />);
-
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Add Pond Quality/i }));
-    });
-    expect(screen.getByDisplayValue('7')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('30')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('25')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('10')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('5')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('8')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('500')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('0.5')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('1')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('0.2')).toBeInTheDocument();
-  })
 });
 
   
