@@ -12,7 +12,6 @@ interface FishSamplingCardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const FishSamplingCard: React.FC<FishSamplingCardProps> = async ({ pondId, cycleId, ...props }) => {
   const fishSampling = cycleId ? await fetchFishSampling(pondId, cycleId) : undefined
-  console.log('cycle id nya', cycleId)
 
   return (
     <div {...props}>

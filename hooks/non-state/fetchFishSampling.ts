@@ -1,5 +1,4 @@
 import { fetchLatestFishSampling } from "@/lib/fish-sampling"
-import { FishSampling } from "@/types/fish-sampling"
 
 export const fetchFishSampling = async (pondId: string, cycleId: string) => {
   try {

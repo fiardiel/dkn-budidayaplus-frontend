@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { fetchFishSampling } from '@/hooks/non-state/fetchFishSampling';
 import FishSamplingCard from '@/components/fish-sampling/FishSamplingCard';
-import { FishSamplingList } from '@/components/fish-sampling';
 import { id } from 'date-fns/locale';
 import { formatDate } from 'date-fns';
 
