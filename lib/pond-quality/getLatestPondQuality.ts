@@ -16,11 +16,8 @@ export async function getLatestPondQuality(pondId: string, cycleId: string): Pro
         "Authorization": `Bearer ${token}`,
       },
     });
-    if (!res.ok) {
-      return undefined
-    }
-    return res.json()
+    return res.ok ? await res.json() : undefined;
   } catch {
-    throw new Error("Gagal terhubung ke server")
+    return undefined
   }
 }

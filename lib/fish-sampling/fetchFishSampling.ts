@@ -15,10 +15,9 @@ export async function fetchLatestFishSampling(pondId: string, cycleId: string): 
         "Authorization": `Bearer ${token}`,
       }
     });
-    if (!response.ok) return undefined;
-    return response.json();
+    return response.ok ? await response.json() : undefined;
   } catch {
-    throw new Error("Gagal terhubung ke server");
+    return undefined;
   }
 }
 

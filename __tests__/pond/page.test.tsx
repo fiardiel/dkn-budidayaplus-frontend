@@ -56,15 +56,6 @@ describe('PondListPage', () => {
     });
   });
 
-  it('handles the error case of fetching ponds', async () => {
-    (fetchPonds as jest.Mock).mockRejectedValue(new Error("Failed to fetch ponds"));
-    render(await PondListPage());
-
-    await waitFor(() => {
-      expect(screen.getByText("Tidak ada kolam")).toBeInTheDocument();
-    });
-  });
-
   it('renders the pond image and handles fallback', async () => {
     render(await PondListPage());
 

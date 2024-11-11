@@ -5,13 +5,7 @@ import { Pond } from '@/types/pond'
 import React from 'react'
 
 const PondListPage = async () => {
-  let ponds: Pond[];
-  try {
-    ponds = await fetchPonds();
-  } catch (error) {
-    ponds = [];
-  }
-
+  const ponds: Pond[] = await fetchPonds();
   const user = await getUser();
 
   return (
