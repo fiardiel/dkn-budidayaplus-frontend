@@ -51,7 +51,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <FishSamplingCard pondId={pond.pond_id} cycleId={cycle?.id} />
         </div>
         <div className='flex flex-col mt-10'>
-          <FoodSampling pondId={pond.pond_id} />
+          <FoodSampling cycleId={cycle?.id} pondId={pond.pond_id} />
         </div>
       </div>
     </div>

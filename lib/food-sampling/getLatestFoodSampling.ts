@@ -16,11 +16,8 @@ export async function getLatestFoodSampling(pondId: string, cycleId: string): Pr
         "Authorization": `Bearer ${token}`,
       },
     });
-    if (!res.ok) {
-      return undefined
-    }
-    return res.json()
+    return res.ok ? await res.json() : undefined;
   } catch {
-    throw new Error("Gagal terhubung ke server")
+    return undefined
   }
 }

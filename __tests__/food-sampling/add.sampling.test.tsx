@@ -2,6 +2,18 @@ import { fireEvent, render, screen, waitFor, act } from '@testing-library/react'
 import { addFoodSampling } from '@/lib/food-sampling';
 import { AddFoodSampling } from '@/components/food-sampling';
 
+const originalReload = window.location.reload;
+
+beforeAll(() => {
+  Object.defineProperty(window, 'location', {
+    writable: true,
+    value: { ...window.location, reload: jest.fn() },
+  });
+});
+afterAll(() => {
+  window.location.reload = originalReload;
+});
+
 jest.mock('@/lib/food-sampling', () => ({
   addFoodSampling: jest.fn(),
 }));
@@ -15,10 +27,10 @@ describe('Add Food Sampling Modal', () => {
   });
 
   it('renders the form fields correctly', async () => {
-    render(<AddFoodSampling pondId={pondId} cycleId={cycleId}/>);
+    render(<AddFoodSampling pondId={pondId} cycleId={cycleId} />);
 
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /Add Food Sampling/i }));
+      fireEvent.click(screen.getByRole('button', { name: /sample/i }));
     });
 
     expect(screen.getByPlaceholderText('Kuantitas Makanan')).toBeInTheDocument();
@@ -36,9 +48,9 @@ describe('Add Food Sampling Modal', () => {
     const mockResponse = { success: true, message: 'Food Sampling added' };
     (addFoodSampling as jest.Mock).mockResolvedValue(mockResponse);
 
-    render(<AddFoodSampling pondId={pondId} cycleId={cycleId}/>);
+    render(<AddFoodSampling pondId={pondId} cycleId={cycleId} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Food Sampling/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Kuantitas Makanan'), { target: { value: '30' } });
 
@@ -54,13 +66,13 @@ describe('Add Food Sampling Modal', () => {
   it('displays error message when backend says food sampling creation failed', async () => {
     const mockResponse = { success: false, message: 'Failed to create food sampling' };
     (addFoodSampling as jest.Mock).mockResolvedValue(mockResponse);
-  
-    render(<AddFoodSampling pondId={pondId} cycleId={cycleId}/>);
-  
-    fireEvent.click(screen.getByRole('button', { name: /Add Food Sampling/i }));
-  
+
+    render(<AddFoodSampling pondId={pondId} cycleId={cycleId} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
+
     fireEvent.change(screen.getByPlaceholderText('Kuantitas Makanan'), { target: { value: '30' } });
-  
+
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /simpan/i }));
     });
@@ -69,16 +81,16 @@ describe('Add Food Sampling Modal', () => {
       expect(screen.getByText('Gagal menyimpan sample makanan')).toBeInTheDocument();
     });
   });
-  
+
 
   it('displays error message and sets error state when form submission fails', async () => {
     const mockError = new Error('Gagal menambah sampling makanan');
     (addFoodSampling as jest.Mock).mockRejectedValueOnce(mockError);
 
 
-    render(<AddFoodSampling pondId={pondId} cycleId={cycleId}/>);
+    render(<AddFoodSampling pondId={pondId} cycleId={cycleId} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Food Sampling/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Kuantitas Makanan'), { target: { value: '30' } });
 
@@ -90,9 +102,9 @@ describe('Add Food Sampling Modal', () => {
   });
 
   it('does not allow form submission when any of the fields are invalid', async () => {
-    render(<AddFoodSampling pondId={pondId} cycleId={cycleId}/>);
+    render(<AddFoodSampling pondId={pondId} cycleId={cycleId} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Add Food Sampling/i }));
+    fireEvent.click(screen.getByRole('button', { name: /sample/i }));
 
     fireEvent.change(screen.getByPlaceholderText('Kuantitas Makanan'), { target: { value: '-2' } });
 

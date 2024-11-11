@@ -1,7 +1,18 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { FoodSamplingForm } from '@/components/food-sampling';  
-import { addFoodSampling } from '@/lib/food-sampling';
-import { FoodSampling } from '@/types/food-sampling';
+import { FoodSamplingForm } from '@/components/food-sampling';
+import { addFoodSampling } from '@/lib/food-sampling'; import { FoodSampling } from '@/types/food-sampling';
+
+const originalReload = window.location.reload;
+
+beforeAll(() => {
+  Object.defineProperty(window, 'location', {
+    writable: true,
+    value: { ...window.location, reload: jest.fn() },
+  });
+});
+afterAll(() => {
+  window.location.reload = originalReload;
+});
 
 jest.mock('@/lib/food-sampling', () => ({
   addFoodSampling: jest.fn(),
@@ -17,7 +28,8 @@ describe('FoodSamplingForm', () => {
     pond_id: pondId,
     cycle_id: cycleId,
     food_quantity: 30,
-    sample_date: new Date('2024-10-01'),
+    reporter: 'Rafi',
+    recorded_at: new Date('2024-10-01'),
   };
 
   beforeEach(() => {
@@ -39,8 +51,8 @@ describe('FoodSamplingForm', () => {
 
     await waitFor(() => {
       const errorMessages = screen.getAllByText('Expected number, received nan');
-      expect(errorMessages.length).toBe(1); 
-  });
+      expect(errorMessages.length).toBe(1);
+    });
   });
 
   it('submits the form successfully when data is valid', async () => {

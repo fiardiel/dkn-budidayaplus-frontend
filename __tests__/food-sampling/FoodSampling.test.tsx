@@ -1,35 +1,29 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { FoodSampling } from '@/components/food-sampling';
-import { FoodSampling as FoodSamplingType } from '@/types/food-sampling';
-import { useFoodSampling } from '@/hooks/useFoodSampling';
 
-jest.mock('@/hooks/useFoodSampling', () => {
-  const mockFoodSampling: FoodSamplingType = {
-    sampling_id: '1',
-    food_quantity: 100,
-    sample_date: new Date(),
-    pond_id: '1',
-    cycle_id: '1',
-  };
-  return {
-    useFoodSampling: jest.fn().mockReturnValue({ foodSampling: mockFoodSampling, cycle: { id: '1' } }),
-  };
-});
+jest.mock('@/lib/food-sampling', () => ({
+  getLatestFoodSampling: jest.fn(),
+}))
+
+jest.mock('@/components/food-sampling/FoodSamplingList', () => () => <div data-testid="food-sampling-list" />);
+jest.mock('@/components/food-sampling/AddFoodSampling', () => () => <div data-testid="add-food-sampling" />);
+jest.mock('@/components/food-sampling/ViewFoodSamplingHistory', () => () => <div data-testid="view-food-sampling-history" />);
 
 describe('FoodSampling', () => {
   it('renders the FoodSampling component with cycle', async () => {
-    render(<FoodSampling pondId="1" />);
+    const ui = await FoodSampling({ pondId: '1', cycleId: '1' });
+    render(ui)
 
     await waitFor(() => {
       expect(screen.getByTestId('food-sampling-list')).toBeInTheDocument();
       expect(screen.getByTestId('add-food-sampling')).toBeInTheDocument();
-      expect(screen.getByText('Lihat Riwayat')).toBeInTheDocument();
+      expect(screen.getByTestId('view-food-sampling-history')).toBeInTheDocument();
     });
   });
 
   it('renders the FoodSampling component without cycle', async () => {
-    (useFoodSampling as jest.Mock).mockReturnValue({ foodSampling: undefined, cycle: undefined });
-    render(<FoodSampling pondId="1" />);
+    const ui = await FoodSampling({ pondId: '1' });
+    render(ui)
 
     await waitFor(() => {
       expect(screen.getByTestId('food-sampling-list')).toBeInTheDocument();

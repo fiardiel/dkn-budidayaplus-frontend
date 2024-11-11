@@ -21,7 +21,7 @@ const FishSamplingCard: React.FC<FishSamplingCardProps> = async ({ pondId, cycle
         {cycleId &&
           <Button size={'sm'} variant={'outline'} asChild>
             <Link href={`/pond/${pondId}/fish-sampling`}>
-              Lihat Riwayat <History size={20} className="ml-1" />
+              Lihat Riwayat <History size={16} className="ml-2" />
             </Link>
           </Button>
         }

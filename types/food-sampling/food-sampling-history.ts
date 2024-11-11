@@ -1,6 +1,7 @@
 import { FoodSampling } from "@/types/food-sampling";
 
 export type FoodSamplingHistory = {
-    food_samples: FoodSampling[],
+    food_samplings: FoodSampling[],
     cycle_id: string
 }
+
