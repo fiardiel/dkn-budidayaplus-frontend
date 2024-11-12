@@ -1,19 +1,17 @@
 'use client';
 
-import { FoodSampling, FoodSamplingInput, FoodSamplingSchema } from '@/types/food-sampling';
+import { FoodSamplingInput, FoodSamplingSchema } from '@/types/food-sampling';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { addFoodSampling } from '@/lib/food-sampling';
-import { objectToFormData } from '@/lib/utils'
 
 interface FoodSamplingFormProps {
   setIsModalOpen: (open: boolean) => void
-  foodSampling?: FoodSampling
-  pondId?: string
-  cycleId?: string
+  pondId: string
+  cycleId: string
 }
 
 const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, setIsModalOpen }) => {
@@ -34,11 +32,10 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, se
   const onSubmit = async (data: FoodSamplingInput) => {
     try {
       setError(null)
-      const foodSamplingData = objectToFormData(data)
-
-      const res = await addFoodSampling(foodSamplingData, pondId, cycleId)
+      const res = await addFoodSampling(data, pondId, cycleId)
 
       if (!res.success) {
+        console.log(res.message)
         setError('Gagal menyimpan sample makanan')
         return
       }
@@ -61,7 +58,6 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, se
             {...register('food_quantity', { setValueAs: value => parseInt(value) })}
             type="number"
             placeholder="Kuantitas Makanan"
-            step={0.01}
           />
           {errors.food_quantity && <span>{errors.food_quantity.message}</span>}
         </div>
