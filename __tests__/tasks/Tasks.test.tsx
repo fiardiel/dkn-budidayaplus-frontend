@@ -33,7 +33,6 @@ describe('Tasks', () => {
     render(<Tasks tasks={mockTasks} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Daftar Tugas')).toBeInTheDocument()
       mockTasks.forEach((task) => {
         expect(screen.getByText(task.task_type)).toBeInTheDocument()
         expect(screen.getByTestId(`task-status-${task.id}`)).toBeInTheDocument()

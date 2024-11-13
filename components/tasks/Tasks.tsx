@@ -12,7 +12,6 @@ interface TasksProps extends React.HTMLAttributes<HTMLDivElement> {
 const Tasks: React.FC<TasksProps> = ({ tasks }) => {
   return (
     <div>
-      <p className='text-2xl font-medium'>Daftar Tugas</p>
       <Table className='mt-5'>
         <TableHeader>
           <TableRow>
