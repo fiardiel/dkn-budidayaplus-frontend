@@ -31,8 +31,8 @@ const Tasks: React.FC<TasksProps> = ({ tasks }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tasks.length > 0 ? tasks.map((task, index) => (
-            <TableRow key={index}>
+          {tasks.length > 0 ? tasks.map((task) => (
+            <TableRow key={task.id}>
               <TableCell>
                 {task.task_type}
               </TableCell>
