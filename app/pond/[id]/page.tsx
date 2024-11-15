@@ -5,22 +5,13 @@ import { fetchPond } from '@/lib/pond';
 import Image from 'next/image';
 import React from 'react'
 import { FishSamplingCard } from '@/components/fish-sampling';
-import { fetchCycle } from '@/hooks/non-state/fetchCycle';
+import { getLatestCycle } from '@/lib/cycle';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
-  const getPond = async (id: string) => {
-    try {
-      const pond = await fetchPond(id)
-      return pond
-    } catch (error) {
-      return undefined
-    }
-  }
-
-  const pond = await getPond(params.id)
+  const pond = await fetchPond(params.id)
   const volume = pond ? pond.length * pond.width * pond.depth : 0
-  const cycle = await fetchCycle()
+  const cycle = await getLatestCycle()
 
   if (!pond) {
     return (
@@ -54,13 +45,13 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
         <div className='flex flex-col mt-10'>
-          <PondQuality pondId={pond.pond_id} />
+          <PondQuality pondId={pond.pond_id} cycleId={cycle?.id} />
         </div>
         <div className='flex flex-col mt-10'>
           <FishSamplingCard pondId={pond.pond_id} cycleId={cycle?.id} />
         </div>
         <div className='flex flex-col mt-10'>
-          <FoodSampling pondId={pond.pond_id} />
+          <FoodSampling cycleId={cycle?.id} pondId={pond.pond_id} />
         </div>
       </div>
     </div>

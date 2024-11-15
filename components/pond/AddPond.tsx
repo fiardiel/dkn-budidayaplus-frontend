@@ -18,7 +18,7 @@ const AddPond: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
             Tambah Kolam{' '}<IoIosAdd size={20} className='ml-1' />
           </Button>
         </DialogTrigger>
-        <DialogContent  title='Tambah Kolam'>
+        <DialogContent title='Tambah Kolam'>
           <PondForm setIsModalOpen={setIsModalOpen} />
         </DialogContent>
       </Dialog>

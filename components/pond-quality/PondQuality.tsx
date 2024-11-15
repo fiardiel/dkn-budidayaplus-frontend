@@ -1,23 +1,22 @@
 import React from 'react'
 import { AddPondQuality, PondQualityList, ViewPondQualityHistory } from '@/components/pond-quality'
-import { fetchCycle } from '@/hooks/non-state/fetchCycle'
-import { fetchPondQuality } from '@/hooks/non-state/fetchPondQuality'
+import { getLatestPondQuality } from '@/lib/pond-quality'
 
 interface PondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string
+  cycleId?: string
 }
 
-const PondQuality: React.FC<PondQualityProps> = async ({ pondId, ...props }) => {
-  const cycle = await fetchCycle()
-  const pondQuality = cycle && await fetchPondQuality(pondId, cycle.id)
+const PondQuality: React.FC<PondQualityProps> = async ({ pondId, cycleId, ...props }) => {
+  const pondQuality = cycleId ? await getLatestPondQuality(pondId, cycleId) : undefined
 
   return (
     <div {...props}>
       <div>
         <p className='text-2xl font-medium'>Kualitas Air</p>
-        {cycle && (
+        {cycleId && (
           <div className='flex gap-1 items-center mt-2'>
-            <AddPondQuality pondId={pondId} cycleId={cycle.id} />
+            <AddPondQuality pondId={pondId} cycleId={cycleId} />
             <ViewPondQualityHistory pondId={pondId} />
           </div>
         )}

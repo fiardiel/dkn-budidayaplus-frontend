@@ -32,7 +32,7 @@ const FishSamplingList: React.FC<FishSamplingProps> = ({ fishSampling, ...props 
           </div>
         </div>
       ) : (
-        <p className='text-lg text-neutral-600 mt-5'>Tidak ada sampling ikan</p>
+        <p className='text-lg text-neutral-600'>Tidak ada sampling ikan</p>
       )}
     </div>
   );

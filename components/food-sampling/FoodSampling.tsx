@@ -1,23 +1,22 @@
-'use client'
-
 import React from 'react';
 import { AddFoodSampling, FoodSamplingList, ViewFoodSamplingHistory } from '@/components/food-sampling';
-import { useFoodSampling } from '@/hooks/useFoodSampling';
+import { getLatestFoodSampling } from '@/lib/food-sampling';
 
 interface FoodSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
   pondId: string;
+  cycleId?: string;
 }
 
-const FoodSampling: React.FC<FoodSamplingProps> = ({ pondId, ...props }) => {
-  const { foodSampling, cycle } = useFoodSampling(pondId);
+const FoodSampling: React.FC<FoodSamplingProps> = async ({ pondId, cycleId, ...props }) => {
+  const foodSampling = cycleId ? await getLatestFoodSampling(pondId, cycleId) : undefined;
 
   return (
     <div {...props}>
       <div>
-        <p className='text-2xl font-medium'>Data Sampling Makanan</p>
-        {cycle && (
+        <p className='text-2xl font-medium'>Sampling Makanan</p>
+        {cycleId && (
           <div className='flex gap-1 items-center mt-2'>
-            <AddFoodSampling pondId={pondId} cycleId={cycle.id} data-testid="add-food-sampling" />
+            <AddFoodSampling pondId={pondId} cycleId={cycleId} data-testid="add-food-sampling" />
             <ViewFoodSamplingHistory pondId={pondId} data-testid="view-food-sampling-history" />
           </div>
         )}

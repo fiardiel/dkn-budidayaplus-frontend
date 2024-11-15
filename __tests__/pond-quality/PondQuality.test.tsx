@@ -7,10 +7,6 @@ jest.mock('@/lib/pond-quality', () => ({
   getLatestPondQuality: jest.fn()
 }))
 
-jest.mock('@/lib/cycle', () => ({
-  getLatestCycle: jest.fn()
-}))
-
 jest.mock('@/components/pond-quality', () => ({
   AddPondQuality: jest.fn().mockReturnValue(<div data-testid='add-pond-quality' />),
   ViewPondQualityHistory: jest.fn().mockReturnValue(<div data-testid='view-pond-quality-history' />),
@@ -38,24 +34,12 @@ describe('PondQuality', () => {
         phosphate: 0.144,
       }
     );
-    (getLatestCycle as jest.Mock).mockReturnValue({
-      id: '1',
-      start_date: new Date(),
-      end_date: new Date(),
-      supervisor: '0812345678',
-      pond_fish_amount: [
-        {
-          id: '1',
-          pond_id: 'abcde',
-          fish_amount: 10,
-        },
-      ],
-    })
   });
 
   it('renders the pond quality component', async () => {
     const props = {
       pondId: 'abcde',
+      cycleId: '1',
       className: 'test-class',
     }
     const ui = await PondQuality(props)
@@ -69,44 +53,11 @@ describe('PondQuality', () => {
   })
 
   it('renders the component without the cycle', async () => {
-    (getLatestCycle as jest.Mock).mockResolvedValue(undefined)
-
     const props = {
       pondId: 'abcde',
+      cycleId: undefined,
       className: 'test-class',
     }
-    const ui = await PondQuality(props)
-    render(ui);
-
-    await waitFor(() => {
-      expect(screen.queryByText('Tambah Kualitas Air')).toBeNull()
-      expect(screen.queryByText('Lihat Riwayat Kualitas Air')).toBeNull()
-    })
-  })
-
-  it('handles cycle fetch error', async () => {
-    (getLatestCycle as jest.Mock).mockRejectedValue(new Error('Error'))
-    const props = {
-      pondId: 'pond-id',
-      className: 'test-class',
-    }
-    const ui = await PondQuality(props)
-    render(ui);
-
-    await waitFor(() => {
-      expect(screen.queryByText('Tambah Kualitas Air')).toBeNull()
-      expect(screen.queryByText('Lihat Riwayat Kualitas Air')).toBeNull()
-    })
-  })
-
-  it('handles pond quality fetch error', async () => {
-    (getLatestPondQuality as jest.Mock).mockRejectedValueOnce(new Error('Error'));
-
-    const props = {
-      pondId: 'pond-id',
-      className: 'test-class',
-    }
-
     const ui = await PondQuality(props)
     render(ui);
 
