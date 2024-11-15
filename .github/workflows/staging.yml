@@ -58,5 +58,5 @@ jobs:
             docker stop budidayaplus_fe_staging || true
             docker rm budidayaplus_fe_staging || true
             docker run -d --name budidayaplus_fe_staging -p 3001:3000 \
-              -e API_BASE_URL=${{ secrets.API_BASE_URL }} \
+              -e API_BASE_URL=${{ secrets.API_BASE_URL_STAGING }} \
               ghcr.io/fiardiel/budidayaplus_fe:latest
