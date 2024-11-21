@@ -11,6 +11,7 @@ import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from "@/components/ui/input"
 import { Label } from '@/components/ui/label'
 import { addDays, format } from 'date-fns'
+import { useToast } from '@/hooks/use-toast'
 
 interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
   pondList: Pond[]
@@ -19,6 +20,7 @@ interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, ...props }) => {
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   const {
     register,
@@ -50,6 +52,10 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
         return
       }
 
+      toast({
+        description: 'Siklus berhasil dibuat',
+        variant: 'success'
+      })
       reset()
       setIsModalOpen(false)
 
@@ -83,8 +89,8 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
         >
         </Controller>
         <input type='hidden' {...register('end_date')} />
-        {endDate && <p className='text-sm'> Tanggal selesai: { endDate } </p>}
-        
+        {endDate && <p className='text-sm'> Tanggal selesai: {endDate} </p>}
+
         {pondList.map((pond, index) => (
           <div key={pond.pond_id}>
             <input type="hidden" {...register(`pond_fish_amount.${index}.pond_id`)} value={pond.pond_id} />
@@ -103,7 +109,7 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
           </div>
         ))}
         <Button type="submit" disabled={isSubmitting}>Simpan</Button>
-        {error && <p className='text-red-500'>{ error }</p>}
+        {error && <p className='text-red-500'>{error}</p>}
       </form>
     </div >
   )

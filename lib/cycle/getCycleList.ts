@@ -13,9 +13,9 @@ export async function getCycleList(): Promise<CycleList> {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`,
       },
+      next: { tags: ['cycles'] }
     })
     const data = await response.json()
-    console.log(data)
     return response.ok ? data : { active: [], past: [], future: [], stopped: [] }
   } catch (err) {
     console.log(err)

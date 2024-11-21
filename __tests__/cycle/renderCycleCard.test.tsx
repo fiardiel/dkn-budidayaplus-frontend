@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { renderCycleCard } from '@/components/cycle';
+import { renderCycleCard } from '@/components/cycle/renderCycleCard';
 import { Cycle } from '@/types/cycle';
-import { format } from 'date-fns';
+import { formatDate } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { Carousel } from '@/components/ui/carousel';
+
+jest.mock('@/components/cycle', () => ({
+  StopCycle: () => <div data-testid='stopCycle'>StopCycle</div>
+}))
 
 const mockCycle: Cycle = {
   id: 'abcde',
@@ -11,46 +15,28 @@ const mockCycle: Cycle = {
   end_date: new Date(),
   supervisor: 'supervisor',
   pond_fish_amount: []
-};
+}
 
 describe('renderCycleCard', () => {
-  it('should render the cycle card with active state', () => {
+  it('should render the cycle card', () => {
     render(
       <Carousel>
         {renderCycleCard(mockCycle, "Siklus Aktif", "bg-blue-500", "text-gray-300")}
       </Carousel>
     );
+    expect(screen.getByText('Siklus Aktif')).toBeInTheDocument()
+    expect(screen.getByText(`${formatDate(mockCycle.start_date, 'dd/MM/yy', { locale: id })} - ${formatDate(mockCycle.end_date, 'dd/MM/yy', { locale: id })}`)).toBeInTheDocument()
+    expect(screen.getByTestId('stopCycle')).toBeInTheDocument()
+  })
 
-    expect(screen.getByText('Siklus Aktif')).toBeInTheDocument();
-    expect(screen.getByText(`${format(mockCycle.start_date, 'dd/MM/yy', { locale: id })} - ${format(mockCycle.end_date, 'dd/MM/yy', { locale: id })}`)).toBeInTheDocument();
-    expect(screen.getByText('Stop Siklus')).toBeInTheDocument();
-  });
-
-  it('should render the cycle card with stopped state', () => {
+  it('should render the cycle card when its not active', () => {
     render(
       <Carousel>
-        {renderCycleCard(mockCycle, "Siklus Aktif", "bg-blue-500", "text-gray-300", true)}
+        {renderCycleCard(mockCycle, "Siklus Lalu", "bg-slate-500", "text-slate-400")}
       </Carousel>
     );
-
-    expect(screen.getByText('Siklus Dihentikan')).toBeInTheDocument();
-    expect(screen.getByText(`${format(mockCycle.start_date, 'dd/MM/yy', { locale: id })} - ${format(mockCycle.end_date, 'dd/MM/yy', { locale: id })}`)).toBeInTheDocument();
-    expect(screen.queryByText('Stop Siklus')).not.toBeInTheDocument();
-  });
-
-  it('should call onStopCycle when stop button is clicked', () => {
-    const mockOnStopCycle = jest.fn();
-
-    render(
-      <Carousel>
-        {renderCycleCard(mockCycle, "Siklus Aktif", "bg-blue-500", "text-gray-300", false, mockOnStopCycle)}
-      </Carousel>
-    );
-
-    const stopButton = screen.getByText('Stop Siklus');
-    stopButton.click();
-
-    expect(mockOnStopCycle).toHaveBeenCalledTimes(1);
-    expect(mockOnStopCycle).toHaveBeenCalledWith(mockCycle.id);
-  });
-});
+    expect(screen.getByText('Siklus Lalu')).toBeInTheDocument()
+    expect(screen.getByText(`${formatDate(mockCycle.start_date, 'dd/MM/yy', { locale: id })} - ${formatDate(mockCycle.end_date, 'dd/MM/yy', { locale: id })}`)).toBeInTheDocument()
+    expect(screen.queryByTestId('stopCycle')).not.toBeInTheDocument()
+  })
+})

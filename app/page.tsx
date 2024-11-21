@@ -1,5 +1,4 @@
-
-import { CycleList } from "@/components/cycle";
+import { CycleList, AddCycle } from "@/components/cycle";
 import { formatDate } from "date-fns";
 import { id } from "date-fns/locale";
 export default function Home() {
@@ -18,7 +17,8 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col items-center w-full mt-10">
-        <CycleList />
+        <AddCycle className="flex w-[80%] justify-start" />
+        <CycleList className="w-full mt-5" />
       </div>
     </div>
   );
