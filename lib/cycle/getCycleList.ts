@@ -16,11 +16,11 @@ export async function getCycleList(): Promise<CycleList> {
     })
     const data = await response.json()
     console.log(data)
-    return response.ok ? data : { active: [], past: [], future: [] }
+    return response.ok ? data : { active: [], past: [], future: [], stopped: [] }
   } catch (err) {
     console.log(err)
     return {
-      active: [], past: [], future: []
+      active: [], past: [], future: [], stopped: []
     }
   }
 }
