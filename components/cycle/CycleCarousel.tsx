@@ -1,32 +1,55 @@
 'use client'
 
-import { CycleList } from '@/types/cycle'
-import React from 'react'
+import { CycleList } from '@/types/cycle';
+import React, { useState } from 'react';
 import {
   Carousel,
   CarouselContent,
-} from "@/components/ui/carousel"
-import { cn } from '@/lib/utils'
-import { renderCycleCard } from '@/components/cycle/renderCycleCard'
+} from "@/components/ui/carousel";
+import { cn } from '@/lib/utils';
+import { renderCycleCard } from '@/components/cycle/renderCycleCard';
+import { stopCycle } from "@/lib/cycle";
 
 interface CycleCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
-  cycleList: CycleList
+  cycleList: CycleList;
 }
 
 const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList }) => {
-  const totalLength = cycleList.active.length + cycleList.past.length + cycleList.future.length
+  const [localCycleList, setLocalCycleList] = useState<CycleList>(cycleList);
+
+  const handleStopCycle = async (cycleId: string) => {
+    const result = await stopCycle(cycleId);
+    if (result.success) {
+      const stoppedCycle = localCycleList.active.find(cycle => cycle.id === cycleId);
+      if (stoppedCycle) {
+        setLocalCycleList(prevState => ({
+          ...prevState,
+          active: prevState.active.filter(cycle => cycle.id !== cycleId),
+          stopped: [...prevState.stopped, { ...stoppedCycle }],
+        }));
+      }
+    } else {
+      alert(result.message);
+    }
+  };
+
+  const totalLength =
+    localCycleList.active.length +
+    localCycleList.past.length +
+    localCycleList.future.length +
+    localCycleList.stopped.length;
 
   return (
     <Carousel
       opts={{
-        startIndex: cycleList.past.length
+        startIndex: localCycleList.past.length,
       }}
       className="max-w-full"
     >
-      <CarouselContent className={cn(
-        totalLength > 1 ? 'justify-start' : 'justify-center'
-      )}>
-        {cycleList.past.map((cycle) =>
+      <CarouselContent
+        className={cn(totalLength > 1 ? 'justify-start' : 'justify-center')}
+      >
+        {localCycleList.past.map((cycle) =>
           renderCycleCard(
             cycle,
             'Siklus Lalu',
@@ -34,15 +57,17 @@ const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList }) => {
             'text-slate-400'
           )
         )}
-        {cycleList.active.map((cycle) =>
+        {localCycleList.active.map((cycle) =>
           renderCycleCard(
             cycle,
             'Siklus Aktif',
             'bg-primary-600',
-            'text-primary-300'
+            'text-primary-300',
+            false,
+            handleStopCycle
           )
         )}
-        {cycleList.future.map((cycle) =>
+        {localCycleList.future.map((cycle) =>
           renderCycleCard(
             cycle,
             'Siklus Mendatang',
@@ -50,9 +75,18 @@ const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList }) => {
             'text-slate-400'
           )
         )}
-      </CarouselContent >
-    </Carousel >
-  )
-}
+        {localCycleList.stopped.map((cycle) =>
+          renderCycleCard(
+            cycle,
+            'Siklus Dihentikan',
+            'bg-gray-500',
+            'text-gray-300',
+            true
+          )
+        )}
+      </CarouselContent>
+    </Carousel>
+  );
+};
 
-export default CycleCarousel
+export default CycleCarousel;
