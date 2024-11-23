@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from "@/components/ui/input"
 import { Label } from '@/components/ui/label'
-import { addDays, format } from 'date-fns'
+import { addDays, format, formatDate } from 'date-fns'
 
 interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
   pondList: Pond[]
@@ -40,8 +40,8 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
 
       const formattedData = {
         ...data,
-        start_date: data.start_date.toISOString().split("T")[0],
-        end_date: data.end_date.toISOString().split("T")[0],
+        start_date: formatDate(data.start_date, 'yyyy-MM-dd'),
+        end_date: formatDate(data.end_date, 'yyyy-MM-dd'),
       };
 
       const response = await createCycle(formattedData)
@@ -83,8 +83,8 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
         >
         </Controller>
         <input type='hidden' {...register('end_date')} />
-        {endDate && <p className='text-sm'> Tanggal selesai: { endDate } </p>}
-        
+        {endDate && <p className='text-sm'> Tanggal selesai: {endDate} </p>}
+
         {pondList.map((pond, index) => (
           <div key={pond.pond_id}>
             <input type="hidden" {...register(`pond_fish_amount.${index}.pond_id`)} value={pond.pond_id} />
@@ -103,7 +103,7 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
           </div>
         ))}
         <Button type="submit" disabled={isSubmitting}>Simpan</Button>
-        {error && <p className='text-red-500'>{ error }</p>}
+        {error && <p className='text-red-500'>{error}</p>}
       </form>
     </div >
   )
