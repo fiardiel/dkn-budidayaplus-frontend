@@ -24,19 +24,23 @@ const TaskStatus: React.FC<TaskStatusProps> = ({ task, onStatusChange }) => {
 
   return (
     <div data-testid={`task-status-${task.id}`} className="relative inline-block">
-      <div
+      <button
+        type="button"
         data-testid={`status-badge-${task.id}`}
         className={`px-3 py-1 text-white font-medium rounded cursor-pointer ${
           task.status === "DONE" ? "bg-green-500" : "bg-gray-500"
         }`}
         onClick={handleStatusClick}
+        aria-expanded={isDropdownOpen}
+        aria-label={`Toggle status dropdown for task ${task.task_type}`}
       >
         {task.status}
-      </div>
+      </button>
       {isDropdownOpen && (
         <div className="absolute mt-1 bg-white border rounded shadow-md">
           {task.status === "TODO" && (
             <button
+              type="button"
               data-testid={`dropdown-done-${task.id}`}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               onClick={() => handleStatusChange("DONE")}
@@ -46,6 +50,7 @@ const TaskStatus: React.FC<TaskStatusProps> = ({ task, onStatusChange }) => {
           )}
           {task.status === "DONE" && (
             <button
+              type="button"
               data-testid={`dropdown-todo-${task.id}`}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               onClick={() => handleStatusChange("TODO")}
