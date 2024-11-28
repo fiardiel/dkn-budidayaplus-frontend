@@ -17,7 +17,9 @@ const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, ...props }) 
     <div {...props} data-testid='pond-quality-list'>
       {pondQuality ? (
         <div className='mt-5'>
-          <p className='text-gray-500'>Laporan terakhir: {formatDate(pondQuality.recorded_at, 'EEEE, dd MMMM yyyy', {locale: id})}</p>
+          <p className='text-gray-500'>
+            Laporan terakhir: {formatDate(pondQuality.recorded_at, 'EEEE, dd MMMM yyyy', { locale: id })}
+          </p>
           <div className='grid grid-cols-2 gap-3 mt-4'>
             {waterQuality.map((item) => (
               <div key={item.id} className='flex flex-col'>
@@ -25,7 +27,9 @@ const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, ...props }) 
                   <item.icon size={18} />
                   <p className='text-sm'>{item.label}</p>
                 </div>
-                <p className='text-xl font-semibold text-neutral-600 ml-1 mt-1'> {item.value} </p>
+                <p className={`text-xl font-semibold ml-1 mt-1 ${item.className}`}>
+                  {item.value}
+                </p>
               </div>
             ))}
           </div>
