@@ -3,7 +3,7 @@ name: Deploy Development to VM
 on:
   push:
     branches:
-      - rafi/google_analytics_dev
+      - rafi/google_analytics
 
 jobs:
   build:
