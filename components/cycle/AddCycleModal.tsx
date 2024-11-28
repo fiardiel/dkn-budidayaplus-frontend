@@ -1,22 +1,22 @@
 'use client'
 
 import React, { useState } from 'react'
-import AddCycleForm from '@/components/cycle/AddCycleForm'
+import { AddCycleForm } from '@/components/cycle'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button'
 import { Modal as DialogContent } from '@/components/ui/modal'
-import { usePondList } from '@/hooks/usePondList';
+import { Pond } from '@/types/pond';
 
 interface AddCycleModalProps extends React.HTMLAttributes<HTMLDivElement> {
+  pondList: Pond[]
 }
 
-const AddCycleModal: React.FC<AddCycleModalProps> = ({ ...props }) => {
+const AddCycleModal: React.FC<AddCycleModalProps> = ({ pondList, ...props }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { pondList, error } = usePondList()
 
   return (
     <div {...props}>
-      {error || pondList.length === 0 ?
+      {pondList.length === 0 ?
         (
           <p className='text-center text-gray-500'>Tidak ada kolam yang tersedia</p>
         ) :

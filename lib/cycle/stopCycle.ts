@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 export async function stopCycle(cycleId: string) {
@@ -16,5 +17,6 @@ export async function stopCycle(cycleId: string) {
     return { success: false, message: errorRes.detail }
   }
 
+  revalidateTag('cycles')
   return { success: true, message: 'Siklus berhasil dihentikan' }
 }
