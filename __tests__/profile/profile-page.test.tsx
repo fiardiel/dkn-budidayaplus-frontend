@@ -1,17 +1,20 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import ProfilePage from '@/app/profile/[username]/page';
-import { fetchProfile } from '@/lib/profile';
-import { Profile } from '@/types/profile';
+import { fetchProfile, getWorkers } from '@/lib/profile';
+import { Profile, Worker } from '@/types/profile';
 import User from '@/types/auth/user';
 import { getUser } from '@/lib/auth';
+import { get } from 'http';
 
 jest.mock("@/lib/profile", () => ({
   fetchProfile: jest.fn(),
+  getWorkers: jest.fn(),
 }));
 
 jest.mock("@/lib/auth", () => ({
   getUser: jest.fn(),
 }));
+
 
 jest.mock("@/components/profile", () => ({
   UpdateProfileModal: () => {
@@ -38,10 +41,27 @@ const mockProfiles: Profile[] = [
   },
 ];
 
+const mockWorkers: Worker[] = [
+  {
+    id: "1",
+    first_name: mockUser.first_name,
+    last_name: mockUser.last_name,
+    phone_number: mockUser.phone_number,
+  },
+  {
+    id: "2",
+    first_name: "Lala",
+    last_name: "Lele",
+    phone_number: "089512345678",
+  },
+]
+
+
 describe('Profile detail page', () => {
   beforeEach(async () => {
     (fetchProfile as jest.Mock).mockResolvedValue(mockProfiles.find(profile => profile.id === 1));
     (getUser as jest.Mock).mockResolvedValue(mockUser);
+    (getWorkers as jest.Mock).mockResolvedValue(mockWorkers);
   });
 
   it('renders the profile detail page with full name and phone number', async () => {
@@ -49,10 +69,14 @@ describe('Profile detail page', () => {
     const profileImage = await screen.findByAltText("Apple image");
     await waitFor(() => {
       expect(screen.getByText("Detail Profile")).toBeInTheDocument();
-      expect(screen.getByText("Apple Pie")).toBeInTheDocument();
+      const texts = screen.getAllByText("Apple Pie")
+      expect(texts[0]).toBeInTheDocument();
 
       expect(profileImage).toHaveAttribute("src", "/_next/image?url=%2Ffallbackimage.png&w=1080&q=75");
       expect(screen.getByText("1234567890")).toBeInTheDocument();
+
+      expect(texts[1]).toBeInTheDocument();
+      expect(screen.getByText("Lala Lele")).toBeInTheDocument()
     });
   });
 
