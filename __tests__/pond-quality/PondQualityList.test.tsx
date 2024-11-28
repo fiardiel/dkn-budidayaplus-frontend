@@ -70,6 +70,25 @@ describe('PondQualityList', () => {
     });
   });
 
+  it('renders the pond quality list with both temperature and pH outside thresholds', async () => {
+    const updatedPondQuality = { ...mockPondQuality, water_temperature: 15, ph_level: 9 }; // both out of thresholds
+
+    render(<PondQualityList pondQuality={updatedPondQuality} />);
+
+    await waitFor(() => {
+      // Check that the temperature and pH values are displayed correctly
+      expect(screen.getByText('15°C')).toBeInTheDocument();
+      expect(screen.getByText('9')).toBeInTheDocument();
+
+      // Check that both have the red color class
+      const tempElement = screen.getByText('15°C').closest('p');
+      expect(tempElement).toHaveClass('text-red-500');
+
+      const phElement = screen.getByText('9').closest('p');
+      expect(phElement).toHaveClass('text-red-500');
+    });
+  });
+
   it('renders no pond quality message', async () => {
     const mockPondQualityUndefined = undefined
     render(<PondQualityList pondQuality={mockPondQualityUndefined} />);
