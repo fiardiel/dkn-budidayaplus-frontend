@@ -4,7 +4,6 @@ import React from 'react';
 import type { Profile, Worker } from '@/types/profile';
 import Image from 'next/image';
 import { UpdateProfileModal } from '@/components/profile';
-import { Span } from 'next/dist/trace';
 
 interface UserProfileProps {
   profile: Profile;
@@ -43,7 +42,7 @@ const ProfileComponent: React.FC<UserProfileProps> = ({ profile, isUserSelf , wo
                   <ol className = 'list-decimal pl-4'>
                     {
                       workers.map(worker => {
-                        return <li>{worker.first_name +' '+  worker.last_name} {(profile.user.phone_number === worker.phone_number ? <span>(Supervisor)</span>:<span></span>)}</li>
+                        return <li key = {worker.phone_number}>{worker.first_name +' '+  worker.last_name} {(profile.user.phone_number === worker.phone_number ? <span>(Supervisor)</span>:<span></span>)}</li>
                       })
                     }
                   </ol>
