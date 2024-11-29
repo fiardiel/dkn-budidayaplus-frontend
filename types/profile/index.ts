@@ -1,5 +1,5 @@
 import { UpdateProfileInput, UpdateProfileSchema } from "@/types/profile/update-profile-schema";
-import { Profile } from "@/types/profile/profile";
+import { Profile, Worker } from "@/types/profile/profile";
 
-export type { UpdateProfileInput, Profile }
+export type { UpdateProfileInput, Profile, Worker }
 export { UpdateProfileSchema }
