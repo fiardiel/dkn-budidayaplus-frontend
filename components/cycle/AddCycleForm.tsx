@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from "@/components/ui/input"
 import { Label } from '@/components/ui/label'
-import { addDays, format } from 'date-fns'
 import { useToast } from '@/hooks/use-toast'
+import { addDays, format, formatDate } from 'date-fns'
 
 interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
   pondList: Pond[]
@@ -42,8 +42,8 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
 
       const formattedData = {
         ...data,
-        start_date: data.start_date.toISOString().split("T")[0],
-        end_date: data.end_date.toISOString().split("T")[0],
+        start_date: formatDate(data.start_date, 'yyyy-MM-dd'),
+        end_date: formatDate(data.end_date, 'yyyy-MM-dd'),
       };
 
       const response = await createCycle(formattedData)
