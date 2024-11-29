@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers"
 
 export async function createCycle(data: {
@@ -25,5 +26,6 @@ export async function createCycle(data: {
     return { success: false, message: errorRes.detail }
   }
 
+  revalidatePath('/')
   return { success: true, message: 'Siklus tambak berhasil dibuat' }
 }
