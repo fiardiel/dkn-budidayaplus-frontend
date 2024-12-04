@@ -1,3 +1,5 @@
+'use server'
+
 import { Task } from "@/types/tasks";
 import { cookies } from "next/headers"
 
