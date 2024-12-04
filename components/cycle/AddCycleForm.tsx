@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Input } from "@/components/ui/input"
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/hooks/use-toast'
 import { addDays, format, formatDate } from 'date-fns'
 
 interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,6 +20,7 @@ interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, ...props }) => {
   const [error, setError] = useState<string | null>(null)
+  const { toast } = useToast()
 
   const {
     register,
@@ -50,6 +52,10 @@ const AddCycleForm: React.FC<AddCycleFormProps> = ({ pondList, setIsModalOpen, .
         return
       }
 
+      toast({
+        description: 'Siklus berhasil dibuat',
+        variant: 'success'
+      })
       reset()
       setIsModalOpen(false)
 

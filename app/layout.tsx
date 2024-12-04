@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
+import { Toaster } from "@/components/ui/toaster";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +22,13 @@ export default function RootLayout({
       <body
         className={`${inter.className}`}
       >
-        <Sidebar/>
+        <Sidebar />
         <main>
           {children}
         </main>
+        <Toaster />
       </body>
+      <GoogleAnalytics gaId="G-X7DBE88P0J" />
     </html>
   );
 }
