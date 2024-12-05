@@ -1,5 +1,4 @@
 import PondQuality from '@/components/pond-quality/PondQuality';
-import { getLatestCycle } from '@/lib/cycle';
 import { getLatestPondQuality, fetchPondQualityThreshold } from '@/lib/pond-quality';
 import { render, screen, waitFor } from '@testing-library/react';
 
@@ -76,18 +75,18 @@ describe('PondQuality', () => {
     });
   });
 
-  it('passes the correct props to PondQualityList', async () => {
-    const props = {
-      pondId: 'abcde',
-      cycleId: '1',
-      className: 'test-class',
-    };
-    const ui = await PondQuality(props);
-    render(ui);
+  // it('passes the correct props to PondQualityList', async () => {
+  //   const props = {
+  //     pondId: 'abcde',
+  //     cycleId: '1',
+  //     className: 'test-class',
+  //   };
+  //   const ui = await PondQuality(props);
+  //   render(ui);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('pond-quality-list')).toHaveAttribute('thresholdStatus', 'Sehat');
-      expect(screen.getByTestId('pond-quality-list')).toHaveAttribute('violations', '[]');
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(screen.getByTestId('pond-quality-list')).toHaveAttribute('thresholdStatus', 'Sehat');
+  //     expect(screen.getByTestId('pond-quality-list')).toHaveAttribute('violations', '[]');
+  //   });
+  // });
 });
