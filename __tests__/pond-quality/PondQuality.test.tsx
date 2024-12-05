@@ -1,17 +1,18 @@
 import PondQuality from '@/components/pond-quality/PondQuality';
 import { getLatestCycle } from '@/lib/cycle';
-import { getLatestPondQuality } from '@/lib/pond-quality';
+import { getLatestPondQuality, fetchPondQualityThreshold } from '@/lib/pond-quality';
 import { render, screen, waitFor } from '@testing-library/react';
 
 jest.mock('@/lib/pond-quality', () => ({
-  getLatestPondQuality: jest.fn()
-}))
+  getLatestPondQuality: jest.fn(),
+  fetchPondQualityThreshold: jest.fn(),
+}));
 
 jest.mock('@/components/pond-quality', () => ({
   AddPondQuality: jest.fn().mockReturnValue(<div data-testid='add-pond-quality' />),
   ViewPondQualityHistory: jest.fn().mockReturnValue(<div data-testid='view-pond-quality-history' />),
   PondQualityList: jest.fn().mockReturnValue(<div data-testid='pond-quality-list' />),
-}))
+}));
 
 describe('PondQuality', () => {
   beforeEach(() => {
@@ -34,36 +35,59 @@ describe('PondQuality', () => {
         phosphate: 0.144,
       }
     );
+
+    (fetchPondQualityThreshold as jest.Mock).mockReturnValue(
+      {
+        status: 'Sehat',
+        violations: [],
+      }
+    );
   });
 
-  it('renders the pond quality component', async () => {
+  it('renders the pond quality component with cycleId', async () => {
     const props = {
       pondId: 'abcde',
       cycleId: '1',
       className: 'test-class',
-    }
-    const ui = await PondQuality(props)
+    };
+    const ui = await PondQuality(props);
     render(ui);
 
     await waitFor(() => {
-      expect(screen.getByTestId('pond-quality-list')).toBeInTheDocument()
-      expect(screen.getByTestId('add-pond-quality')).toBeInTheDocument()
-      expect(screen.getByTestId('view-pond-quality-history')).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByTestId('pond-quality-list')).toBeInTheDocument();
+      expect(screen.getByTestId('add-pond-quality')).toBeInTheDocument();
+      expect(screen.getByTestId('view-pond-quality-history')).toBeInTheDocument();
+    });
+  });
 
-  it('renders the component without the cycle', async () => {
+  it('renders the pond quality component without cycleId', async () => {
     const props = {
       pondId: 'abcde',
       cycleId: undefined,
       className: 'test-class',
-    }
-    const ui = await PondQuality(props)
+    };
+    const ui = await PondQuality(props);
     render(ui);
 
     await waitFor(() => {
-      expect(screen.queryByText('Tambah Kualitas Air')).toBeNull()
-      expect(screen.queryByText('Lihat Riwayat Kualitas Air')).toBeNull()
-    })
-  })
-})
+      expect(screen.getByTestId('pond-quality-list')).toBeInTheDocument();
+      expect(screen.queryByTestId('add-pond-quality')).toBeNull();
+      expect(screen.queryByTestId('view-pond-quality-history')).toBeNull();
+    });
+  });
+
+  it('passes the correct props to PondQualityList', async () => {
+    const props = {
+      pondId: 'abcde',
+      cycleId: '1',
+      className: 'test-class',
+    };
+    const ui = await PondQuality(props);
+    render(ui);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('pond-quality-list')).toHaveAttribute('thresholdStatus', 'Sehat');
+      expect(screen.getByTestId('pond-quality-list')).toHaveAttribute('violations', '[]');
+    });
+  });
+});
