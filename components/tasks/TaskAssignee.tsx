@@ -16,7 +16,6 @@ interface TaskAssigneeProps {
 
 const TaskAssignee: React.FC<TaskAssigneeProps> = ({ task, workers }) => {
   const [modalOpen, setModalOpen] = useState(false)
-  const [_, setUpdatedTask] = useState(task)
   const [loading, setLoading] = useState(false)
   const [assigneeUser, setAssigneeUser] = useState<Profile | undefined>(workers.find(worker => worker.user.phone_number === task.assignee))
 
@@ -31,15 +30,13 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ task, workers }) => {
           description: 'Petugas berhasil ditetapkan',
           variant: 'success'
         })
-        setUpdatedTask(latestTask)
         setAssigneeUser(workers.find(worker => worker.user.phone_number === latestTask.assignee))
       } else {
-        const latestTask = await unassignTask(task.id)
+        await unassignTask(task.id)
         toast({
           description: 'Petugas berhasil dikosongkan',
           variant: 'success'
         })
-        setUpdatedTask(latestTask)
         setAssigneeUser(undefined)
       }
     } catch (error) {
