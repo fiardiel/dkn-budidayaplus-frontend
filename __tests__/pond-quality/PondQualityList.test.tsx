@@ -3,12 +3,20 @@ import PondQualityList from '@/components/pond-quality/PondQualityList';
 import { PondQuality } from '@/types/pond-quality';
 import { formatDate } from 'date-fns';
 import { id } from 'date-fns/locale';
+import User from '@/types/auth/user'; 
+
+const mockReporter: User = {
+  id: 1,
+  first_name: 'John',
+  last_name: 'Doe',
+  phone_number: '0812345678',
+};
 
 const mockPondQuality: PondQuality = {
   cycle: '1',
   id: 'abcde',
   pond: 'abcde',
-  reporter: '0812345678',
+  reporter: mockReporter,
   recorded_at: new Date(),
   image_name: 'pond1.jpg',
   ph_level: 7.5,
