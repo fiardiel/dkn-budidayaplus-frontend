@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
 import { addDays, format, formatDate } from 'date-fns'
-import { useToast } from '@/hooks/use-toast'
 
 interface AddCycleFormProps extends React.HTMLAttributes<HTMLDivElement> {
   pondList: Pond[]

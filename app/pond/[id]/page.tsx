@@ -6,6 +6,7 @@ import Image from 'next/image';
 import React from 'react'
 import { FishSamplingCard } from '@/components/fish-sampling';
 import { getLatestCycle } from '@/lib/cycle';
+import { fetchPondQualityThreshold } from '@/lib/pond-quality';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
@@ -21,6 +22,9 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
     )
   }
 
+  const thresholdData = cycle ? await fetchPondQualityThreshold(pond.pond_id, cycle.id) : null;
+  const thresholdStatus = thresholdData?.status;
+
   return (
     <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
       <div className='w-[80%]'>
@@ -28,6 +32,13 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           <div>
             <p className='text-3xl'>Selamat datang di</p>
             <p className='text-3xl font-semibold'>{pond.name}</p>
+            {thresholdStatus && (
+              <div className='mt-2'>
+                <p className={`text-lg ${thresholdStatus === 'Sehat' ? 'text-green-500' : thresholdStatus === 'Moderat' ? 'text-yellow-500' : 'text-red-500'}`}>
+                •  {thresholdStatus === 'Sehat' ? 'Sehat' : thresholdStatus === 'Moderat' ? 'Moderat' : 'Tidak Sehat'}
+                </p>
+              </div>
+            )}
           </div>
           <div>
             <div className='flex gap-x-2'>
