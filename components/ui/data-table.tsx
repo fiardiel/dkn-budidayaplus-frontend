@@ -37,7 +37,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 10,
   })
 
   const table = useReactTable({
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <p className="text-sm">
-          Page {pagination.pageIndex + 1} of {table.getPageCount()}
+          Page {table.getPageCount() ? pagination.pageIndex + 1 : 0} of {table.getPageCount()}
         </p>
         <Button
           variant="outline"

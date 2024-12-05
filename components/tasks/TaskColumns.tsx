@@ -4,7 +4,7 @@ import { Task } from "@/types/tasks"
 import { ColumnDef } from "@tanstack/react-table"
 import { formatDate } from "date-fns"
 import { id } from "date-fns/locale"
-import { TaskTypeHeader, TaskDateHeader, TaskAssigneeHeader, TaskStatus, TaskAssignee } from "@/components/tasks"
+import { TaskTypeHeader, TaskDateHeader, TaskStatus } from "@/components/tasks"
 
 export const determinePeriod = (date: Date, period: 'past' | 'upcoming' | 'today') => {
   const today = new Date();
@@ -50,11 +50,11 @@ export const columns: ColumnDef<Task>[] = [
     }
   },
   {
-    accessorKey: "assignee",
-    header: ({ column }) => <TaskAssigneeHeader column={column} />,
+    accessorKey: "pond",
+    header: 'Kolam',
     cell: ({ row }) => {
       const task = row.original
-      return <TaskAssignee task={task} />
+      return <div className="w-24">{task.pond.name}</div>
     }
-  },
+  }
 ]

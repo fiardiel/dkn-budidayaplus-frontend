@@ -4,34 +4,44 @@ import { Task } from "@/types/tasks"
 import { Column } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Filter } from "lucide-react"
+import { cn } from '@/lib/utils'
 
 interface TaskTypeHeaderProps {
   column: Column<Task, unknown>
 }
 
 const TaskTypeHeader: React.FC<TaskTypeHeaderProps> = ({ column }) => {
+  const filterButtons = [
+    { label: 'Clear', value: undefined },
+    { label: 'Pond Quality', value: 'Pond Quality' },
+    { label: 'Fish Sampling', value: 'Fish Sampling' },
+    { label: 'Food Sampling', value: 'Food Sampling' },
+  ]
+  const isFiltered = column.getIsFiltered()
+  const filterValue = column.getFilterValue()
+
   return (
     <div>
       <Popover>
         <PopoverTrigger asChild>
           <Button variant={'ghost'} className="flex items-center gap-2">
-            Tugas <Filter className="h-4 w-4" />
+            <div className='flex items-center gap-1'>
+              Tugas <Filter className={cn("h-4 w-4", isFiltered && 'fill-current')} />
+            </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto">
           <div className="flex flex-col gap-y-2">
-            <Button variant={'ghost'} className='flex w-full justify-start' onClick={() => column.setFilterValue(undefined)}>
-              Clear
-            </Button>
-            <Button variant={'ghost'} className='flex w-full justify-start' onClick={() => column.setFilterValue('Pond Quality')}>
-              Pond Quality
-            </Button>
-            <Button variant={'ghost'} className='flex w-full justify-start' onClick={() => column.setFilterValue('Fish Sampling')}>
-              Fish Sampling
-            </Button>
-            <Button variant={'ghost'} className='flex w-full justify-start' onClick={() => column.setFilterValue('Food Sampling')}>
-              Food Sampling
-            </Button>
+            {filterButtons.map(button => (
+              <Button
+                key={button.label}
+                variant={'ghost'}
+                className={cn('flex w-full justify-start', button.value === filterValue && button.label !== 'Clear' && 'bg-primary-100')}
+                onClick={() => column.setFilterValue(button.value)}
+              >
+                {button.label}
+              </Button>
+            ))}
           </div>
         </PopoverContent>
       </Popover>
