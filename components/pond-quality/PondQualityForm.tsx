@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { addOrUpdatePondQuality } from '@/lib/pond-quality';
 import { objectToFormData } from '@/lib/utils'
+import { Label } from '@radix-ui/react-label';
 
 interface PondQualityFormProps {
   setIsModalOpen: (open: boolean) => void
@@ -69,6 +70,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
     <div>
       <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
         <div>
+          <Label className='text-sm' htmlFor='water_temperature'>
+            Temperatur (°C)
+          </Label>
           <Input
             {...register('water_temperature', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -79,6 +83,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='ph_level'>
+            pH (0-14)
+          </Label>
           <Input
             {...register('ph_level', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -89,6 +96,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='salinity'>
+            Salinitas (PSU)
+          </Label>
           <Input
             {...register('salinity', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -99,6 +109,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='water_clarity'>
+            Kejernihan Air (NTU)
+          </Label>
           <Input
             {...register('water_clarity', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -109,6 +122,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='water_circulation'>
+            Sirkulasi Air (L/menit)
+          </Label>
           <Input
             {...register('water_circulation', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -119,6 +135,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='dissolved_oxygen'>
+            Oksigen Terlarut (mg/L)
+          </Label>
           <Input
             {...register('dissolved_oxygen', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -129,6 +148,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='orp'>
+            ORP (mV)
+          </Label>
           <Input
             {...register('orp', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -139,6 +161,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='ammonia'>
+            Ammonia (mg/L)
+          </Label>
           <Input
             {...register('ammonia', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -149,6 +174,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='nitrate'>
+            Nitrate (mg/L)
+          </Label>
           <Input
             {...register('nitrate', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -159,6 +187,9 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='phosphate'>
+            Phosphate (mg/L)
+          </Label>
           <Input
             {...register('phosphate', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -180,7 +211,7 @@ const PondQualityForm: React.FC<PondQualityFormProps> = ({ pondId, cycleId, setI
         <Button className='w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700 col-span-2' type='submit' disabled={isSubmitting}>
           Simpan
         </Button>
-        {error && <p className='w-full text-center text-red-500'>{error}</p>}
+        {error && <p className='w-full text-center text-red-500 col-span-2'>{error}</p>}
       </form>
     </div>
   );

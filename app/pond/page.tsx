@@ -9,12 +9,12 @@ const PondListPage = async () => {
   const user = await getUser();
 
   return (
-    <div className='min-h-[100dvh] flex flex-col items-center py-10 mt-20'>
+    <div className='min-h-[100dvh] flex flex-col items-center py-10 mb-20'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>
             <p className='text-3xl leading-7 font-light'>Selamat datang</p>
-            <p className='text-3xl leading-7 font-semibold mt-2'>
+            <p className='text-3xl leading-7 font-semibold mt-2 text-[#2154C5]'>
               {user && `${user.first_name} ${user.last_name}`}
             </p>
           </div>

@@ -6,6 +6,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button'
 import { Modal as DialogContent } from '@/components/ui/modal'
 import { Pond } from '@/types/pond';
+import { RefreshCcw } from 'lucide-react';
 
 interface AddCycleModalProps extends React.HTMLAttributes<HTMLDivElement> {
   pondList: Pond[]
@@ -23,8 +24,8 @@ const AddCycleModal: React.FC<AddCycleModalProps> = ({ pondList, ...props }) => 
         (
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen} modal={false}>
             <DialogTrigger asChild>
-              <Button>
-                Mulai Siklus
+              <Button className='bg-[#ff8585] hover:bg-[#ff8585] text-white rounded-xl'>
+                Mulai Siklus <RefreshCcw className='ml-2 h-5 w-5' />
               </Button>
             </DialogTrigger>
             <DialogContent title='Mulai Siklus'>

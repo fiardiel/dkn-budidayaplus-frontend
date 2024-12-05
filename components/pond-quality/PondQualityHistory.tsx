@@ -1,82 +1,31 @@
-'use client'
+import React from 'react';
+import { getPondQualityHistory } from '@/lib/pond-quality';
+import { DataTable } from '@/components/ui/data-table';
+import { columns } from '@/components/pond-quality';
+import { Waves } from 'lucide-react';
 
-import React from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { HistoryTableHeaders } from '@/components/pond-quality'
-import { usePondQualityHistory } from '@/hooks/usePondQualityHistory'
-import { formatDate } from 'date-fns'
-
-interface PondQualityHistoryProps extends React.HTMLAttributes<HTMLDivElement> {
-  pondId: string    
+interface PondQualityHistoryProps {
+  pondId: string;
 }
 
-const PondQualityHistory: React.FC<PondQualityHistoryProps> = ({pondId, ...props}) => {
-  const pondQualityHistory = usePondQualityHistory(pondId)
+const PondQualityHistory: React.FC<PondQualityHistoryProps> = async ({ pondId }) => {
+  const result = await getPondQualityHistory(pondId);
+  const history = result.pond_qualities;
 
   return (
-    <div {...props}>
-      <p className='font-medium text-2xl'>Riwayat Kualitas Air</p>
-      <Table className='mt-5'>
-        <TableHeader>
-          <TableRow>
-            {HistoryTableHeaders.map((item) => (
-              <TableHead key={item.id}>
-                <div className='flex items-center gap-1'>
-                  <item.icon size={20} /> {item.title}
-                </div>
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {pondQualityHistory && pondQualityHistory.pond_qualities.length !== 0 ? (
-            pondQualityHistory.pond_qualities.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  <p>{formatDate(item.recorded_at, 'dd-MM-yyyy')}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.water_temperature}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.ph_level}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.salinity}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.water_clarity}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.water_circulation}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.dissolved_oxygen}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.orp}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.nitrate}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.ammonia}</p>
-                </TableCell>
-                <TableCell>
-                  <p>{item.phosphate}</p>
-                </TableCell>
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={11}>Tidak ada data</TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
+    <div className="w-full">
+      <div className="flex justify-center">
+        <div className="w-[80%] flex gap-4">
+          <Waves className="w-10 h-10 text-[#2154C5]" />
+          <p className="w-full text-start text-3xl font-semibold">Riwayat Kualitas Kolam</p>
+        </div>
+      </div>
+      <div className="mt-6">
+        <DataTable columns={columns} data={history} />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default PondQualityHistory
+export default PondQualityHistory;
+

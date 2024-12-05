@@ -17,7 +17,7 @@ const PondQuality: React.FC<PondQualityProps> = async ({ pondId, cycleId, ...pro
         <p className='text-2xl font-medium'>Kualitas Air</p>
         {cycleId && (
           <div className='flex gap-1 items-center mt-2'>
-            <AddPondQuality pondId={pondId} cycleId={cycleId} />
+            <AddPondQuality pondQuality={pondQuality} pondId={pondId} cycleId={cycleId} />
             <ViewPondQualityHistory pondId={pondId} />
           </div>
         )}

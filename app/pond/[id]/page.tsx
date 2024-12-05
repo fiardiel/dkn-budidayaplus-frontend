@@ -7,12 +7,14 @@ import React from 'react'
 import { FishSamplingCard } from '@/components/fish-sampling';
 import { getLatestCycle } from '@/lib/cycle';
 import { fetchPondQualityThreshold } from '@/lib/pond-quality';
+import { getProfile } from '@/lib/profile';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
   const pond = await fetchPond(params.id)
   const volume = pond ? pond.length * pond.width * pond.depth : 0
   const cycle = await getLatestCycle()
+  const user = await getProfile()
 
   if (!pond) {
     return (
@@ -26,7 +28,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const thresholdStatus = thresholdData?.status;
 
   return (
-    <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
+    <div className='min-h-[100vh] flex flex-col py-10 pb-20 items-center'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-8'>
           <div>
@@ -42,8 +44,14 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           </div>
           <div>
             <div className='flex gap-x-2'>
-              <EditPond pond={pond} />
-              <DeletePond pondId={pond.pond_id} />
+              {user?.role === 'supervisor' &&
+                (
+                  <>
+                    <EditPond pond={pond} />
+                    <DeletePond pondId={pond.pond_id} />
+                  </>
+                )
+              }
             </div>
             <div className='relative mt-5'>
               <div className='absolute top-3 left-3 bg-black/10 py-1 px-2 rounded-lg'>

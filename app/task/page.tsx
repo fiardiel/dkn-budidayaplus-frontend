@@ -10,10 +10,14 @@ const TasksPage = async () => {
   const user = await getProfile() as Profile
 
   return (
-    <div className='flex mt-20 justify-center'>
-      <div className='w-[80%] py-10'>
-        <p className='text-3xl font-semibold'>Daftar Tugas</p>
-        <Tasks className='mt-5' user={user} tasks={tasks} workers={workers} />
+    <div className='flex w-full pb-20 justify-center py-10'>
+      <div className='w-full'>
+        <div className='px-8'>
+          <p className='text-3xl font-semibold'>Daftar Tugas</p>
+        </div>
+        <div className='overflow-scroll'>
+          <Tasks className='mt-5' user={user} tasks={tasks} workers={workers} />
+        </div>
       </div>
     </div>
   )

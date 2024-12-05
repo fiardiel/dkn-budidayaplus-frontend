@@ -21,14 +21,10 @@ const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList, user }) => {
       opts={{
         startIndex: cycleList.past.length + cycleList.stopped.length
       }}
-      className="max-w-full"
+      className="max-w-full px-[10%]"
     >
       <CarouselContent className={cn(
         '-ml-1',
-        (cycleList.past.length
-          + cycleList.stopped.length
-          + cycleList.active.length
-          + cycleList.future.length) <= 1 ? 'justify-center' : 'justify-start'
       )}>
         {cycleList.past.map((cycle) =>
           renderCycleCard(
@@ -50,7 +46,7 @@ const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList, user }) => {
           renderCycleCard(
             cycle,
             'Siklus Aktif',
-            'bg-primary-700',
+            'bg-[#2154C5]',
             'text-primary-300',
             user
           )

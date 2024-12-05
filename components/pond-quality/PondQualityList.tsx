@@ -6,6 +6,7 @@ import { formatDate } from 'date-fns';
 import { id } from 'date-fns/locale';
 import React from 'react';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Badge } from '../ui/badge'
 
 interface PondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
   pondQuality: PondQuality | undefined;
@@ -20,7 +21,15 @@ const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, thresholdSta
     <div {...props} data-testid='pond-quality-list'>
       {pondQuality ? (
         <div className='mt-5'>
-          <p className='text-gray-500'>Laporan terakhir: {formatDate(pondQuality.recorded_at, 'EEEE, dd MMMM yyyy', { locale: id })}</p>
+          <div className='text-gray-500'>
+            <div className='flex'>
+              <p className='font-semibold'>Laporan terakhir</p>
+              <Badge className='ml-2 bg-[#2154C5]'>
+                {pondQuality.reporter.first_name} {pondQuality.reporter.last_name}
+              </Badge>
+            </div>
+            <p> {formatDate(pondQuality.recorded_at, 'EEEE, dd MMMM yyyy', { locale: id })} </p>
+          </div>
           <div className='grid grid-cols-2 gap-3 mt-4'>
             {waterQuality.map((item) => (
               <div key={item.id} className='flex flex-col'>
