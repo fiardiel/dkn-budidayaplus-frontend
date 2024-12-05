@@ -5,4 +5,8 @@ export type Task = {
 	status: string
 	cycle_id: string
 	assignee: string
+	pond: {
+		pond_id: string
+		name: string
+	}
 }
