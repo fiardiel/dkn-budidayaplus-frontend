@@ -13,6 +13,7 @@ export default function Home() {
         </div>
         <Image className="w-32 h-32" src='/BudidayaPlus.svg' width={500} height={500} alt='BudidayaPlus Logo' />
       </div>
+
       <div className="flex gap-2 items-center justify-center w-full">
         <div className="w-[80%] flex gap-2">
           <div className="h-5 w-0.5 bg-neutral-700" />
@@ -21,7 +22,13 @@ export default function Home() {
           </p>
         </div>
       </div>
+
       <Cycle />
+
+      <div className="flex flex-col items-center w-full">
+        <p className="mt-10 py-10 w-[80%] text-2xl font-medium text-neutral-60">Tugas Hari Ini </p>
+        <TaskByDateList />
+      </div>
     </div>
   );
 }
