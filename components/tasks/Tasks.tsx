@@ -1,61 +1,41 @@
-import React from 'react'
+'use client'
+
+import { Profile } from '@/types/profile'
 import { Task } from '@/types/tasks'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { formatDate } from 'date-fns'
-import { id } from 'date-fns/locale'
-import { TaskStatus, TaskAssignee } from '@/components/tasks'
+import React from 'react'
+import { DataTable } from '@/components/ui/data-table'
+import { columns } from './TaskColumns'
+import TaskAssigneeHeader from './TaskAssigneeHeader'
+import TaskAssignee from './TaskAssignee'
 
 interface TasksProps extends React.HTMLAttributes<HTMLDivElement> {
   tasks: Task[]
+  workers: Profile[]
+  user: Profile
 }
 
-const Tasks: React.FC<TasksProps> = ({ tasks }) => {
+const Tasks: React.FC<TasksProps> = ({ tasks, workers, user, ...props }) => {
   return (
-    <div>
-      <Table className='mt-5'>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              Tugas
-            </TableHead>
-            <TableHead>
-              Tenggat
-            </TableHead>
-            <TableHead>
-              Status
-            </TableHead>
-            <TableHead>
-              Petugas
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {tasks.length > 0 ? tasks.map((task) => (
-            <TableRow key={task.id}>
-              <TableCell>
-                {task.task_type}
-              </TableCell>
-              <TableCell>
-                {formatDate(task.date, 'EEEE, dd MMMM yyyy', { locale: id })}
-              </TableCell>
-              <TableCell>
-                <TaskStatus task={task} />
-              </TableCell>
-              <TableCell>
-                <TaskAssignee task={task} />
-              </TableCell>
-            </TableRow>
-          )) :
-            <TableRow>
-              <TableCell colSpan={4}>
-                Tidak ada tugas
-              </TableCell>
-            </TableRow>
-          }
-        </TableBody>
-      </Table>
+    <div {...props}>
+      <DataTable columns={
+        [
+          ...columns, {
+            accessorKey: "assignee",
+            header: ({ column }) => <TaskAssigneeHeader workers={workers} column={column} />,
+            cell: ({ row }) => {
+              const task = row.original
+              return (
+                <div className='flex justify-center'>
+                  <TaskAssignee user={user} workers={workers} task={task} />
+                </div>
+              )
+            }
+          },
+        ]
+      }
+        data={tasks} />
     </div>
   )
 }
 
-export default Tasks 
+export default Tasks

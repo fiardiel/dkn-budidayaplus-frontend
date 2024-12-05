@@ -1,2 +1,5 @@
-export * from '@/lib/tasks/fetchTasks'
-export * from '@/lib/tasks/fetchTasksSorted'
+export { fetchTasks } from '@/lib/tasks/fetchTasks'
+export { fetchTasksSorted } from '@/lib/tasks/fetchTasksSorted'
+export { fetchFilteredTasks } from '@/lib/tasks/fetchFilteredTasks'
+export { fetchTaskById } from '@/lib/tasks/fetchTaskById'
+export { fetchTaskByDate } from '@/lib/tasks/fetchTaskByDate'
