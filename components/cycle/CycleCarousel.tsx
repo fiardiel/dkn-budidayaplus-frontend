@@ -8,12 +8,14 @@ import {
 } from "@/components/ui/carousel";
 import { renderCycleCard } from '@/components/cycle';
 import { cn } from '@/lib/utils';
+import { Profile } from '@/types/profile';
 
 interface CycleCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
   cycleList: CycleList;
+  user?: Profile
 }
 
-const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList }) => {
+const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList, user }) => {
   return (
     <Carousel
       opts={{
@@ -50,6 +52,7 @@ const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList }) => {
             'Siklus Aktif',
             'bg-primary-700',
             'text-primary-300',
+            user
           )
         )}
         {cycleList.future.map((cycle) =>

@@ -6,12 +6,14 @@ import { id } from "date-fns/locale";
 import { RefreshCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StopCycle } from "@/components/cycle";
+import { Profile } from "@/types/profile";
 
 export const renderCycleCard = (
   cycle: Cycle,
   label: string,
   bgColor: string,
   dateTextColor: string,
+  user?: Profile
 ) => (
   <CarouselItem key={cycle.id} className="pl-1 basis-4/5">
     <Card
@@ -27,7 +29,7 @@ export const renderCycleCard = (
             {format(new Date(cycle.end_date), "dd/MM/yy", { locale: id })}
           </p>
         </div>
-        {label.includes("Aktif") && (
+        {label.includes("Aktif") && user?.role === "supervisor" && (
           <StopCycle className='self-end mb-1' cycleId={cycle.id} />
         )}
       </CardContent>
