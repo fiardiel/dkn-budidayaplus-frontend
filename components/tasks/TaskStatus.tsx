@@ -16,25 +16,25 @@ const TaskStatus: React.FC<TaskStatusProps> = ({ task }) => {
 
   const { toast } = useToast()
   const handleSetStatus = async (status: string) => {
-    try {
-      setLoading(true)
-      const latestTask = await setStatus(task.id, status)
-      setUpdatedTask(latestTask)
+    setLoading(true)
+    const { success, error, data } = await setStatus(task.id, status)
+
+    if (success) {
+      setUpdatedTask(data)
       toast({
-        title: 'Status berhasil diubah',
-        description: 'Anda dapat melihat perubahan status di tab task',
+        title: 'Berhasil mengubah status task',
+        description: 'Status task telah berubah',
         variant: 'success',
       })
-    } catch (error) {
+    } else {
       toast({
-        title: 'Terjadi kesalahan',
-        description: 'Coba refresh halaman ini',
+        title: 'Gagal mengubah status task',
+        description: error,
         variant: 'destructive',
       })
-    } finally {
-      setLoading(false)
-      setIsOpen(false)
     }
+    setLoading(false)
+    setIsOpen(false)
   }
 
   return (

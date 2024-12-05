@@ -11,9 +11,10 @@ import TaskAssignee from './TaskAssignee'
 interface TasksProps extends React.HTMLAttributes<HTMLDivElement> {
   tasks: Task[]
   workers: Profile[]
+  user: Profile
 }
 
-const Tasks: React.FC<TasksProps> = ({ tasks, workers, ...props }) => {
+const Tasks: React.FC<TasksProps> = ({ tasks, workers, user, ...props }) => {
   return (
     <div {...props}>
       <DataTable columns={
@@ -25,7 +26,7 @@ const Tasks: React.FC<TasksProps> = ({ tasks, workers, ...props }) => {
               const task = row.original
               return (
                 <div className='flex justify-center'>
-                  <TaskAssignee workers={workers} task={task} />
+                  <TaskAssignee user={user} workers={workers} task={task} />
                 </div>
               )
             }
