@@ -12,9 +12,10 @@ import { unassignTask } from '@/lib/tasks/unassignTask'
 interface TaskAssigneeProps {
   task: Task
   workers: Profile[]
+  user: Profile
 }
 
-const TaskAssignee: React.FC<TaskAssigneeProps> = ({ task, workers }) => {
+const TaskAssignee: React.FC<TaskAssigneeProps> = ({ task, user, workers }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [assigneeUser, setAssigneeUser] = useState<Profile | undefined>(workers.find(worker => worker.user.phone_number === task.assignee))
@@ -22,39 +23,36 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ task, workers }) => {
   const { toast } = useToast()
 
   const handleAssigneeChange = async (assigneeUsername?: string) => {
-    try {
-      setLoading(true)
-      if (assigneeUsername) {
-        const latestTask = await assignTask(task.id, assigneeUsername)
-        toast({
-          description: 'Petugas berhasil ditetapkan',
-          variant: 'success'
-        })
-        setAssigneeUser(workers.find(worker => worker.user.phone_number === latestTask.assignee))
-      } else {
-        await unassignTask(task.id)
-        toast({
-          description: 'Petugas berhasil dikosongkan',
-          variant: 'success'
-        })
-        setAssigneeUser(undefined)
-      }
-    } catch (error) {
+    setLoading(true)
+    if (assigneeUsername) {
+      const response = await assignTask(task.id, assigneeUsername)
+
       toast({
-        title: 'Gagal menetapkan petugas',
-        description: (error as Error).message,
-        variant: 'destructive',
+        title: `Petugas ${response.success ? 'berhasil' : 'gagal'} ditetapkan`,
+        description: response.error ? response.error : '',
+        variant: response.success ? 'success' : 'destructive'
       })
-    } finally {
-      setModalOpen(false)
-      setLoading(false)
+
+      if (response.success) {
+        setAssigneeUser(workers.find(worker => worker.user.phone_number === assigneeUsername))
+      }
+    } else {
+      const response = await unassignTask(task.id)
+      toast({
+        title: `Petugas ${response.success ? 'berhasil' : 'gagal'} dihapus`,
+        description: response.error ? response.error : '',
+        variant: response.success ? 'success' : 'destructive'
+      })
+      setAssigneeUser(undefined)
     }
+    setLoading(false)
+    setModalOpen(false)
   }
 
   return (
     <Dialog open={modalOpen} onOpenChange={setModalOpen}>
       <DialogTrigger asChild>
-        <Button variant={'outline'} size={assigneeUser ? undefined : 'icon'} className='rounded-full'>
+        <Button variant={'outline'} size={assigneeUser ? undefined : 'icon'} disabled={user.role === 'worker'} className='rounded-full'>
           {assigneeUser?.user.first_name} {assigneeUser?.user.last_name}
         </Button>
       </DialogTrigger>
