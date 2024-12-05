@@ -14,7 +14,7 @@ const PondListPage = async () => {
         <div className='flex flex-col space-y-10'>
           <div>
             <p className='text-3xl leading-7 font-light'>Selamat datang</p>
-            <p className='text-3xl leading-7 font-semibold mt-2'>
+            <p className='text-3xl leading-7 font-semibold mt-2 text-[#2154C5]'>
               {user && `${user.first_name} ${user.last_name}`}
             </p>
           </div>

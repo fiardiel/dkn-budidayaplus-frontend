@@ -14,7 +14,7 @@ const AddPond: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
     <div {...props}>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogTrigger asChild>
-          <Button className='flex'>
+          <Button className='flex bg-blue-500 hover:bg-blue-500'>
             Tambah Kolam{' '}<IoIosAdd size={20} className='ml-1' />
           </Button>
         </DialogTrigger>

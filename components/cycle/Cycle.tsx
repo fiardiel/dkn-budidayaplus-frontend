@@ -7,7 +7,7 @@ const Cycle = async () => {
   return (
     <div className="flex flex-col items-center w-full mt-10">
       <AddCycle user={user} className="flex w-[80%] justify-start" />
-      <CycleList className="w-full mt-5" />
+      <CycleList user={user} className="w-full mt-5" />
     </div>
   )
 }

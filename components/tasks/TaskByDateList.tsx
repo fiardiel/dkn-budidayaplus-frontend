@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Task } from "@/types/tasks";
-import { fetchTaskByDate } from "@/lib/tasks/fetchTaskByDate"; 
+import { fetchTaskByDate } from "@/lib/tasks/fetchTaskByDate";
 import TaskByDateCard from './TaskByDateCard';
 
 const TaskByDateList: React.FC = () => {
@@ -25,11 +25,11 @@ const TaskByDateList: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading tasks...</p>;
+    return <p className='text-start w-[80%]'>Loading tasks...</p>;
   }
 
   if (tasks.length === 0) {
-    return <p>Tidak ada tugas untuk hari ini.</p>;
+    return <p className='text-start w-[80%]'>Tidak ada tugas untuk hari ini.</p>;
   }
 
   return (

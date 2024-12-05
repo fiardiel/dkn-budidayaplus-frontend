@@ -20,7 +20,7 @@ const PondCard: React.FC<PondCardProps> = ({ pond }) => {
     <div>
       <Card>
         <CardHeader className='space-y-4 pb-2'>
-          <Image style={{width: "auto"}} priority width={500} height={500} alt={`${pond.name} image`} src={`/${imgSrc}`} onError={() => setImgSrc(fallbackImgSrc)} />
+          <Image style={{ width: "auto" }} priority width={500} height={500} alt={`${pond.name} image`} src={`/${imgSrc}`} onError={() => setImgSrc(fallbackImgSrc)} />
           <CardTitle>
             {pond.name}
           </CardTitle>
@@ -29,7 +29,7 @@ const PondCard: React.FC<PondCardProps> = ({ pond }) => {
           <p>Volume: {volume.toFixed(2)} m<sup>3</sup></p>
         </CardContent>
         <CardFooter>
-          <Button className='bg-blue-500 hover:bg-blue-600 active:bg-blue-700' asChild>
+          <Button className='bg-[#ff8585] hover:bg-[#ff8585] text-white rounded-xl'>
             <Link href={`/pond/${pond.pond_id}`}>
               View Pond
             </Link>

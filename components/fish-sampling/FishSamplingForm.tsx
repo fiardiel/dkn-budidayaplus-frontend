@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { addFishSampling } from '@/lib/fish-sampling';
 import { objectToFormData } from '@/lib/utils'
+import { Label } from '@/components/ui/label';
 
 interface FishSamplingFormProps {
   setIsModalOpen: (open: boolean) => void
@@ -52,6 +53,9 @@ const FishSamplingForm: React.FC<FishSamplingFormProps> = ({ pondId, cycleId, se
       <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
 
         <div>
+          <Label className='text-sm' htmlFor='fish_weight'>
+            Berat Ikan (kg)
+          </Label>
           <Input
             {...register('fish_weight', { setValueAs: value => parseFloat(value) })}
             type="number"
@@ -62,6 +66,9 @@ const FishSamplingForm: React.FC<FishSamplingFormProps> = ({ pondId, cycleId, se
         </div>
 
         <div>
+          <Label className='text-sm' htmlFor='fish_length'>
+            Panjang Ikan(cm)
+          </Label>
           <Input
             {...register('fish_length', { setValueAs: value => parseFloat(value) })}
             type="number"
