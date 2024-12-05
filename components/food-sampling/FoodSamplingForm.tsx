@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { addFoodSampling } from '@/lib/food-sampling';
+import { Label } from '@/components/ui/label';
 
 interface FoodSamplingFormProps {
   setIsModalOpen: (open: boolean) => void
@@ -54,6 +55,9 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, se
       <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
 
         <div className='col-span-2'>
+          <Label className='text-sm' htmlFor='food_quantity'>
+            Kuantitas Makanan
+          </Label>
           <Input
             {...register('food_quantity', { setValueAs: value => parseInt(value) })}
             type="number"

@@ -3,3 +3,4 @@ export { default as FishSamplingForm } from '@/components/fish-sampling/FishSamp
 export { default as AddFishSampling } from '@/components/fish-sampling/AddFishSampling';
 export { default as FishSamplingCard } from '@/components/fish-sampling/FishSamplingCard';
 export { default as FishSamplingHistory } from '@/components/fish-sampling/FishSamplingHistory';
+export { columns } from '@/components/fish-sampling/FishSamplingTableColumns';

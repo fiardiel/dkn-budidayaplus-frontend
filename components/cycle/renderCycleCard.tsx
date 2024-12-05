@@ -15,7 +15,7 @@ export const renderCycleCard = (
   dateTextColor: string,
   user?: Profile
 ) => (
-  <CarouselItem key={cycle.id} className="pl-1 basis-4/5">
+  <CarouselItem key={cycle.id} className="pl-1 basis-5/6">
     <Card
       className={cn(bgColor, 'h-36 border-none rounded-2xl relative overflow-hidden')}
     >

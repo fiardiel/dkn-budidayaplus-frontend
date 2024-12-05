@@ -4,4 +4,4 @@ export { default as FoodSamplingList } from '@/components/food-sampling/FoodSamp
 export { default as FoodSampling } from '@/components/food-sampling/FoodSampling';
 export { default as ViewFoodSamplingHistory } from '@/components/food-sampling/ViewFoodSamplingHistory';
 export { default as FoodSamplingHistory } from '@/components/food-sampling/FoodSamplingHistory';
-export { FoodSamplingHistoryTableHeaders } from '@/components/food-sampling/HistoryTableHeaders';
+export { columns } from '@/components/food-sampling/FoodSamplingTableColumns';

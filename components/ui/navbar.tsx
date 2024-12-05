@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Button } from './button'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { useProfile } from '@/hooks/useProfile'

@@ -10,7 +10,7 @@ const TasksPage = async () => {
   const user = await getProfile() as Profile
 
   return (
-    <div className='flex w-full mb-20 justify-center py-8'>
+    <div className='flex w-full pb-20 justify-center py-10'>
       <div className='w-full'>
         <div className='px-8'>
           <p className='text-3xl font-semibold'>Daftar Tugas</p>

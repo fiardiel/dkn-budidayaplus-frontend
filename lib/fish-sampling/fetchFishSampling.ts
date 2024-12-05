@@ -21,19 +21,19 @@ export async function fetchLatestFishSampling(pondId: string, cycleId: string): 
   }
 }
 
-export async function fetchFishSamplingHistory(pondId: string, cycleId: string): Promise<FishSamplingHistory> {
+export async function fetchFishSamplingHistory(pondId: string): Promise<FishSamplingHistory> {
   const token = cookies().get('accessToken')?.value;
   try {
-    const response = await fetch(`${API_BASE_URL}/api/fish-sampling/${pondId}/${cycleId}/`, {
+    const response = await fetch(`${API_BASE_URL}/api/fish-sampling/${pondId}/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       }
     });
-    if (!response.ok) return { fish_samplings: [], cycle_id: cycleId };
-    return response.json();
+    const data = await response.json()
+    return response.ok ? data : { fish_samplings: [], cycle_id: '' };
   } catch {
-    throw new Error("Gagal terhubung ke server");
+    return { fish_samplings: [], cycle_id: '' }
   }
 }
