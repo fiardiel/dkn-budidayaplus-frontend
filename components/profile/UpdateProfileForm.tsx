@@ -9,14 +9,15 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import { Label } from '@/components/ui/label'
 import { updateProfile } from '@/lib/profile'
+import { useToast } from '@/hooks/use-toast'
 
-interface UpdateProfileFormProps extends React.HTMLAttributes<HTMLDivElement>{
+interface UpdateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   setIsModalOpen: (open: boolean) => void
   profile?: Profile
 }
 
-const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({profile, setIsModalOpen, ...props}) => {
-  const [error, setError] = React.useState<string | null>(null)
+const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ profile, setIsModalOpen, ...props }) => {
+  const { toast } = useToast()
 
   const {
     register,
@@ -26,19 +27,28 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({profile, setIsModa
   } = useForm<UpdateProfileInput>({
     resolver: zodResolver(UpdateProfileSchema),
     defaultValues: profile && {
-        first_name: profile.user.first_name,
-        last_name: profile.user.last_name
-      }
+      first_name: profile.user.first_name,
+      last_name: profile.user.last_name
+    }
   })
 
   const onSubmit = async (data: UpdateProfileInput) => {
-    try {
-      await updateProfile(data)
-      reset()
-      setIsModalOpen(false)
-    } catch (error) {
-      setError((error as Error).message)
+    const result = await updateProfile(data)
+    if (result) {
+      toast({
+        title: 'Berhasil mengupdate profil',
+        description: 'Berhasil mengubah nama depan dan/atau nama belakang',
+        variant: 'success',
+      })
+    } else {
+      toast({
+        title: 'Gagal mengupdate profil',
+        description: 'Silakan periksa kembali data Anda',
+        variant: 'destructive',
+      })
     }
+    setIsModalOpen(false)
+    reset()
   }
 
   return (
@@ -86,10 +96,9 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({profile, setIsModa
               {errors.last_name && <p className='text-red-500 text-sm'>{errors.last_name.message}</p>}
             </div>
           </div>
-          <Button type='submit' className='mt-5' disabled={isSubmitting}>
+          <Button type='submit' className='mt-5 bg-blue-500 hover:bg-blue-600 active:bg-blue-600' disabled={isSubmitting}>
             Simpan
           </Button>
-          {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
         </div>
       </form>
     </div>

@@ -47,3 +47,13 @@ export const formatDateTime = (date: Date | undefined) => {
   const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`
   return formattedDate
 }
+
+export const toTitleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .filter(word => word.trim() !== '')
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
