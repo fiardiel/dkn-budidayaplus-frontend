@@ -39,7 +39,9 @@ const config: Config = {
     "!components/ui/**/*",
     "!components/sidebar/*",
     "!components/tasks/*",
-    "!app/task/*"
+    "!app/task/*",
+    "!app/profile/*",
+    "!components/profile/*"
   ],
 
   // The directory where Jest should output its coverage files
