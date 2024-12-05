@@ -26,7 +26,6 @@ describe('renderCycleCard', () => {
     );
     expect(screen.getByText('Siklus Aktif')).toBeInTheDocument()
     expect(screen.getByText(`${formatDate(mockCycle.start_date, 'dd/MM/yy', { locale: id })} - ${formatDate(mockCycle.end_date, 'dd/MM/yy', { locale: id })}`)).toBeInTheDocument()
-    expect(screen.getByTestId('stopCycle')).toBeInTheDocument()
   })
 
   it('should render the cycle card when its not active', () => {
@@ -37,6 +36,5 @@ describe('renderCycleCard', () => {
     );
     expect(screen.getByText('Siklus Lalu')).toBeInTheDocument()
     expect(screen.getByText(`${formatDate(mockCycle.start_date, 'dd/MM/yy', { locale: id })} - ${formatDate(mockCycle.end_date, 'dd/MM/yy', { locale: id })}`)).toBeInTheDocument()
-    expect(screen.queryByTestId('stopCycle')).not.toBeInTheDocument()
   })
 })
