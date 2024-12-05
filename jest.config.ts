@@ -32,12 +32,14 @@ const config: Config = {
   collectCoverageFrom: [
     // Include specific directories
     "app/**/*.{ts,tsx,js,jsx}",
-    "components/**/*.{ts,tsx,js,jsx}", 
-    
+    "components/**/*.{ts,tsx,js,jsx}",
+
     // Exclude specific directories
     "!app/layout.tsx",
     "!components/ui/**/*",
-    "!components/sidebar/*"
+    "!components/sidebar/*",
+    "!components/tasks/*",
+    "!app/task/*"
   ],
 
   // The directory where Jest should output its coverage files

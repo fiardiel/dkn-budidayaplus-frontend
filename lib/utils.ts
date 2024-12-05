@@ -11,10 +11,10 @@ export function cn(...inputs: ClassValue[]) {
 export function objectToFormData(obj: FormDataConvertible) {
   const formData = new FormData();
   for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-          const value = obj[key];
-          formData.append(key, value instanceof File ? value : String(value));
-      }
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      formData.append(key, value instanceof File ? value : String(value));
+    }
   }
   return formData;
 }
