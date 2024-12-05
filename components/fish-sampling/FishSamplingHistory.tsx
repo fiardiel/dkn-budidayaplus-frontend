@@ -13,7 +13,7 @@ const FishSamplingHistory: React.FC<FishSamplingHistoryProps> = ({ pondId }) => 
 
   return (
     <div className="flex w-full justify-center">
-      <div className="overflow-y-auto h-screen px-4 py-2 pt-28 scroll-mt-20 w-[80%]">
+      <div className="overflow-y-auto h-screen px-4 py-2 pb-28 scroll-mt-20 w-[80%]">
         <h2 className="text-3xl font-semibold mb-4">Fish Sampling History</h2>
         {!initialHistory || initialHistory.fish_samplings.length == 0 ? (
           <p>No sampling history available.</p>

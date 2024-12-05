@@ -9,7 +9,7 @@ const PondListPage = async () => {
   const user = await getUser();
 
   return (
-    <div className='min-h-[100dvh] flex flex-col items-center py-10 mt-20'>
+    <div className='min-h-[100dvh] flex flex-col items-center py-10 mb-20'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>

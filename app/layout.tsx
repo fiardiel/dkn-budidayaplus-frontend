@@ -4,6 +4,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import Navbar from "@/components/ui/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +23,10 @@ export default function RootLayout({
       <body
         className={`${inter.className}`}
       >
-        <Sidebar />
-        <main>
+        <main className="bg-zinc-50">
           {children}
         </main>
+        <Navbar />
         <Toaster />
       </body>
       <GoogleAnalytics gaId="G-X7DBE88P0J" />

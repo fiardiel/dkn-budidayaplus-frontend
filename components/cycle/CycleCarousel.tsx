@@ -50,7 +50,7 @@ const CycleCarousel: React.FC<CycleCarouselProps> = ({ cycleList, user }) => {
           renderCycleCard(
             cycle,
             'Siklus Aktif',
-            'bg-primary-700',
+            'bg-[#2154C5]',
             'text-primary-300',
             user
           )

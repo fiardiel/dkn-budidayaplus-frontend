@@ -96,7 +96,7 @@ const UpdateProfileForm: React.FC<UpdateProfileFormProps> = ({ profile, setIsMod
               {errors.last_name && <p className='text-red-500 text-sm'>{errors.last_name.message}</p>}
             </div>
           </div>
-          <Button type='submit' className='mt-5' disabled={isSubmitting}>
+          <Button type='submit' className='mt-5 bg-blue-500 hover:bg-blue-600 active:bg-blue-600' disabled={isSubmitting}>
             Simpan
           </Button>
         </div>
