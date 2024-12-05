@@ -3,7 +3,7 @@
 import React from 'react';
 import type { Profile } from '@/types/profile';
 import Image from 'next/image';
-import { UpdateProfileModal } from '@/components/profile';
+import { Team, UpdateProfileModal } from '@/components/profile';
 
 interface UserProfileProps {
   profile: Profile;
@@ -13,7 +13,7 @@ interface UserProfileProps {
 const ProfileComponent: React.FC<UserProfileProps> = ({ profile, isUserSelf }) => {
   const fallbackImgSrc = 'fallbackimage.png'
   return (
-    <div className='min-h-[100vh] flex flex-col py-10 items-center mt-20'>
+    <div className='flex flex-col py-10 items-center mt-20'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-10'>
           <div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { fetchProfile } from '@/lib/profile';
 import ProfileComponent from '@/components/profile/ProfileComponent';
 import { getUser } from '@/lib/auth';
+import { Team } from '@/components/profile';
 
 interface ProfilePageProps {
   params: { username: string };
@@ -21,7 +22,12 @@ const ProfilePage: React.FC<ProfilePageProps> = async ({ params }) => {
     )
   }
 
-  return <ProfileComponent isUserSelf={user?.id === profile.user.id} profile={profile} />;
+  return (
+    <div className='flex flex-col'>
+      <ProfileComponent isUserSelf={user?.id === profile.user.id} profile={profile} />
+      <Team username={params.username} />
+    </div>
+  );
 };
 
 export default ProfilePage;

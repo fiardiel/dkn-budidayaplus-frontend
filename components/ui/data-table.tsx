@@ -24,7 +24,7 @@ import {
 import { Button } from "@/components/ui/button"
 import React from "react"
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
@@ -32,6 +32,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  ...props
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -58,7 +59,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div>
+    <div {...props}>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
