@@ -51,7 +51,7 @@ const RegisterPage = () => {
           <form data-testid='register-form' onSubmit={handleSubmit(onSubmit)} className='flex flex-col w-full mt-5'>
             <div className='flex flex-col'>
               <Input
-                className={cn('border-none h-12 mt-3 focus-visible:ring-blue-500 placeholder:text-black', error ? 'bg-red-100 ring-2 ring-red-200' : 'bg-blue-50')} 
+                className={cn('border-none h-12 mt-3 focus-visible:ring-blue-500 placeholder:text-black', error ? 'bg-red-100 ring-2 ring-red-200' : 'bg-blue-50')}
                 type='text'
                 placeholder='Nomor Ponsel'
                 {...register('phone_number')}
@@ -81,15 +81,20 @@ const RegisterPage = () => {
               <Button data-testid='register-button' className='mt-10 h-12 bg-blue-500 hover:bg-blue-600 active:bg-blue-700' type='submit' disabled={isSubmitting} >
                 {
                   isSubmitting ? (
-                    <LoadingSpinner className='h-5 w-5'/>
+                    <LoadingSpinner className='h-5 w-5' />
                   ) :
-                  'Daftar'
+                    'Daftar'
                 }
               </Button>
               {error && <p className='text-red-500 font-semibold text-sm self-center mt-2'>{error}</p>}
             </div>
           </form>
         </div>
+        <Button asChild variant={'link'} >
+          <a className='mt-10 text-center underline' href='/auth/login'>
+            Sudah punya akun? Klik disini untuk login
+          </a>
+        </Button>
       </div>
     </div>
   )
