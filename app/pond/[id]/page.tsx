@@ -44,7 +44,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
           </div>
           <div>
             <div className='flex gap-x-2'>
-              {user?.role === 'supervisor' &&
+              {user?.role === 'supervisor' && !cycle &&
                 (
                   <>
                     <EditPond pond={pond} />
