@@ -9,11 +9,9 @@ import { Badge } from '../ui/badge'
 
 interface PondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
   pondQuality: PondQuality | undefined;
-  thresholdStatus?: string;
-  violations?: string[];
 }
 
-const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, thresholdStatus, violations, ...props }) => {
+const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, ...props }) => {
   const waterQuality = pondQuality ? renderQualityData(pondQuality) : [];
 
   return (
