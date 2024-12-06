@@ -11,10 +11,10 @@ export function cn(...inputs: ClassValue[]) {
 export function objectToFormData(obj: FormDataConvertible) {
   const formData = new FormData();
   for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-          const value = obj[key];
-          formData.append(key, value instanceof File ? value : String(value));
-      }
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      formData.append(key, value instanceof File ? value : String(value));
+    }
   }
   return formData;
 }
@@ -47,3 +47,13 @@ export const formatDateTime = (date: Date | undefined) => {
   const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`
   return formattedDate
 }
+
+export const toTitleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .filter(word => word.trim() !== '')
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+

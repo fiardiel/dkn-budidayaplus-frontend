@@ -16,7 +16,7 @@ const FoodSampling: React.FC<FoodSamplingProps> = async ({ pondId, cycleId, ...p
         <p className='text-2xl font-medium'>Sampling Makanan</p>
         {cycleId && (
           <div className='flex gap-1 items-center mt-2'>
-            <AddFoodSampling pondId={pondId} cycleId={cycleId} data-testid="add-food-sampling" />
+            <AddFoodSampling pondId={pondId} cycleId={cycleId} foodSampling={foodSampling} data-testid="add-food-sampling" />
             <ViewFoodSamplingHistory pondId={pondId} data-testid="view-food-sampling-history" />
           </div>
         )}

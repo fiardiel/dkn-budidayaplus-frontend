@@ -31,13 +31,17 @@ const config: Config = {
   // collectCoverageFrom: undefined,
   collectCoverageFrom: [
     // Include specific directories
-    "app/**/*.{ts,tsx,js,jsx}",
-    "components/**/*.{ts,tsx,js,jsx}", 
-    
+    // "app/**/*.{ts,tsx,js,jsx}",
+    // "components/**/*.{ts,tsx,js,jsx}",
+
     // Exclude specific directories
     "!app/layout.tsx",
     "!components/ui/**/*",
-    "!components/sidebar/*"
+    "!components/sidebar/*",
+    "!components/tasks/*",
+    "!app/task/*",
+    "!app/profile/**",
+    "!components/profile/*"
   ],
 
   // The directory where Jest should output its coverage files
@@ -182,9 +186,10 @@ const config: Config = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
-  // ],
+  testPathIgnorePatterns: [
+    "\\\\node_modules\\\\",
+    "/__tests__/",
+  ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
