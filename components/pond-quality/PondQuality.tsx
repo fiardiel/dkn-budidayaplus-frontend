@@ -1,14 +1,15 @@
-import React from 'react'
-import { AddPondQuality, PondQualityList, ViewPondQualityHistory } from '@/components/pond-quality'
-import { getLatestPondQuality } from '@/lib/pond-quality'
+import React from 'react';
+import { AddPondQuality, PondQualityList, ViewPondQualityHistory } from '@/components/pond-quality';
+import { getLatestPondQuality, fetchPondQualityThreshold } from '@/lib/pond-quality';
 
 interface PondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
-  pondId: string
-  cycleId?: string
+  pondId: string;
+  cycleId?: string;
 }
 
 const PondQuality: React.FC<PondQualityProps> = async ({ pondId, cycleId, ...props }) => {
-  const pondQuality = cycleId ? await getLatestPondQuality(pondId, cycleId) : undefined
+  const pondQuality = cycleId ? await getLatestPondQuality(pondId, cycleId) : undefined;
+  const thresholdData = cycleId ? await fetchPondQualityThreshold(pondId, cycleId) : undefined;
 
   return (
     <div {...props}>
@@ -21,9 +22,9 @@ const PondQuality: React.FC<PondQualityProps> = async ({ pondId, cycleId, ...pro
           </div>
         )}
       </div>
-      <PondQualityList pondQuality={pondQuality} />
+      <PondQualityList pondQuality={pondQuality} thresholdStatus={thresholdData?.status} violations={thresholdData?.violations} />
     </div>
-  )
-}
+  );
+};
 
-export default PondQuality
+export default PondQuality;

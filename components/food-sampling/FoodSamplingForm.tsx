@@ -15,44 +15,48 @@ interface FoodSamplingFormProps {
   cycleId: string
 }
 
-const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, setIsModalOpen }) => {
-  const [error, setError] = useState<string | null>(null)
+const FOOD_QUANTITY_THRESHOLD = 1000;
 
+const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, setIsModalOpen }) => {
+  const [error, setError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset
+    reset,
+    watch
   } = useForm<FoodSamplingInput>({
     resolver: zodResolver(FoodSamplingSchema),
     defaultValues: {
       food_quantity: 0
     }
-  })
+  });
+
+  const foodQuantity = watch('food_quantity');
 
   const onSubmit = async (data: FoodSamplingInput) => {
     try {
-      setError(null)
-      const res = await addFoodSampling(data, pondId, cycleId)
+      setError(null);
+      const res = await addFoodSampling(data, pondId, cycleId);
 
       if (!res.success) {
-        console.log(res.message)
-        setError('Gagal menyimpan sample makanan')
-        return
+        console.log(res.message);
+        setError('Gagal menyimpan sample makanan');
+        return;
       }
 
-      reset()
-      setIsModalOpen(false)
-      window.location.reload()
+      reset();
+      setIsModalOpen(false);
+      window.location.reload();
 
     } catch (error) {
-      setError('Gagal menyimpan sample makanan')
+      setError('Gagal menyimpan sample makanan');
     }
-  }
+  };
 
   return (
     <div>
-      <form className='grid grid-cols-2 gap-4' onSubmit={handleSubmit(onSubmit)}>
+      <form className="grid grid-cols-2 gap-4" onSubmit={handleSubmit(onSubmit)}>
 
         <div className='col-span-2'>
           <Label className='text-sm' htmlFor='food_quantity'>
@@ -62,14 +66,20 @@ const FoodSamplingForm: React.FC<FoodSamplingFormProps> = ({ pondId, cycleId, se
             {...register('food_quantity', { setValueAs: value => parseInt(value) })}
             type="number"
             placeholder="Kuantitas Makanan"
+            className={foodQuantity > FOOD_QUANTITY_THRESHOLD ? 'text-red-500' : ''}
           />
           {errors.food_quantity && <span>{errors.food_quantity.message}</span>}
         </div>
 
-        <Button className='w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700 col-span-2' type='submit' disabled={isSubmitting}>
+        <Button
+          className="w-full bg-primary-500 hover:bg-primary-600 active:bg-primary-700 col-span-2"
+          type="submit"
+          disabled={isSubmitting}
+        >
           Simpan
         </Button>
-        {error && <p className='w-full text-center text-red-500'>{error}</p>}
+
+        {error && <p className="w-full text-center text-red-500">{error}</p>}
       </form>
     </div>
   );
