@@ -15,6 +15,12 @@ const menuItems = [
 
 const Navbar = () => {
   const pathname = usePathname()
+  if (pathname.startsWith('/auth')) return (
+    <div>
+
+    </div>
+  )
+
   const router = useRouter()
   const handleNavigation = (href: string) => {
     router.push(href)
