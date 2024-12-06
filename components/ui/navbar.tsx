@@ -15,18 +15,19 @@ const menuItems = [
 
 const Navbar = () => {
   const pathname = usePathname()
-  if (pathname.startsWith('/auth')) return (
-    <div>
-
-    </div>
-  )
-
   const router = useRouter()
   const handleNavigation = (href: string) => {
     router.push(href)
   }
   const profile = useProfile()
   const username = profile?.user.phone_number || ''
+
+  if (pathname.startsWith('/auth')) return (
+    <div>
+
+    </div>
+  )
+
 
   return (
     <div className='flex fixed bottom-0 justify-around border-t-gray-50 bg-[#2154C5] w-full sm:hidden h-20 items-center'>
