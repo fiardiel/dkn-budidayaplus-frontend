@@ -8,6 +8,8 @@ import { FishSamplingCard } from '@/components/fish-sampling';
 import { getLatestCycle } from '@/lib/cycle';
 import { fetchPondQualityThreshold } from '@/lib/pond-quality';
 import { getProfile } from '@/lib/profile';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const fallbackSrc = 'fallbackimage.png'
@@ -35,10 +37,30 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
             <p className='text-3xl'>Selamat datang di</p>
             <p className='text-3xl font-semibold'>{pond.name}</p>
             {thresholdStatus && (
-              <div className='mt-2'>
-                <p className={`text-lg ${thresholdStatus === 'Sehat' ? 'text-green-500' : thresholdStatus === 'Moderat' ? 'text-yellow-500' : 'text-red-500'}`}>
-                •  {thresholdStatus === 'Sehat' ? 'Sehat' : thresholdStatus === 'Moderat' ? 'Moderat' : 'Tidak Sehat'}
-                </p>
+              <div className='mt-6'>
+                <Popover>
+                  <PopoverTrigger>
+                    <div className='flex gap-3 items-center'>
+                      <div className={cn('text-lg h-3 w-3 rounded-full', thresholdStatus === 'Sehat' ? 'bg-green-500' : thresholdStatus === 'Moderat' ? 'bg-yellow-500' : 'bg-red-500')} />
+                      <p className={`text-lg ${thresholdStatus === 'Sehat' ? 'text-green-500' : thresholdStatus === 'Moderat' ? 'text-yellow-500' : 'text-red-500'}`}>
+                        {thresholdStatus === 'Sehat' ? 'Sehat' : thresholdStatus === 'Moderat' ? 'Moderat' : 'Tidak Sehat'}
+                      </p>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div>
+                      <ul className='flex flex-col gap-y-2'>
+                        {thresholdData.violations.length > 0 ? (
+                          thresholdData.violations.map((item) => (
+                            <li className='text-[#ff8585]' key={item}>- {item}</li>
+                          ))
+                        ) : (
+                          <p className='text-sm text-green-500'>Selamat, kolam anda dalam kondisi sehat</p>
+                        )}
+                      </ul>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             )}
           </div>
