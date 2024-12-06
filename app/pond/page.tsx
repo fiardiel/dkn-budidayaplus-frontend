@@ -1,12 +1,14 @@
 import { PondList, AddPond } from '@/components/pond';
 import { getUser } from '@/lib/auth';
-import { fetchPonds } from '@/lib/pond'
+import { fetchPonds } from '@/lib/pond';
+import { getLatestCycle } from '@/lib/cycle';
 import { Pond } from '@/types/pond'
 import React from 'react'
 
 const PondListPage = async () => {
   const ponds: Pond[] = await fetchPonds();
   const user = await getUser();
+  const cycle = await getLatestCycle();
 
   return (
     <div className='min-h-[100dvh] flex flex-col items-center py-10 mb-20'>
@@ -18,7 +20,7 @@ const PondListPage = async () => {
               {user && `${user.first_name} ${user.last_name}`}
             </p>
           </div>
-          <AddPond />
+          {!cycle && <AddPond />}
           {ponds.length > 0 ?
             (
               <PondList ponds={ponds} />

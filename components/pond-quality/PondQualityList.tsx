@@ -5,16 +5,13 @@ import { PondQuality } from '@/types/pond-quality';
 import { formatDate } from 'date-fns';
 import { id } from 'date-fns/locale';
 import React from 'react';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Badge } from '../ui/badge'
 
 interface PondQualityProps extends React.HTMLAttributes<HTMLDivElement> {
   pondQuality: PondQuality | undefined;
-  thresholdStatus?: string;
-  violations?: string[];
 }
 
-const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, thresholdStatus, violations, ...props }) => {
+const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, ...props }) => {
   const waterQuality = pondQuality ? renderQualityData(pondQuality) : [];
 
   return (
@@ -41,34 +38,6 @@ const PondQualityList: React.FC<PondQualityProps> = ({ pondQuality, thresholdSta
               </div>
             ))}
           </div>
-          {thresholdStatus && (
-            <div className='mt-4'>
-              <Popover>
-                <PopoverTrigger asChild>
-                <button
-                    style={{ backgroundColor: '#FFBBBB' }}
-                    className={`text-lg text-white px-4 py-2 rounded-md`}
-                  >
-                    Kolam {thresholdStatus}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <div>
-                    <p className='font-semibold'>Violations:</p>
-                    {violations && violations.length > 0 ? (
-                      <ul className='text-sm text-red-500'>
-                        {violations.map((violation, index) => (
-                          <li key={index}>{violation}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className='text-sm text-green-500'>Tidak ada ambang batas kualitas kolam yang terlampaui</p>
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-          )}
         </div>
       ) : (
         <div className='mt-5'>
