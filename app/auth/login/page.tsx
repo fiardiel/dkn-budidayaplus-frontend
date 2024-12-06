@@ -7,8 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { loginSchema, LoginForm } from "@/types/auth/login"; 
-import { handleLoginFormSubmit } from "@/lib/auth/login/actions"; 
+import { loginSchema, LoginForm } from "@/types/auth/login";
+import { handleLoginFormSubmit } from "@/lib/auth/login/actions";
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -30,13 +31,13 @@ const LoginPage = () => {
       reset()
       router.push("/")
       return
-    } 
+    }
     setError(response.message)
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <div className="bg-transparent flex flex-col p-6 rounded-lg w-full max-w-md">
         <div className="flex flex-col items-center">
           <p className="text-4xl font-bold text-center">Login</p>
           <p className="text-3xl mt-1">
@@ -93,6 +94,11 @@ const LoginPage = () => {
             )}
           </div>
         </form>
+        <Button asChild variant={'link'} >
+          <Link className="mt-10 text-center underline" href="/auth/register">
+            Tidak punya akun? Klik disini untuk daftar
+          </Link>
+        </Button>
       </div>
     </div>
   );

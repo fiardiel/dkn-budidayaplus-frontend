@@ -27,7 +27,7 @@ describe('FoodSamplingForm', () => {
     sampling_id: 'abc123',
     pond_id: pondId,
     cycle_id: cycleId,
-    food_quantity: 30,
+    food_quantity: 1500,
     reporter: 'Rafi',
     recorded_at: new Date('2024-10-01'),
   };
@@ -95,6 +95,21 @@ describe('FoodSamplingForm', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Gagal menyimpan sample makanan')).toBeInTheDocument();
+    });
+  });
+
+  it('submits the form with food quantity greater than threshold', async () => {
+    (addFoodSampling as jest.Mock).mockResolvedValue({ success: true });
+
+    render(<FoodSamplingForm pondId={pondId} cycleId={cycleId} setIsModalOpen={mockSetIsModalOpen} />);
+
+    fireEvent.input(screen.getByPlaceholderText('Kuantitas Makanan'), { target: { value: '1500' } });
+
+    fireEvent.submit(screen.getByRole('button', { name: 'Simpan' }));
+
+    await waitFor(() => {
+      expect(addFoodSampling).toHaveBeenCalledWith({ food_quantity: 1500 }, pondId, cycleId);
+      expect(mockSetIsModalOpen).toHaveBeenCalledWith(false);
     });
   });
 });
