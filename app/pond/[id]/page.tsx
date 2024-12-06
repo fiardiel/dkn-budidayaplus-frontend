@@ -30,7 +30,7 @@ const PondDetailPage = async ({ params }: { params: { id: string } }) => {
   const thresholdStatus = thresholdData?.status;
 
   return (
-    <div className='min-h-[100vh] flex flex-col py-10 pb-20 items-center'>
+    <div className='min-h-[100vh] flex flex-col py-10 pb-20 mb-10 items-center'>
       <div className='w-[80%]'>
         <div className='flex flex-col space-y-8'>
           <div>

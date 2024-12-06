@@ -21,17 +21,6 @@ const Navbar = () => {
   }
   const profile = useProfile()
   const username = profile?.user.phone_number || ''
-  const isSubpage = () => {
-    const segments = pathname.split('/').filter(Boolean)
-    if (segments.length > 1) {
-      return !(segments[0] === 'profile' && segments.length === 2)
-    }
-    return false
-  }
-
-  if (isSubpage()) {
-    return null
-  }
 
   return (
     <div className='flex fixed bottom-0 justify-around border-t-gray-50 bg-[#2154C5] w-full sm:hidden h-20 items-center'>
