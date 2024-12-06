@@ -9,6 +9,8 @@ interface FoodSamplingProps extends React.HTMLAttributes<HTMLDivElement> {
   foodSampling: FoodSampling | undefined;
 }
 
+const FOOD_QUANTITY_THRESHOLD = 1000;
+
 const FoodSamplingList: React.FC<FoodSamplingProps> = ({ foodSampling, ...props }) => {
   return (
     <div {...props} data-testid='food-sampling-list'>
@@ -29,7 +31,13 @@ const FoodSamplingList: React.FC<FoodSamplingProps> = ({ foodSampling, ...props 
                 <Package size={18} />
                 <p className='text-sm'>Kuantitas (gram)</p>
               </div>
-              <p className='text-xl font-semibold text-neutral-600 ml-1 mt-1'>{foodSampling.food_quantity} gr</p>
+              <p
+                className={`text-xl font-semibold ml-1 mt-1 ${
+                  foodSampling.food_quantity > FOOD_QUANTITY_THRESHOLD ? 'text-red-500' : 'text-neutral-600'
+                }`}
+              >
+                {foodSampling.food_quantity} gr
+              </p>
             </div>
           </div>
         </div>

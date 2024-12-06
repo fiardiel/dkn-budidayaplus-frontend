@@ -8,7 +8,7 @@ const mockFoodSampling: FoodSampling = {
   sampling_id: 'sample123',
   pond_id: 'abcde',
   cycle_id: 'cycle123',
-  food_quantity: 150,
+  food_quantity: 1500,
   recorded_at: new Date('2024-10-03'),
   reporter: 'Rafi',
 };
@@ -19,8 +19,9 @@ describe('FoodSamplingList', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Kuantitas (gram)')).toBeInTheDocument();
-      expect(screen.getByText('150 gr')).toBeInTheDocument();
+      expect(screen.getByText('1500 gr')).toBeInTheDocument();
       expect(screen.getByText(`Laporan terakhir: ${formatDate(mockFoodSampling.recorded_at, 'EEEE, dd MMMM yyyy', { locale: id })}`)).toBeInTheDocument();
+      expect(screen.getByText('1500 gr')).toHaveClass('text-red-500');
     });
   });
 

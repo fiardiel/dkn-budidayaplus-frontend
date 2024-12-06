@@ -11,4 +11,5 @@ test("Renders the BudidayaPlus Coming Soon on the Home Page", () => {
     return element?.textContent === "BudidayaPlus"
   })).toBeInTheDocument()
   expect(screen.getByTestId('cycleList')).toBeInTheDocument()
+  expect(screen.getByTestId('addCycleModal')).toBeInTheDocument()
 })
